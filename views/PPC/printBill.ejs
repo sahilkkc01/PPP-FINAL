@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provisional Bill</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header, .section, .footer, .bill-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+        }
+        .header h2 {
+            margin: 5px 0;
+        }
+        .header p {
+            margin: 2px 0;
+        }
+        .info-table, .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td, .bill-table th, .bill-table td {
+            padding: 5px;
+        }
+        .bill-table th, .bill-table td {
+            border: 1px solid #000;
+            text-align: center;
+        }
+        .footer {
+            text-align: right;
+            margin-top: 10px;
+        }
+        .print-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .text-right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Print Button -->
+    <button class="print-btn" onclick="window.print()">Print</button>
+
+    <!-- Hospital Header -->
+    <div class="header">
+        <h2>Lifelinkr</h2>
+        <p>Reg. No. DR86486</p>
+        <p>Delhi Janakpuri.</p>
+        <p>Ph: 9971225655, Timing: AVAILABLE 24 HOURS AND 7 DAYS.</p>
+    </div>
+
+    <!-- Patient and Payer Details -->
+    <table class="info-table">
+        <tr>
+            <td><strong>Patient UID:</strong> <%= patient.id || '' %></td>
+            <td class="text-right"><strong>Date:</strong> <%= bill.createdAt ? new Date(bill.createdAt).toLocaleDateString() : '' %></td>
+        </tr>
+        <tr>
+            <td><strong>Name:</strong> <%= patient.name || '' %> (<%= patient.gender || '' %>)</td>
+            <td class="text-right"><strong>Bill No:</strong> <%= bill.bill_no || '' %></td>
+        </tr>
+        <tr>
+            <td><strong>Age:</strong> <%= patient.age || '' %> years</td>
+            <td class="text-right"><strong>Payment Mode:</strong> <%= bill.paymentMode || '' %></td>
+        </tr>
+        <tr>
+            <td><strong>Address:</strong> <%= patient.address || '' %>, Contact No: <%= patient.mobile || '' %></td>
+            <!-- <td class="text-right"><strong>Discharge Date:</strong> -- / -- / --</td> -->
+        </tr>
+        <tr>
+            <td><strong>Consulting Doctors:</strong></td>
+        </tr>
+        <tr>
+            <td>&nbsp;&nbsp;- Dynamic Name (General Physician)</td>
+        </tr>
+    </table>
+
+    <!-- Provisional Bill Table -->
+    <h3 style="text-align: center;">BILL</h3>
+    <table class="bill-table">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Particulars</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let serialNo = 1; %>
+            
+            <% if (bill.consultation && bill.consultation.length > 0) { %>
+                <% bill.consultation.forEach(item => { %>
+                    <tr>
+                        <td><%= serialNo++ %></td>
+                        <td><%= item.service || 'Consultation Service' %></td>
+                        <td>₹<%= item.price || '0.00' %></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3">No Consultation Services</td>
+                </tr>
+            <% } %>
+
+            <% if (bill.test && bill.test.length > 0) { %>
+                <% bill.test.forEach(test => { %>
+                    <tr>
+                        <td><%= serialNo++ %></td>
+                        <td><%= test.testName || 'Test Service' %></td>
+                        <td>₹<%= test.testPrice || '0.00' %></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3">No Tests</td>
+                </tr>
+            <% } %>
+
+            <% if (bill.pharmacy && bill.pharmacy.length > 0) { %>
+                <% bill.pharmacy.forEach(medicine => { %>
+                    <tr>
+                        <td><%= serialNo++ %></td>
+                        <td><%= medicine.medicine || 'Pharmacy Item' %> (Qty: <%= medicine.quantity || 1 %>)</td>
+                        <td>₹<%= (medicine.quantity || 1) * (medicine.price || 0.00) %></td> <!-- Calculate quantity * price -->
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3">No Pharmacy Items</td>
+                </tr>
+            <% } %>
+            
+        </tbody>
+    </table>
+
+    <!-- Footer Totals -->
+    <div class="footer">
+        <p><strong>Total Bill Amount:</strong> ₹<%= bill.totalAmount || '0.00' %></p>
+        <p><strong>Discont:</strong> ₹<%= bill.discount || '0.00' %></p>
+        <p><strong>Net Amount:</strong> ₹<%= bill.netAmount  || '0.00' %></p>
+      
+       
+        <!-- <p><strong>Paid amount in words:</strong> <%= bill.amountInWords || 'Zero' %></p> -->
+    </div>
+
+</body>
+</html>

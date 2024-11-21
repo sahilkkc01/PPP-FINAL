@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Symptoms - LifeLinkr</title>
+
+    <%-include('../header');  -%>
+  
+
+
+            <!-- content -->
+            <div class="container-fluid">
+
+                <!-- charts -->
+                <div class="col-lg-12 pl-lg-0 mt-2">
+                    <h4 class="primary">View All Symptoms</h4>
+                </div>
+                <div class="chart">
+                    <div class="row">
+                        <div class="col-4 mb-3 mb-3">
+                            <div class="form-group"><label class="input__label">Search</label><input type="text" id="searchBox" class="form-control input-style" placeholder=""></div>
+                          </div>
+                        <div class="col-lg-12 pl-lg-3 chart-grid mt-1">
+                            <!--part 1-->
+                            <div class="card card_border">
+									<table class="table2" id="tblid">
+									<tr>
+									
+									<th>Code</th>
+									<th>Name</th>
+									<th width="10%">View</th>
+									</tr>
+                                    <tbody id="tbodyid">
+
+                                    </tbody>
+									
+									</table>
+                  
+                </div>
+                <div id="paginationControls"></div>
+                            </div>
+                            <!--part 1 ended-->
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 text-right">
+                        <button type="button" onclick=" window.location.href = '/add-symptoms'" class="btn-primary btn-style btn mr-2"><strong><i
+                            class="fa-solid fa-plus"></i> New</strong></button>
+                    </div>
+                </div>
+                <!-- //charts -->
+            </div>
+
+
+            <%-include('../footer');  -%>
+            <script >
+
+
+                $(document).ready(function() {
+
+         
+                // Function to fetch and display data
+                function fetchData() {
+                  $.ajax({
+                    url: '/getSymptoms',
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data)
+                      let tableRows = '';
+                      
+                      data.forEach(function(item) {
+                          
+                        tableRows += `
+                          <tr data-bbm-id="${item.id}">
+        
+        <td>${item.code}</td>
+        <td>${item.name}</td>
+        <td><button type="button" id="view_btn" class="btn btn-primary btn-style btn-change">View</button></td>
+      </tr>
+                        `;
+                      });
+                    
+                      $('#tbodyid').html(tableRows);
+                      pagi_search('#searchBox','#tblid','#paginationControls')
+                      $('#tblid').on('click', '#view_btn', function() {
+                        const id=$(this).closest('tr').data('bbm-id')
+                        const route='add-symptoms'
+                          ViewBtn(route,id)
+                         });
+                         
+                    },
+                    error: function(xhr, status, error) {
+                      console.error('Error fetching classification details:', error);
+                    }
+                  });
+                }
+              
+                // Fetch data on page load
+                fetchData();
+              });
+              
+              </script>

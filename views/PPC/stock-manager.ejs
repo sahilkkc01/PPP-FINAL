@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinker</title>
+
+   <%- include('../header'); -%>
+ 
+            <div class="container-fluid">
+
+                <div class="chart">
+                    <div class="row">
+                        <div class="col-lg-12 pl-lg-2 mt-2">
+                            <h4 class="primary">Stock Manager</h4>
+                        </div>
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <form>
+                                <div class="card card_border">
+                                    <div class="">
+                                        <div class="col-xl-12 p-heading">
+                                            <h6 class="p-text">LIST OF StOCK</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row d-flex justify-content-end">
+                                                <div class="form-group col-lg-4">
+                                                    <label class="input__label">Search</label>
+                                                    <input type="text" id="searchBox" class="form-control input-style" placeholder="">
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="input__label">From</label>
+                                                    <input type="date" id="fromDate" class="form-control input-style filter-input">
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="input__label">To</label>
+                                                    <input type="date" id="toDate" class="form-control input-style filter-input">
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Stock Type Toggle Section -->
+                                            <div class="form-row">
+                                                <div class="col-lg-6 col-md-12 mt-1 mb-2 d-flex pl-2 py-3">
+                                                    <div class="form-group mr-4 d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox" id="stockInCheckbox" checked>
+                                                        <label class="input__label mb-0">Stock In</label>
+                                                    </div>
+                                                    <div class="form-group d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox" id="stockOutCheckbox">
+                                                        <label class="input__label mb-0">Stock Out</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                          <!-- Stock In Section -->
+<div id="stockInSection">
+    <div class="form-row">
+        <div class="col-12 mb-3">
+            <div class="slidx">
+                <table class="table2" id="tblid">
+                    <thead>
+                        <tr>
+                            <th>SNo.</th>
+                            <th>Voucher</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Payment Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyid"></tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold; background-color: #f8f9fa;">
+                            <td colspan="3" class="text-right">Total:</td>
+                            <td id="totalStockInQuantity">0</td>
+                            <td>-</td>
+                            <td id="totalStockInValue">0.00</td>
+                            <td>-</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div id="paginationControls"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stock Out Section -->
+<div id="stockOutSection" style="display: none;">
+    <div class="form-row">
+        <div class="col-12 mb-3">
+            <div class="slidx">
+                <table class="table2" id="tblStockOut">
+                    <thead>
+                        <tr>
+                            <th>SNo.</th>
+                            <th>Bill No.</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyStockOut"></tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold; background-color: #f8f9fa;">
+                            <td colspan="3" class="text-right">Total:</td>
+                            <td id="totalStockOutQuantity">0</td>
+                            <td>-</td>
+                            <td id="totalStockOutValue">0.00</td>
+                            <td>-</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div id="paginationControlsStockOut"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                                        </div>
+                                        
+
+                            </form>
+                        </div>
+
+                        <!-- Combined Stock In and Stock Out Section -->
+<!-- Combined Stock In and Stock Out Section -->
+<div id="combinedSection" style="display: none;">
+    <div class="form-row">
+        <div class="col-12 mb-3">
+            <div class="slidx">
+                <table class="table2" id="tblCombined">
+                    <thead>
+                        <tr>
+                            <th>SNo.</th>
+                            <th>Voucher/Bill No.</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>To Be Paid</th>
+                            <th>Received</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCombined"></tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold; background-color: #f8f9fa;">
+                            <td colspan="5" class="text-right">Total:</td>
+                            <td id="totalCombined">0.00</td>
+                            <td id="totalPaid">0.00</td>
+                            <td id="totalToBePaid">0.00</td>
+                            <td id="totalReceived">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div id="paginationControlsCombined"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit/Loss Section -->
+    <div class="form-group mt-3 mb-4 text-center">
+        <h6 style="font-size: 1.2em;">Profit/Loss: 
+            <span id="profitLoss" style="font-weight: bold;"></span>
+        </h6>
+    </div>
+</div>
+
+
+
+                        <!--footer section start-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Modify Modal -->
+<div class="modal fade" id="modifyPurchaseModal" tabindex="-1" aria-labelledby="modifyPurchaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modifyPurchaseModalLabel">Modify Purchase</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="purchaseScreen">
+                    <h6>Purchase Manager</h6>
+                    <div class="form-row">
+                        <div class="col-lg-3">
+                            <label>Date</label>
+                            <input type="date" id="editDate" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Voucher No.</label>
+                            <input type="text" id="editVoucherNo" class="form-control" readonly>
+                            <input type="text" name="editid" id="editid" style="display: none;">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Supplier</label>
+                            <input type="text" id="editClient" class="form-control" readonly>
+
+                        </div>
+                    </div>
+
+                    <!-- Items Section -->
+                    <div id="editItemsContainer"></div>
+
+                    <h6>Grand Total: <span id="editGrandTotal">0.00</span></h6>
+
+                    <label>Payment Status:</label>
+                    <div>
+                        <input type="radio" id="editPaidOption" name="paymentStatus" value="Paid">
+                        <label for="editPaidOption">Paid</label>
+                        <input type="radio" id="editToBePaidOption" name="paymentStatus" value="To be Paid">
+                        <label for="editToBePaidOption">To be Paid</label>
+                    </div>
+
+                    <label>Comments:</label>
+                    <textarea id="editComment" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePurchaseBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <%- include('../footer'); -%>
+
+            <script>
+                $(document).ready(function () {
+                    let stockInData = []; // Store Stock In data
+                    let stockOutData = []; // Store Stock Out data
+                
+                    // Fetch Stock In data
+                    function fetchStockIn() {
+                        $.ajax({
+                            url: '/getStockVoucherWise',
+                            type: 'GET',
+                            success: function (response) {
+                                stockInData = response.data || [];
+                                displayStockInData(stockInData);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error fetching Stock In data:', error);
+                            }
+                        });
+                    }
+                
+                    // Fetch Stock Out data
+                    function fetchStockOut() {
+                        $.ajax({
+                            url: '/getAllStockOut',
+                            type: 'GET',
+                            success: function (response) {
+                                stockOutData = response.data || [];
+                                displayStockOutData(stockOutData);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error fetching Stock Out data:', error);
+                            }
+                        });
+                    }
+                // Display Stock In data in the table and show totals
+                function displayStockInData(data) {
+    let tableRows = '';
+    let serialNumber = 1;
+    let totalQuantity = 0;
+    let totalValue = 0;
+
+    data.forEach(voucher => {
+        // console.log(data)
+        const { voucherNo, paymentStatus, items, date,id } = voucher;
+
+        items.forEach(item => {
+            const { itemName, quantity, rate } = item;
+            const total = (quantity * rate).toFixed(2);
+
+            tableRows += `
+                <tr style="background-color: #d4edda;">
+                    <td>${serialNumber++}</td>
+                    <td>${voucherNo}</td>
+                    <td>${itemName}</td>
+                    <td>${quantity}</td>
+                    <td>${rate}</td>
+                    <td>${total}</td>
+                    <td>${paymentStatus || ''}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm modify-btn" type="button" data-id="${id}">
+                            Modify
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            totalQuantity += quantity;
+            totalValue += parseFloat(total);
+        });
+    });
+
+    $('#tbodyid').html(tableRows);
+    $('#totalStockInQuantity').text(totalQuantity);
+    $('#totalStockInValue').text(totalValue.toFixed(2));
+    pagi_search('#searchBox', '#tblid', '#paginationControls');
+
+    // Attach click event to the "Modify" buttons
+    $('.modify-btn').on('click', function () {
+        const id = $(this).data('id');
+        openModifyModal(id);
+    });
+}
+
+// Display Stock Out data in the table and show totals
+function displayStockOutData(data) {
+  let tableRows = '';
+  let serialNumber = 1;
+  let totalQuantity = 0;
+  let totalValue = 0;
+
+  data.reverse().forEach((item) => {
+    const { bill_no, date, type, name, price, quantity, total } = item;
+    const calculatedTotal = parseFloat(total || (price * (quantity || 1)).toFixed(2));
+
+    tableRows += `
+      <tr style="background-color: #f8d7da;">
+        <td>${serialNumber++}</td>
+        <td>${bill_no}</td>
+        <td>${name}</td>
+        <td>${quantity || '-'}</td>
+        <td>${price}</td>
+        <td>${calculatedTotal.toFixed(2)}</td>
+        <td>${type}</td>
+      </tr>
+    `;
+
+    totalQuantity += quantity || 0;
+    totalValue += calculatedTotal;
+  });
+
+  $('#tbodyStockOut').html(tableRows);
+  $('#totalStockOutQuantity').text(totalQuantity);
+  $('#totalStockOutValue').text(totalValue.toFixed(2));
+  pagi_search('#searchBox', '#tblStockOut', '#paginationControlsStockOut');
+}
+
+// Display Combined Stock In and Stock Out data, sorted by date
+function displayCombinedData(stockIn, stockOut) {
+  let tableRows = '';
+  let serialNumber = 1;
+  let totalCombined = 0;
+  let totalPaid = 0;
+  let totalToBePaid = 0;
+  let totalReceived = 0;
+
+  const combinedData = [];
+
+  // Prepare Stock In data for merging
+  stockIn.forEach((voucher) => {
+    const { voucherNo, paymentStatus, items, date } = voucher;
+    items.forEach((item) => {
+      const { itemName, quantity, rate } = item;
+      const total = (quantity * rate).toFixed(2);
+      const isPaid = paymentStatus === 'Paid';
+      const paid = isPaid ? parseFloat(total) : 0;
+      const toBePaid = isPaid ? 0 : parseFloat(total);
+
+      combinedData.push({
+        type: 'Stock In',
+        date: new Date(date),
+        referenceNo: voucherNo,
+        itemName,
+        quantity,
+        rate,
+        total: parseFloat(total),
+        paid,
+        toBePaid,
+        received: 0,
+      });
+
+      totalCombined += parseFloat(total);
+      totalPaid += paid;
+      totalToBePaid += toBePaid;
+    });
+  });
+
+  // Prepare Stock Out data for merging
+  stockOut.forEach((item) => {
+    const { bill_no, date, type, name, price, quantity, total } = item;
+    const received = parseFloat(total || (price * (quantity || 1)).toFixed(2));
+
+    combinedData.push({
+      type: 'Stock Out',
+      date: new Date(date),
+      referenceNo: bill_no,
+      itemName: name,
+      quantity,
+      rate: price,
+      total: received,
+      paid: 0,
+      toBePaid: 0,
+      received,
+    });
+
+    totalCombined += received;
+    totalReceived += received;
+  });
+
+  // Sort and display the combined data
+  combinedData.sort((a, b) => a.date - b.date);
+
+  combinedData.reverse().forEach((entry) => {
+    const { type, referenceNo, itemName, quantity, rate, total, paid, toBePaid, received } = entry;
+    const rowColor = type === 'Stock In' ? '#d4edda' : '#f8d7da';
+
+    tableRows += `
+      <tr style="background-color: ${rowColor};">
+        <td>${serialNumber++}</td>
+        <td>${referenceNo}</td>
+        <td>${itemName}</td>
+        <td>${quantity || '-'}</td>
+        <td>${rate}</td>
+        <td>${total.toFixed(2)}</td>
+        <td>${paid.toFixed(2)}</td>
+        <td>${toBePaid.toFixed(2)}</td>
+        <td>${received.toFixed(2)}</td>
+      </tr>
+    `;
+  });
+
+  $('#tbodyCombined').html(tableRows);
+  pagi_search('#searchBox', '#tblCombined', '#paginationControlsCombined');
+  $('#totalCombined').text(totalCombined.toFixed(2));
+  $('#totalPaid').text(totalPaid.toFixed(2));
+  $('#totalToBePaid').text(totalToBePaid.toFixed(2));
+  $('#totalReceived').text(totalReceived.toFixed(2));
+
+  const profitLoss = totalReceived - totalPaid;
+  const profitLossText = profitLoss.toFixed(2);
+  $('#profitLoss').text(profitLoss >= 0 ? `Profit: ${profitLossText}` : `Loss: ${profitLossText}`);
+  $('#profitLoss').css('color', profitLoss >= 0 ? 'green' : 'red');
+}
+
+                    // Fetch data on page load
+                    fetchStockIn();
+                    fetchStockOut();
+                
+                    // Toggle between Stock In, Stock Out, and Combined sections
+                    $('#stockInCheckbox, #stockOutCheckbox').on('change', function () {
+                        const isStockInChecked = $('#stockInCheckbox').is(':checked');
+                        const isStockOutChecked = $('#stockOutCheckbox').is(':checked');
+                
+                        if (isStockInChecked && isStockOutChecked) {
+                            $('#stockInSection').hide();
+                            $('#stockOutSection').hide();
+                            $('#combinedSection').show();
+                            displayCombinedData(stockInData, stockOutData);
+                        } else {
+                            $('#combinedSection').hide();
+                            $('#stockInSection').toggle(isStockInChecked);
+                            $('#stockOutSection').toggle(isStockOutChecked);
+                        }
+                    });
+                
+                    // Date filter for Stock In, Stock Out, and Combined data
+                    $('#fromDate, #toDate').on('change', function () {
+                        const fromDate = $('#fromDate').val();
+                        const toDate = $('#toDate').val();
+                
+                        const filteredStockInData = stockInData.filter(voucher => {
+                            const date = new Date(voucher.date);
+                            return date >= new Date(fromDate) && date <= new Date(toDate);
+                        });
+                
+                        const filteredStockOutData = stockOutData.filter(item => {
+                            const date = new Date(item.date);
+                            return date >= new Date(fromDate) && date <= new Date(toDate);
+                        });
+                
+                        displayStockInData(filteredStockInData);
+                        displayStockOutData(filteredStockOutData);
+                        displayCombinedData(filteredStockInData, filteredStockOutData);
+                    });
+               
+
+                    function setTodayDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('toDate').value = today;
+                }
+                setTodayDate();
+
+                // Function to open the modify modal and fetch purchase details
+                async function openModifyModal(id) {
+    try {
+        // Fetch purchase details using Axios
+        const response = await axios.get(`/getPurchaseDetails/${id}`);
+        const purchaseData = response.data.data;
+        console.log('Purchase Data:', purchaseData);
+
+        // Check if data is returned
+        if (!purchaseData) {
+            alert('No purchase details found for this voucher number.');
+            return;
+        }
+
+        // Ensure items are properly parsed
+        let items = [];
+        try {
+            items = Array.isArray(purchaseData.items) ? purchaseData.items : JSON.parse(purchaseData.items || '[]');
+        } catch (parseError) {
+            console.error('Error parsing items:', parseError);
+            alert('Failed to parse purchase items.');
+            return;
+        }
+
+        // Populate the modal fields
+        $('#editDate').val(purchaseData.date || '');
+        $('#editVoucherNo').val(purchaseData.voucherNo || '');
+        $('#editid').val(purchaseData.id || '');
+        $('#editClient').val(purchaseData.client || '');
+        $('#editComment').val(purchaseData.comment || '');
+        $('input[name="paymentStatus"][value="' + (purchaseData.paymentStatus || 'To be Paid') + '"]').prop('checked', true);
+
+        // Populate items in the modal
+        const itemsContainer = $('#editItemsContainer');
+        itemsContainer.empty();
+        let grandTotal = 0;
+
+        // Generate item rows
+        items.forEach((item, index) => {
+            const { itemName, quantity, rate } = item;
+            const itemQuantity = quantity || 0;
+            const itemRate = rate || 0;
+            const total = (itemQuantity * itemRate).toFixed(2);
+            grandTotal += parseFloat(total);
+
+            itemsContainer.append(`
+                <div class="form-row item-row">
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control edit-item-name" value="${itemName || ''}" readonly>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="number" class="form-control edit-quantity" value="${itemQuantity}" min="0">
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="number" class="form-control edit-rate" value="${itemRate}" min="0">
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="number" class="form-control edit-total" value="${total}" readonly>
+                    </div>
+                    <div class="col-lg-1 d-flex align-items-center">
+                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">−</button>
+                    </div>
+                </div>
+            `);
+        });
+
+        // Update the grand total
+        $('#editGrandTotal').text(grandTotal.toFixed(2));
+
+        // Show the modal
+        $('#modifyPurchaseModal').modal('show');
+
+        // Attach event listeners for dynamic updates
+        attachItemEventListeners();
+    } catch (error) {
+        console.error('Error fetching purchase details:', error.message);
+        alert(`Failed to fetch purchase details. Error: ${error.message}`);
+    }
+}
+
+// Function to attach event listeners for quantity and rate inputs
+function attachItemEventListeners() {
+    // Update total and grand total when quantity or rate changes
+    $('#editItemsContainer').on('input', '.edit-quantity, .edit-rate', function () {
+        let grandTotal = 0;
+
+        // Iterate through each item row
+        $('#editItemsContainer .item-row').each(function () {
+            const quantity = parseFloat($(this).find('.edit-quantity').val()) || 0;
+            const rate = parseFloat($(this).find('.edit-rate').val()) || 0;
+            const total = (quantity * rate).toFixed(2);
+
+            // Update total for the current row
+            $(this).find('.edit-total').val(total);
+
+            // Accumulate grand total
+            grandTotal += parseFloat(total);
+        });
+
+        // Update the grand total in the modal
+        $('#editGrandTotal').text(grandTotal.toFixed(2));
+    });
+
+    // Remove item row when "Remove" button is clicked
+    $('#editItemsContainer').on('click', '.remove-item-btn', function () {
+        $(this).closest('.item-row').remove();
+        // Recalculate grand total after removing an item
+        updateGrandTotal();
+    });
+}
+
+// Function to update grand total
+function updateGrandTotal() {
+    let grandTotal = 0;
+
+    // Iterate through each item row to calculate the grand total
+    $('#editItemsContainer .item-row').each(function () {
+        const total = parseFloat($(this).find('.edit-total').val()) || 0;
+        grandTotal += total;
+    });
+
+    // Update the grand total in the modal
+    $('#editGrandTotal').text(grandTotal.toFixed(2));
+}
+
+// Save purchase modifications
+
+$('#savePurchaseBtn').on('click', async function () {
+    const id = $('#editid').val();
+    const voucherNo = $('#editVoucherNo').val();
+    const date = $('#editDate').val();
+    const client = $('#editClient').val();
+    const paymentStatus = $('input[name="paymentStatus"]:checked').val();
+    const comment = $('#editComment').val();
+
+    // Collect modified items and calculate grand total
+    const items = [];
+    let grandTotal = 0;
+
+    $('#editItemsContainer .item-row').each(function () {
+        const itemName = $(this).find('.edit-item-name').val();
+        const quantity = parseFloat($(this).find('.edit-quantity').val()) || 0;
+        const rate = parseFloat($(this).find('.edit-rate').val()) || 0;
+        const total = quantity * rate;
+
+        // Add item details to the array
+        items.push({ itemName, quantity, rate });
+
+        // Accumulate the grand total
+        grandTotal += total;
+    });
+
+    // Update the grand total in the modal UI
+    $('#editGrandTotal').text(grandTotal.toFixed(2));
+
+    // Prepare the payload with the grand total
+    const payload = {
+        id,
+        date,
+        voucherNo,
+        client,
+        items,
+        paymentStatus,
+        comment,
+        grandTotal: grandTotal.toFixed(2), // Include grandTotal in the payload
+    };
+
+    // Send update request using Axios
+    try {
+        const response = await axios.put(`/updatePurchase/${id}`, payload);
+
+        // Check if the update was successful
+        if (response.data.success) {
+            alert(response.data.message || 'Purchase details updated successfully.');
+            $('#modifyPurchaseModal').modal('hide');
+            // Refresh the Stock In table
+            fetchStockIn();
+        } else {
+            alert('Failed to update purchase details. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error updating purchase details:', error.message);
+        alert(`Failed to update purchase details. Error: ${error.message}`);
+    }
+});
+ 
+                });
+
+                </script>
+                

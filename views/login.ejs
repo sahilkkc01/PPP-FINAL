@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../stylesheets/my_style.css">
+<style>
+    
+body{display:flex;align-items:center;justify-content:center;margin:0;background-image:url('../images/bg.jpeg')}
+.login-container{background:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);display:flex;overflow:hidden;max-width:900px;width:100%}
+.login-form{flex:1}
+.login-image{display:flex;align-items:center;justify-content:center}
+.login-image img{max-width:100%}
+.social-login a{margin:5px}
+.pd30{padding:15px}
+.input-style{margin-top:10px;background:#f0f0f0;font-size:16px;height:43px}
+.wd100{width:100%;background:#57cdff;color:#fff;height:50px}
+.Login-body {
+    height: 100vh;
+}
+
+@media (max-width: 1200px) {
+
+    .login-image img {
+        max-width: 30% !important;
+        margin-bottom: 20px;
+    }
+
+    .Login-body {
+        margin: 50px 0;
+    }
+}
+
+@media (max-width: 991px) {
+    .login-image img {
+        max-width: 35% !important;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-image img {
+        max-width: 40% !important;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .login-image img {
+        max-width: 50% !important;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .login-image img {
+        max-width: 45% !important;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 478px) {
+
+    .login-image img {
+        max-width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .Login-body {
+        margin: 0px 0px !important;
+    }
+}
+</style>
+</head>
+<body class="Login-body">
+    <div class="login-container">
+<div class="row">	
+	  
+	  <div class="col-xl-12 pr-xl-2">
+	  <div class="row">
+      <div class="col-xl-6 pr-xl-2">
+	  <div class="pd30">
+	  <h1>Sign In</h1>
+	  <h3 class="mb-4">to access your HIS dashboard</h3>
+
+    <div id="errorDiv"></div>
+			 <form id="loginForm" method="post" class="mt-2">
+				<div class="row">		
+				<div class="col-xl-12 pr-xl-2">
+				<div class="form-group">
+				<input placeholder="Email Address" required id="userEmail" name="userEmail" type="text" class="form-control input-style">
+				</div>
+				</div>
+				<div class="col-xl-12 pr-xl-2">
+				<div class="form-group">
+				<input placeholder="Password" type="password" required id="userPassword" name="userPassword" class="form-control input-style">
+				</div>
+				</div>
+				<div class="col-xl-12 pr-xl-2">
+				<div class="form-group">
+				<select style="display: none;" name="clinic" class="form-control input-style" id="clinic">
+                
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+				</div>
+				</div>
+				
+				<div class="col-xl-12 pr-xl-2 mt-4">
+				<div class="form-group">
+				<button type="submit" class="btn btn-secondary wd100">Sign In</button>
+				</div>
+				</div>
+		</div>
+    <div id="loadingIndicator"></div>
+		</form>
+		</div>
+    </div>
+	<div class="col-xl-6 pr-xl-2">
+	 <div class="login-image">
+            <img src="../images/pht.jpeg" class="img-responsive" alt="LifeLinkr">
+        </div>
+	</div>
+    </div>
+	</div>
+	</div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorDiv = document.getElementById('errorDiv');
+
+        let isPreAuthenticated = false;
+        let preAuthenticatedUser = null;
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission behavior
+
+            if (!isPreAuthenticated) {
+                handlePreAuthentication();
+            } else {
+                handleFinalLogin();
+            }
+        });
+
+        function handlePreAuthentication() {
+            const formData = {
+                userEmail: loginForm.userEmail.value,
+                userPassword: loginForm.userPassword.value,
+            };
+
+            loadingIndicator.textContent = 'Loading...';
+            loadingIndicator.style.display = 'block';
+            errorDiv.style.display = 'none';
+
+            axios.post('/login', formData)
+                .then(response => {
+                    // Pre-authentication successful, store user data
+                    preAuthenticatedUser = response.data.user;
+                    window.location.href = "/patients"
+
+                    // Fetch clinic names from the existing clinic endpoint
+                })
+                .catch(error => {
+                    console.error('Login Error:', error);
+                    if (error.response && error.response.data) {
+                        errorDiv.textContent = error.response.data.msg;
+                        alert(error.response.data.msg);
+                    } else {
+                        errorDiv.textContent = 'Failed to log in. Please try again.';
+                    }
+                    errorDiv.style.display = 'block';
+                })
+                .finally(() => {
+                    loadingIndicator.style.display = 'none';
+                });
+        }
+
+        
+    });
+</script>

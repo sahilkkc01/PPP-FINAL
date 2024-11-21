@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Manage Notifications - LifeLinkr</title>
+
+    <%- include('../header'); -%>
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Manage Notifications</h4>
+      </div>
+
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!-- Date Filter Section -->
+
+            <!-- Doctor Notifications Table -->
+            <h5 class="primary">Doctors</h5>
+            <div class="table2 mb-4">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Doctor Name</th>
+                    <th>Confirmation SMS</th>
+                    <th>Schedule SMS</th>
+                    <th>Confirmation Email</th>
+                    <th>Schedule Email</th>
+                    <th>Push Notification</th>
+                  </tr>
+                </thead>
+                <tbody id="docTable"></tbody>
+              </table>
+            </div>
+
+            <!-- Staff Notifications Table -->
+            <h5 class="primary">Staff</h5>
+            <div class="table-responsive table2 mb-4">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Staff Name</th>
+                    <th>Schedule SMS</th>
+                    <th>Schedule Email</th>
+                    <th>Online Appointment SMS</th>
+                  </tr>
+                </thead>
+                <tbody id="staffBody"></tbody>
+              </table>
+            </div>
+
+            <!-- User Table -->
+
+            <h5 class="primary">User</h5>
+            <div class="table-responsive table2 mb-4">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>User Name</th>
+                    <th>Appointment Email</th>
+                    <th>Appointment SMS</th>
+                    <th>Report Whatsapp</th>
+                    <th>Report Email</th>
+                    <th>Prescription Whatsapp</th>
+                    <th>Prescription Mail</th>
+                    <th>Bill Mail</th>
+                    <th>Bill Whatsapp</th>
+                  </tr>
+                </thead>
+                <tbody id="userBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const fetchData = async () => {
+        const response = await fetch("/getstaffstatus");
+        const data = await response.json();
+        console.log(data);
+
+        let tableRow = "";
+        let tableRow2 = "";
+        data.doctorStatus.forEach((item) => {
+          tableRow += `
+              <tr>
+          <td>${item.name}</td>
+          <td><input type="checkbox" id="ConSMS-${item.id}" ${
+            item.ConSMS ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'doc', 'ConSMS')" /></td>
+          <td><input type="checkbox" id="SchSMS-${item.id}" ${
+            item.SchSMS ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'doc', 'SchSMS')" /></td>
+          <td><input type="checkbox" id="ConEmail-${item.id}" ${
+            item.ConEmail ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'doc', 'ConEmail')" /></td>
+          <td><input type="checkbox" id="SchEmail-${item.id}" ${
+            item.SchEmail ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'doc', 'SchEmail')" /></td>
+           <td><input type="checkbox" id="pushNotify-${item.id}" ${
+            item.pushNotify ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'doc', 'pushNotify')" /></td>
+        </tr>
+            `;
+        });
+        data.staffStatus.forEach((item) => {
+          tableRow2 += `
+              <tr>
+          <td>${item.name}</td>
+          <td><input type="checkbox" id="SchSMS-${item.id}" ${
+            item.SchSMS ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'staff', 'SchSMS')" /></td>
+          <td><input type="checkbox" id="SchEmail-${item.id}" ${
+            item.SchEmail ? "checked" : ""
+          } onchange="updateStatus(${item.id}, 'staff', 'SchEmail')" /></td>
+          <td><input type="checkbox" id="OnAppointmentSMS-${item.id}" ${
+            item.OnAppointmentSMS ? "checked" : ""
+          } onchange="updateStatus(${
+            item.id
+          }, 'staff', 'OnAppointmentSMS')" /></td>
+        </tr>
+            `;
+        });
+
+        let tableRow3 = "";
+        data.userAppointmentStatus.forEach((item) => {
+          tableRow3 += `
+            <tr>
+          <td>${item.name}</td>
+          <td><input type="checkbox" id="appntMail-${item.id}" ${
+            item.appntMail ? "checked" : ""
+          } onchange="updateUserStatus(${item.id}, 'appntMail')" /></td>
+          <td><input type="checkbox" id="appntSMS-${item.id}" ${
+            item.appntSMS ? "checked" : ""
+          } onchange="updateUserStatus(${item.id}, 'appntSMS')" /></td>
+          <td><input type="checkbox" id="reprtWatsp-${item.id}" ${
+            item.reprtWatsp ? "checked" : ""
+          } onchange="updateUserStatus(${item.id},  'reprtWatsp')" /></td>
+           <td><input type="checkbox" id="rprtMail-${item.id}" ${
+            item.rprtMail ? "checked" : ""
+          } onchange="updateUserStatus(${item.id}, 'rprtMail')" /></td>
+           <td><input type="checkbox" id="prscrpWatsp-${item.id}" ${
+            item.prscrpWatsp ? "checked" : ""
+          } onchange="updateUserStatus(${item.id},  'prscrpWatsp')" /></td>
+           <td><input type="checkbox" id="prscrpMail-${item.id}" ${
+            item.prscrpMail ? "checked" : ""
+          } onchange="updateUserStatus(${item.id}, 'prscrpMail')" /></td>
+           <td><input type="checkbox" id="billMail-${item.id}" ${
+            item.billMail ? "checked" : ""
+          } onchange="updateUserStatus(${item.id},  'billMail')" /></td>
+           <td><input type="checkbox" id="billWatsp-${item.id}" ${
+            item.billWatsp ? "checked" : ""
+          } onchange="updateUserStatus(${item.id}, 'billWatsp')" /></td>
+        </tr>
+          `;
+        });
+        document.getElementById("docTable").innerHTML = tableRow;
+        document.getElementById("staffBody").innerHTML = tableRow2;
+        document.getElementById("userBody").innerHTML = tableRow3;
+      };
+
+      const updateUserStatus = async (id, field) => {
+        try {
+          // Get the checkbox value (checked or not)
+          const isChecked = document.getElementById(`${field}-${id}`).checked;
+          console.log(isChecked);
+
+          // Prepare the update data
+          const updateData = {
+            id: id,
+            [field]: isChecked,
+          };
+
+          // Send the update request to the server
+          const response = await fetch("/updateUserStatus", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.msg);
+          } else {
+            alert("Failed to update status");
+          }
+        } catch (error) {
+          console.error("Error updating status:", error);
+          alert("An error occurred while updating the status");
+        }
+      };
+
+      const updateStatus = async (id, type, field) => {
+        try {
+          // Get the checkbox value (checked or not)
+          const isChecked = document.getElementById(`${field}-${id}`).checked;
+          console.log(isChecked);
+
+          // Prepare the update data
+          const updateData = {
+            id: id,
+            [field]: isChecked,
+          };
+
+          // Send the update request to the server
+          const response = await fetch("/updateStaffStatus", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.msg);
+          } else {
+            alert("Failed to update status");
+          }
+        } catch (error) {
+          console.error("Error updating status:", error);
+          alert("An error occurred while updating the status");
+        }
+      };
+      fetchData();
+    </script>
+
+    <%- include('../footer'); -%>
+  </head>
+</html>

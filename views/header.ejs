@@ -1,0 +1,632 @@
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../stylesheets/style-starter.css?v=0.2">
+    <link rel="stylesheet" href="../stylesheets/style.css?v=0.1">
+
+
+    <!-- google fonts -->
+    <link href="//fonts.googleapis.com/css?family=Montserrat:300,400,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <style>
+      #datahere {
+        list-style: none;
+        padding: 0;
+        margin-top: 0.5rem;
+        background-color: #fff;
+        max-height: 200px; /* Limits the height */
+        overflow-y: auto; /* Scroll if overflow */
+        position: absolute; /* Ensures it stays aligned with the input field */
+        width: 100%; /* Matches the width of the search bar */
+        z-index: 10; /* Makes sure the list stays on top */
+      }
+      
+      #datahere li {
+        padding: 8px;
+        margin: 0;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+      }
+      
+      #datahere li:hover {
+        background-color: #f0f0f0; /* Highlight on hover */
+      }
+      
+      .search-result-item {
+        font-size: 14px;
+        color: #333;
+      }
+      
+      .no-results {
+        font-style: italic;
+        color: #999;
+      }
+      
+      
+      .profile_img .user_profile_img img {
+          border-radius: 7px !important;
+          margin-right: 4px;
+      }
+      
+      
+      .user_details_basic .name {
+          font-size: 13px;
+          font-weight: 600;
+          color: #103e75;
+      }
+      
+      
+      .user_details_basic .position {
+          color: #1faeea;
+          font-size: 14px;
+      }
+      
+      .other-icons {
+          width: 25px;
+          cursor: pointer;
+      }
+      
+      #search-bar {
+          background: transparent;
+          border: 2px solid #073c6d;
+          min-width: 20rem;
+          padding: 3px 12px;
+          border-radius: 30px;
+      }
+      
+      #search-bar:focus {
+          outline: none;
+      }
+      
+      #search-bar::placeholder {
+          color: #073c6d;
+          opacity: 1;
+      }
+      
+      
+      .calender-link{
+          position: relative;
+      }
+      
+      .calendar-container {
+          display: none;
+          position: absolute;
+          width: 300px;
+          right: 4px;
+          top: -11px;
+          margin: 50px auto;
+          text-align: center;
+          border-radius: 7px;
+          background: white;
+          padding: 10px;
+          box-shadow: 0px 0px 10px rgb(0 0 0 / 29%);
+      }
+      
+      .date-range {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          margin-left: 0;
+      }
+      
+      .date-range input {
+          border: 1px solid #073c6d;
+          padding: 1px 10px;
+          border-radius: 3px;
+          color: #073c6d;
+          width: 120px;
+          text-align: center;
+          cursor: pointer;
+          font-size: 14px;
+      
+      }
+      
+      .month-display {
+          margin: 10px 0;
+          color: #5d656d;
+          font-weight: 500;
+      }
+      
+      #calendar {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          gap: 5px;
+      }
+      
+      #calendar div {
+          padding: 0px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin: 3px 0;
+          color: #5d656d;
+          text-align: center;
+      
+      }
+      
+      #calendar .header {
+          background-color: transparent;
+          font-weight: bold;
+          cursor: default;
+          color: #5d656d;
+          font-weight: 500;
+          height: fit-content;
+          box-shadow: none;
+      }
+      
+      #calendar .selected {
+          background-color: #d3effb;
+          color: #47a3c9;
+          padding: 0px 0px;
+          border-radius: 30px;
+      
+      }
+      
+      #calendar .range {
+          background-color: #e0f3ff;
+          color: black;
+      }
+      
+      #calendar .inactive {
+          background-color: #ccc;
+          cursor: default;
+      }
+      
+        .fas {
+          font-size: 13px;
+        }
+      
+        .form-builder {
+          border-right: 1px solid #ddd;
+        }
+      
+        .form-builder,
+        .form-preview {
+          height: 100vh;
+          overflow-y: auto;
+        }
+      
+        .input__label {
+          font-size: 13px;
+          line-height: 15px;
+          text-transform: capitalize;
+          margin-bottom: 3px;
+          color: #5B646C;
+        }
+      
+        .radio,
+        .checkbox {
+          display: inline-block;
+          margin: 0 10px 0 25px;
+          font-size: 13px;
+        }
+      
+        .scrollmenu {
+          overflow-y: scroll;
+          max-height: 500px !important;
+        }
+      
+        /* Internal CSS to hide the navbar */
+        .navbar-expand-lg {
+          display: none;
+        }
+      
+        .file-input-container {
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+        }
+      
+        .file-input-container button {
+          margin-right: 5px;
+        }
+      
+        .highlight {
+          border: 2px solid rgb(30, 134, 183);
+          box-shadow: 0 0 10px rgba(30, 134, 183, 0.7);
+          transition: border 0.5s ease, box-shadow 0.5s ease;
+        }
+      
+        /* Define the locked styling */
+        .locked {
+          background-color: #ffcccc;
+          pointer-events: none;
+          opacity: 0.6;
+        }
+        .lockField {
+      background-color: #e5dddd;
+      pointer-events: none;
+      opacity: 0.6;
+      user-select: none; /* Prevent text selection */
+      }
+       
+      </style>
+      <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        
+        /* Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+        </style>
+</head>
+
+<body id="notes-container" class="sidebar-menu-collapsed">
+    <div class="se-pre-con"></div>
+    <section>
+        <!-- sidebar menu start -->
+        <div class="sidebar-menu sticky-sidebar-menu">
+
+            <!-- logo start -->
+            <div class="logo">
+                <h1><a href="index.html"><img src="../images/logo.png" alt="logo"></a></h1>
+            </div>
+
+            <div class="logo-icon text-center">
+                <a href="/sendReminder" title="logo"><img src="../images/favicon.png" alt="logo-icon"> </a>
+            </div>
+            <!-- //logo end -->
+
+
+            <div class="sidebar-menu-inner">
+
+                <!-- sidebar nav start -->
+                <ul class="nav nav-pills nav-stacked custom-nav" id="mymenulst">
+
+                    <!--? Search Bar  -->
+                    <li class="d-flex align-items-center search-bar-li mx-2 px-2 mt-2 mb-3">
+                        <span>
+                            <i class="d-flex justify-content-center fa-solid fa-magnifying-glass"></i>
+                        </span>
+
+                          <input type="search" name="search" id="nav-search" placeholder="Search">
+                    </li>
+
+                    <!--? Menu Bar -->
+
+                    <!-- <li> -->
+
+                    <!--div class="align-items-center Left_Side my-2 Menu_Top">
+                        <div class="Menu d-flex align-items-center me-3">
+                            <span><img class="icon-menu-flat" src="../images/menu.svg" alt="menu"></span>
+                            <span class="ms-2">Menu</span>
+                        </div>
+                        <div class="Menu-icon Timer-icon me-3">
+                            <i class="d-flex justify-content-center fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div class="Menu-icon list-icon">
+                            <i class="d-flex justify-content-center fa-solid fa-star"></i>
+                        </div>
+                    </div-->
+
+                    <!--div class="Menu-Box-Icon">
+                        <img class="icon-menu-flat" src="../images/menu.svg" alt="menu">
+                    </div-->
+
+                    <!-- </li> -->
+
+                    <!--? Dashboard  -->
+                    <!--li class="menu-list dash-menu">
+                        <a href="/dashboard" class="d-flex align-items-center">
+                            <img class="icon-img" src="../images/dashboard.svg" alt="">
+                            <span class="link-name">DASHBOARD</span>
+                            <i class="bookmark-icon fa-solid fa-star"></i>
+                        </a>
+                    </li-->
+
+
+                    <!--? Operations -->
+                                        <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-briefcase"></i> -->
+                            <img class="icon-img" src="../images/to-do-list.png" alt="">
+                            <span class="link-name">DAILY TASKS</span><!--i
+                                class="bookmark-icon fa-regular fa-star"></i--></a>
+                        <ul class="sub-menu-list">
+                            
+                            <li><a href="patients">Patient Registration</a> </li>
+                            <li><a href="sendReminder">Follow-Ups</a> </li>
+                            <li><a href="emr" >For Doctor(EMR)</a> </li>
+                            <li><a href="calender" >Appointment Calender</a> </li>
+                            <li><a href="billlist">Billing</a></li>
+                            <li><a href="patient360">Patient 360</a></li>
+                            <li><a href="dashboard">Dashboard</a></li>
+                            <li><a href="purchaseManager">Purchase Manager</a></li>
+                            <li><a href="stockManager">Stock Manager</a></li>
+                            <li><a href="payPerVisit">Pay Per Visit</a></li>
+                           
+                        </ul>
+                    </li>
+                 
+                    <li class="menu-list">
+                      <a href="#" class="d-flex align-items-center">
+                        <img class="icon-img" src="../images/global-settings.png" alt="">
+                        <span class="link-name">SETUP CLINIC</span>
+                      </a>
+                      <ul class="sub-menu-list">
+                        <!-- Only show the menu items if the user does not have 'View Only' in their rights -->
+                        
+                          <li><a href="clinics">Add Clinic</a></li>
+                          <li><a href="staff">Add Staff</a></li>
+                          <li><a href="speciality">Add Speciality</a></li>
+                          <li><a href="symptoms">Add Symptoms</a></li>
+                          <li><a href="tests">Add Tests</a></li>
+                          <li><a href="services">Add Services</a></li>
+                          <li><a href="items">Add Medicine</a></li>
+                          <li><a href="doctors">Add Doctor</a></li>
+                          <li><a href="expenses">Add Expenses</a></li>
+                          <li><a href="purchaseClient">Add Purchase Client</a></li>
+                          <li><a href="notificationTemp">Notification Template</a></li>
+                        
+                          <li><a href="notification-setting">Notification Settings</a></li>
+                    
+                      </ul>
+                    </li>
+                 
+                   
+                    
+                  
+                  
+
+                </ul>
+                <!-- //sidebar nav end -->
+                <!-- toggle button start -->
+                <a class="toggle-btn" id="toggleClick">
+                    <span class="collapse-sidebar-text">Collapse Sidebar</span></i>
+                    <i class="fa fa-angle-double-right menu-collapsed__right"></i>
+                </a>
+                <!-- //toggle button end -->
+            </div>
+        </div>
+        <!-- //sidebar menu end -->
+        <!-- header-starts -->
+        <div class="header sticky-header">
+
+            <!-- notification menu start -->
+            <div class="menu-right">
+                <div class="navbar user-panel-top">
+
+                    <div class="search-box" style="margin-right: 10px;">
+                        <form method="get">
+                            <div>
+                              <input class="search-input" name="search_input" placeholder="Search Patient.." type="search" id="search-bar">
+                              <ul id="datahere"></ul>
+                            </div>
+                            <button class="search-submit" value="" fdprocessedid="7l6yx3"><span style="color: #073c6d;" class="fa fa-search"></span></button>
+                        </form>
+                    </div>
+
+                    <div class="user-dropdown-details d-flex">
+                        <div class="profile_details_left">
+                            <ul class="nofitications-dropdown">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-regular fa-bell"></i>
+                                        <span class="badge blue">3</span>
+                                    </a>
+                                    <!--ul class="dropdown-menu">
+                                        <li>
+                                            <div class="notification_header">
+                                                <h3>You have 3 new notifications</h3>
+                                            </div>
+                                        </li>
+                                        <li><a href="#" class="grid">
+                                                <div class="user_img"></div>
+                                                <div class="notification_desc">
+                                                    <p>Johnson purchased template</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a></li>
+                                            <div class="notification_bottom">
+                                                <a href="#all" class="bg-primary">See all notifications</a>
+                                            </div>
+                                        </li>
+                                    </ul-->
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="profile_details">
+                            <ul>
+                                <li class="dropdown profile_details_drop">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <div class="profile_img">
+                                            <img src="../images/no-user.jpg" class="rounded-circle" alt="" />
+                                            <div class="user-active">
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu drp-mnu" aria-labelledby="dropdownMenu3">
+                                        <li class="user-info">
+                                            <!-- <h5 class="user-name">Test</h5> -->
+                                            <!-- <span class="status ml-2">Available</span> -->
+                                        </li>
+                                        <li> <a href="#"><i class="lnr lnr-user"></i>My Profile</a> </li>
+                                        <li class="logout" id="logoutButton"> <a href="#"><i class="fa fa-power-off"></i>
+                                                Logout</a> </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--notification menu end -->
+
+        </div>
+        <script>
+            document.getElementById('logoutButton').addEventListener('click', function (event) {
+           event.preventDefault(); // Prevent the default action of following the link
+       
+           fetch('/logout', {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json'
+             }
+           })
+           .then(response => {
+             if (!response.ok) {
+               throw new Error('Logout failed');
+             }
+             return response.json();
+           })
+           .then(data => {
+             console.log(data.msg); // Log the logout message
+             window.location.href = '/1'; // Redirect to login page after successful logout
+           })
+           .catch(error => {
+             console.error('Error logging out:', error);
+             alert('Failed to log out. Please try again.'); // Provide user feedback
+           });
+       });
+       </script>
+        <!-- //header-ends -->
+        <div class="main-content">
+
+            <!--div class="row content-top-gap2">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                        <a class="navbar-brand text-center mr-5" href="#">
+                            <span class="dash-icon"><img height="20" src="./images/dashboard.png" alt="dashboard"></span>
+                            Dashboard
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item active text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/user.png" alt=""></span>
+                                        Appointments
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div-->
+            <div class="row content-top-gap2"></div>
+
+            <script>
+                document.getElementById('logoutButton').addEventListener('click', function (event) {
+               event.preventDefault(); // Prevent the default action of following the link
+           
+               fetch('/logout', {
+                 method: 'POST',
+                 headers: {
+                   'Content-Type': 'application/json'
+                 }
+               })
+               .then(response => {
+                 if (!response.ok) {
+                   throw new Error('Logout failed');
+                 }
+                 return response.json();
+               })
+               .then(data => {
+                 console.log(data.msg); // Log the logout message
+                 window.location.href = '/1'; // Redirect to login page after successful logout
+               })
+               .catch(error => {
+                 console.error('Error logging out:', error);
+                 alert('Failed to log out. Please try again.'); // Provide user feedback
+               });
+           });
+           </script>
+           <script>
+            // Debounce function: delays invoking the search function until the user stops typing for a certain time
+    
+    const datahere = document.getElementById("datahere");
+    const val = document.getElementById("search-bar") // Assuming the input field has an ID 'search_input'
+    
+    function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+    }
+    
+    // Debounced fetch function to search with a 1-second delay
+    // Debounced search function to trigger with a delay
+    const debouncedSearch = debounce(async (searchTerm) => {
+    if (searchTerm.trim() === "") {
+      // If search term is empty, do not trigger the search
+      datahere.innerHTML = '';
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/findcolumns?searchTerm=${searchTerm}`);
+      const data = await response.json();
+      console.log(data);
+      
+    
+      // Clear previous results
+      datahere.innerHTML = '';
+    
+      // Insert each search result into the UL
+      if (data.length > 0) {
+        data.forEach(item => {
+          const li = document.createElement("li");
+    
+          // Add content dynamically based on the available fields in the item
+          if (item.name) {
+            li.textContent = `${item.name} - Gender: ${item.gender} - Age: ${item.age} years`;
+          }  else {
+            li.textContent = 'Unknown data structure';
+          }
+    
+          li.addEventListener("click", () => {
+            // Call the function to send the POST request
+            // postItemData(item);
+            const id = item.id;
+            const route = "patient360"
+            ViewBtn(route,id)
+          });
+    
+          // Apply CSS classes for styling
+          li.classList.add('search-result-item');
+          datahere.appendChild(li);
+        });
+      } else {
+        const li = document.createElement("li");
+        li.textContent = 'No results found.';
+        li.classList.add('no-results');
+        datahere.appendChild(li);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+    }, 200);
+    
+    // Attach input event listener to the search field
+    val.addEventListener("input", (e) => {
+    const searchTerm = e.target.value;
+    debouncedSearch(searchTerm);
+    });
+
+    function formatDate(date) {
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+    }
+
+    function resetForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.reset(); // Reset all fields to their default values
+    } else {
+        console.error(`Form with ID '${formId}' not found.`);
+    }
+}
+    </script>

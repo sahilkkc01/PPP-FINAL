@@ -1,0 +1,668 @@
+  <!--footer section start-->
+  <style>
+    .shortcut-menu{position:fixed;bottom:65px;right:18px;z-index:1000}
+    .shortcut-icon{background-color:#007bff;color:#fff;border-radius:50%;padding:7px 11px;cursor:pointer;transition:transform .3s ease}
+    .shortcut-icon:hover{transform:scale(1.1)}
+    .menu-items{display:none;position:absolute;bottom:0;right:0;flex-direction:column;align-items:center}
+    .menu-item{background-color:#fff;border-radius:50%;padding:7px 11px;margin:7px 0;color:#007bff;box-shadow:0 2px 5px rgba(0,0,0,0.2);cursor:pointer;transition:all .3s ease}
+    .menu-item:hover{background-color:#007bff;color:#fff;transform:translateY(-5px)}
+    .close-menu{background-color:red;color:#fff;border-radius:50%;padding:7px 11px;cursor:pointer;transition:transform .3s ease}
+    .close-menu:hover{transform:scale(1.1)}
+    .menu-items.show{display:flex;animation:showMenu .5s ease forwards}
+    @keyframes showMenu {
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+    }
+    </style>
+    <style>
+  
+      .controls {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+  
+      .add-note-btn {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: transform 0.2s, background 0.2s;
+      }
+  
+      .add-note-btn:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+      }
+  
+      .sticky-note {
+        position: absolute;
+        width: 220px;
+        min-height: 180px;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        cursor: move;
+        user-select: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+        animation: popIn 0.3s ease-out;
+      }
+  
+      @keyframes popIn {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        70% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+  
+      .sticky-note:hover {
+        transform: scale(1.02);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+      }
+  
+      .sticky-note::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 40%;
+        height: 12px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 5px 5px;
+      }
+  
+      .sticky-note input {
+        width: 90%;
+        border: none;
+        background: transparent;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 5px;
+        font-family: inherit;
+      }
+  
+      .sticky-note textarea {
+        width: 90%;
+        border: none;
+        background: transparent;
+        resize: none;
+        min-height: 100px;
+        font-family: inherit;
+        padding: 5px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+  
+      .sticky-note input:focus,
+      .sticky-note textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+      }
+  
+      .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        opacity: 0;
+        transition: opacity 0.2s, background 0.2s;
+      }
+  
+      .sticky-note:hover .delete-btn {
+        opacity: 1;
+      }
+  
+      .delete-btn:hover {
+        background: rgba(255, 0, 0, 0.2);
+      }
+  
+      .color-picker {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 20px;
+        height: 20px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 0;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+  
+      .sticky-note:hover .color-picker {
+        opacity: 1;
+      }
+      .btn-close2{position:relative;right:-5px;background:none;border:none;font-size:19px;padding:3px;font-weight:600;color:#666;}
+    </style>
+  </div>
+</div>
+
+<div style="clear:both;"></div>
+
+<div id="mynIG" class="notification alert alert-danger alert-dismissible fade hidden show" style="max-width:350px;z-index:999;left:1%;bottom:1%;">
+  Internet Connection Lost.. Don't Worry your form is autosaved
+  <button type="button" data-bs-dismiss="alert" aria-label="Close" class="btn-close2">&#x2715;</button>
+</div>
+
+<div id="mynIC" class="notification alert alert-success alert-dismissible fade hidden show" style="max-width:350px;z-index:999;left:1%;bottom:1%;">
+  Internet Connection Restored
+  <button type="button" data-bs-dismiss="alert" aria-label="Close" class="btn-close2">&#x2715;</button>
+</div>
+
+  <footer class="dashboard footer footer-section bg-white py-4">
+    <div class="container">
+        <div class="row text-center text-md-start d-flex flex-column align-items-center">
+            <!-- Logo Section -->
+            <div class="col-12 col-md-6 mb-3 mb-md-0 d-flex justify-content-center align-items-center">
+                <img src="../images/logo.svg" alt="LifeLinkr Logo" class="img-fluid"
+                    style="max-height: 30px;">
+                <!-- <span><img class="ganesh-ji-img" src="./images/ganesh-ji-1.svg" alt=""></span> -->
+            </div>
+
+            <!-- Copyright Text -->
+            <div class="mt-1 col-12 col-md-6 text-center text-md-end">
+                <p class="mb-0">All Rights Reserved 2023–24 © Copyright – LifeLinkr
+                </p>
+            </div>
+        </div>
+
+        <!-- Links Section -->
+        <div class="row mt-0">
+            <div class="col-12 text-center">
+                <div class="footer-links d-inline-block">
+                    <a href="#">Technical Support</a> |
+                    <a href="#">Support Documents</a> |
+                    <a href="#">Training</a> |
+                    <a href="#" class="blue-link-footer">Compare Us</a> |
+                    <a href="#" class="blue-link-footer">Customer Sales</a> |
+                    <a href="#">Report a Bug</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ganesh-ji-img">
+            <span><img class="ganesh-ji-img" src="../images/ganesh-ji-orange.svg" alt=""></span>
+        </div>
+    </div>
+
+</footer>
+<!--footer section end-->
+<!-- move top -->
+<button onclick="topFunction()" id="movetop" class="bg-primary" title="Go to top">
+    <span class="fa fa-angle-up"></span>
+</button>
+<div class="shortcut-menu">
+    <div class="shortcut-icon" id="openMenu" title="Quick Menu" alt="Quick Menu">
+        <i class="fa-solid fa-bars"></i> <!-- Bootstrap icon -->
+    </div>
+  
+    <div class="menu-items" id="menuItems">
+        <a href="#" class="menu-item" onclick="createNote()" id="add-note-btn">
+            <i class="fa-regular fa-note-sticky" title="Sticky Notes" alt="Sticky Notes"></i>
+        </a>
+       
+        <a href="#" class="menu-item" data-bs-toggle="modal" data-bs-target="#myModal"><i class="fas fa-calendar-alt"></i></a>
+      
+        <div class="close-menu" id="closeMenu" title="Close" alt="Close">
+            <i class="fa-regular fa-circle-xmark"></i>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sucs1" tabindex="-1" aria-labelledby="sucs1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-body">
+     <div class="row text-center">
+      <div class="col-12"><img src="../images/ckh1.gif" ></div>
+      <h5 class="text-center col-12">Form Successfully Submitted</h5>     
+      <div class="form-group col-12 mt-1 mb-2 text-center">
+          <a href="Javascript:history.go ( -1)" class="btn-secondary btn-style btn mt-3 mr-2"><strong>Go Back</strong></a>
+          <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-primary btn-style btn mt-3"><strong>OK</strong></button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+<script>
+document.addEventListener("keydown", (event) => {
+  // Check if 'Ctrl' and 'B' keys are pressed
+  if (event.ctrlKey && event.key === "e") {
+    event.preventDefault(); // Prevent default browser behavior (e.g., bold text in a text editor)
+    // $('#toggleClick').click();
+    window.location.href='/emr'
+  }
+  if (event.ctrlKey && event.key === "3") {
+    event.preventDefault(); // Prevent default browser behavior (e.g., bold text in a text editor)
+    // $('#toggleClick').click();
+    window.location.href='/patient360'
+
+  }
+  if (event.ctrlKey && event.key === "b") {
+    event.preventDefault(); // Prevent default browser behavior (e.g., bold text in a text editor)
+    // $('#toggleClick').click();
+    window.location.href='/bill'
+
+  }
+  if (event.ctrlKey && event.key === "s") {
+    event.preventDefault(); // Prevent default browser behavior (e.g., bold text in a text editor)
+    // $('#toggleClick').click();
+    window.location.href='/stockManager'
+
+  }
+});
+    // Select all elements with the class 'expandable-textbox'
+    const textboxes = document.querySelectorAll(".expandable-textbox");
+
+    textboxes.forEach((textbox) => {
+        textbox.addEventListener("focus", function() {
+            textbox.classList.add("expanded");
+            textbox.setAttribute("rows", "4"); // Optional for textarea-like behavior
+        });
+
+        textbox.addEventListener("blur", function() {
+            if (!textbox.value) { // Collapse only if textbox is empty
+                textbox.classList.remove("expanded");
+                textbox.removeAttribute("rows");
+            }
+        });
+    });
+</script>
+
+<script>
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("movetop").style.display = "block";
+        } else {
+            document.getElementById("movetop").style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+<!-- /move top -->
+
+
+<script src="../javascripts/jquery-3.3.1.min.js"></script>
+<script src="../javascripts/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="../javascripts/jquery.nicescroll.js"></script>
+<script src="../javascripts/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Validation Js -->
+<script src="../javascripts/Validation.js"></script> 
+<script src="../javascripts/saveForm.js"></script> 
+<script src="../javascripts/saveFormImg.js"></script> 
+<script src="../javascripts/pagi_search.js"></script> 
+<script src="../javascripts/ViewBtn.js"></script> 
+<script src="../javascripts/autoSaveData.js"></script>
+
+<!-- close script -->
+<script>
+    var closebtns = document.getElementsByClassName("close-grid");
+    var i;
+
+    for (i = 0; i < closebtns.length; i++) {
+        closebtns[i].addEventListener("click", function () {
+            this.parentElement.style.display = 'none';
+        });
+    }
+
+</script>
+
+<script>
+ $('input, select, textarea').on("input change", function() {
+    $(this).removeClass('is-invalid');
+});
+
+</script>
+<!-- //close script -->
+
+<!-- disable body scroll when navbar is in active -->
+<script>
+    $(function () {
+        $('.sidebar-menu-collapsed').click(function () {
+            $('body').toggleClass('noscroll');
+        })
+    });
+</script>
+<!-- disable body scroll when navbar is in active -->
+<!-- loading-gif Js -->
+<script>
+$(window).on('load', function() {
+// Animate loader off screen
+$(".se-pre-con").fadeOut("slow");
+});
+</script>
+
+<script>
+    document.getElementById('openMenu').addEventListener('click', function () {
+        document.getElementById('menuItems').classList.add('show');
+    });
+    
+    document.getElementById('closeMenu').addEventListener('click', function () {
+        document.getElementById('menuItems').classList.remove('show');
+    });
+    document.getElementById("patient360").addEventListener("click",()=>{
+      console.log("Button clicked!"); 
+      window.location.href = "/main/dash";
+    })
+    </script>
+  
+  <script>
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+    let currentNote = null;
+  
+    // Predefined colors for sticky notes
+    const noteColors = [
+      { background: "#fff740", text: "#000000" }, // Yellow
+      { background: "#ff7eb9", text: "#000000" }, // Pink
+      { background: "#7afcff", text: "#000000" }, // Blue
+      { background: "#98ff98", text: "#000000" }, // Green
+      { background: "#ff9e9e", text: "#000000" }, // Red
+      { background: "#dcd0ff", text: "#000000" }, // Purple
+    ];
+  
+    document.addEventListener("DOMContentLoaded", loadNotes);
+  
+    async function loadNotes() {
+      try {
+        const response = await fetch("/notes");
+        const notes = await response.json();
+        if(notes.length === 0) return;
+        notes.forEach((note) => {
+          createNoteElement(note);
+        });
+      } catch (error) {
+        console.error("Error loading notes:", error);
+      }
+    }
+  
+    async function createNote() {
+      const randomColor =
+        noteColors[Math.floor(Math.random() * noteColors.length)];
+      const note = {
+        title: "New Note",
+        description: "Add description here",
+        x_coordinate: Math.random() * (window.innerWidth - 250) + 50,
+        y_coordinate: Math.random() * (window.innerHeight - 250) + 50,
+        ClinicId: 1,
+        color: randomColor.background,
+      };
+  
+      try {
+        const response = await fetch("/notes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(note),
+        });
+        const savedNote = await response.json();
+        createNoteElement(savedNote);
+      } catch (error) {
+        console.error("Error creating note:", error);
+      }
+    }
+  
+    function createNoteElement(note) {
+      const noteElement = document.createElement("div");
+      noteElement.className = "sticky-note";
+      noteElement.id = `note-${note.id}`;
+      noteElement.style.left = `${note.x_coordinate}px`;
+      noteElement.style.top = `${note.y_coordinate}px`;
+      noteElement.style.backgroundColor =
+        note.color || noteColors[0].background;
+  
+      noteElement.innerHTML = `
+              <input type="color" class="color-picker" value="${
+                note.color || noteColors[0].background
+              }" 
+                     onchange="updateNoteColor(${note.id}, this.value)">
+              <span class="delete-btn" onclick="deleteNote(${
+                note.id
+              })">×</span>
+              <input type="text" value="${note.title}" onchange="updateNote(${
+        note.id
+      })">
+              <textarea onchange="updateNote(${note.id})">${
+        note.description
+      }</textarea>
+          `;
+  
+      noteElement.addEventListener("mousedown", dragStart);
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("mouseup", dragEnd);
+  
+      document.getElementById("notes-container").appendChild(noteElement);
+    }
+  
+    async function updateNoteColor(id, color) {
+      const noteElement = document.getElementById(`note-${id}`);
+      noteElement.style.backgroundColor = color;
+      await updateNote(id);
+    }
+  
+    async function updateNote(id) {
+      const noteElement = document.getElementById(`note-${id}`);
+      const note = {
+        id: id,
+        title: noteElement.querySelector('input[type="text"]').value,
+        description: noteElement.querySelector("textarea").value,
+        x_coordinate: parseInt(noteElement.style.left),
+        y_coordinate: parseInt(noteElement.style.top),
+        color: noteElement.querySelector('input[type="color"]').value,
+        ClinicId: 1,
+      };
+  
+      try {
+        await fetch(`/notes/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(note),
+        });
+      } catch (error) {
+        console.error("Error updating note:", error);
+      }
+    }
+  
+    async function deleteNote(id) {
+      const noteElement = document.getElementById(`note-${id}`);
+      noteElement.style.transform = "scale(0)";
+      noteElement.style.opacity = "0";
+  
+      setTimeout(async () => {
+        try {
+          await fetch(`/notes/${id}`, {
+            method: "DELETE",
+          });
+          noteElement.remove();
+        } catch (error) {
+          console.error("Error deleting note:", error);
+        }
+      }, 300);
+    }
+  
+    // Replace your dragStart function with this:
+    function dragStart(e) {
+      currentNote = e.target.closest(".sticky-note");
+      if (!currentNote) return;
+  
+      // Reset these values on initial click
+      xOffset = 0;
+      yOffset = 0;
+  
+      // Calculate initial position based on current element position
+      const rect = currentNote.getBoundingClientRect();
+      initialX = e.clientX - rect.left;
+      initialY = e.clientY - rect.top;
+  
+      if (
+        e.target.tagName.toLowerCase() === "input" ||
+        e.target.tagName.toLowerCase() === "textarea"
+      ) {
+        return;
+      }
+  
+      isDragging = true;
+      currentNote.classList.add("dragging");
+      currentNote.style.zIndex = "1000";
+    }
+  
+    // And update your drag function:
+    function drag(e) {
+      if (!isDragging) return;
+  
+      e.preventDefault();
+  
+      // Calculate new position
+      const newX = e.clientX - initialX;
+      const newY = e.clientY - initialY;
+  
+      currentNote.style.left = `${newX}px`;
+      currentNote.style.top = `${newY}px`;
+    }
+  
+    function dragEnd(e) {
+      if (!isDragging) return;
+  
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+  
+      if (currentNote) {
+        const noteId = currentNote.id.split("-")[1];
+        updateNote(noteId);
+      }
+    }
+    $(document).ready(function () {
+      // Function to expand sidebar
+      function expandSidebar() {
+         var body = $('body');
+         if (body.hasClass('sidebar-menu-collapsed')) {
+          $('.toggle-btn').click(); 
+         }
+      }
+
+      // Event listener for <a> inside <li> with class 'menu-list'
+        $('.menu-list > a').click(function (event) {
+         event.preventDefault(); 
+         expandSidebar(); 
+      });
+   });
+
+
+//? Calender Open on click of input
+document.querySelectorAll('input[type="date"]').forEach(function(dateInput) {
+   dateInput.addEventListener('click', function() {
+       this.showPicker(); // Trigger the calendar popup on click
+   });
+})
+
+const form = document.querySelectorAll("form");
+
+  console.log("Form ID:",form);
+    // form[1].addEventListener("")
+    window.addEventListener('offline', () => {
+      // alert('1');
+      // Replace 'myFormId' with your actual form ID
+      document.getElementById("mynIG").classList.remove("hidden");
+      setTimeout(function () {
+        $('#mynIG').fadeOut();
+      }, 15000);
+      if(form.length > 1){
+        if(form[1].id){
+        saveFormDataToLocalStorage(form[1].id);
+      }
+    }
+      // 
+    });
+
+window.addEventListener("online", ()=>{
+  document.getElementById("mynIC").classList.remove("hidden");
+  setTimeout(function () {
+        $('#mynIC').fadeOut();
+      }, 15000);
+});
+
+window.addEventListener('load', () => {
+  if(form[1].id){
+    loadFormDataFromLocalStorage(form[1].id);
+  }
+});
+$(document).ready(function() {
+    $('#nav-search').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+		if (value === "") {
+            // Close or hide all menu items
+            $('#mymenulst li').removeClass("nav-active");
+        } else {
+        
+        // Show all hidden list items before filtering
+        $('#mymenulst li').addClass("nav-active");
+
+        // Filter the list based on the search value
+        $('#mymenulst li').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+		}
+    });
+});
+
+//for Tooltip
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+
+</script>
+<!--// loading-gif Js -->
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Patient 360 - LifeLinkr</title>
+    <%- include('../header') -%>
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Patient 360</h4>
+      </div>
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!--part 1-->
+
+            <div class="col-xl-12 pr-xl-2 mb-4">
+              <style>
+                .profile-image {
+                  width: 100px;
+                  height: 100px;
+                  background-color: #e9ecef;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: bold;
+                  color: #6c757d;
+                }
+              </style>
+
+              <!-- Action Buttons -->
+              <div class="row mb-2">
+                <div class="col-md-3 text-left">
+                  <input
+                    type="text"
+                    id="patient"
+                    class="form-control input-style search-input"
+                    placeholder="Search Patient..."
+                    name="patient"
+                    data-validation="required"
+                    data-error-message="Patient is required"
+                  />
+                  <ul
+                    class="list-group suggestions-list"
+                    style="position: absolute; z-index: 100"
+                  ></ul>
+                </div>
+
+                <div class="col-md-9 text-right">
+                  <button
+                    href="#"
+                    class="btn btn-primary me-2 mr-1"
+                    disabled
+                    id="markVisit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#markVisitModal"
+                  >
+                    Mark Visit
+                  </button>
+                </div>
+              </div>
+
+              <!-- Patient Information Section -->
+              <div class="card mb-4" id="patientCard">
+                <div class="card-body">
+                  <div class="row">
+                    <!-- Profile Image -->
+
+                    <div class="col-md-2">
+                      <!-- Display Image -->
+                      <img
+                        id="displayImg"
+                        alt="Patient Image"
+                        src=""
+                        style="max-width: 150px; max-height: 150px"
+                      />
+                    </div>
+
+                    <!-- Patient Details -->
+                    <div class="col-md-10">
+                      <div class="row mb-2">
+                        <div class="col-md-4">
+                          <strong>Code:</strong> <span id="patientCode"></span>
+                        </div>
+                        <div class="col-md-4">
+                          <strong>Patient Name:</strong>
+                          <span id="patientName"></span>
+                        </div>
+                        <div class="col-md-4">
+                          <strong>Email:</strong>
+                          <span id="patientEmail"></span>
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-md-4">
+                          <strong>Mobile:</strong>
+                          <span id="patientMobile"></span>
+                        </div>
+                        <div class="col-md-4">
+                          <strong>Age:</strong> <span id="patientAge"></span>
+                        </div>
+                        <div class="col-md-4">
+                          <strong>Gender:</strong>
+                          <span id="patientGender"></span>
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-md-4">
+                          <strong>Weight in KG:</strong>
+                          <span id="patientWeight"></span>
+                        </div>
+                        <div class="col-md-4">
+                          <strong>Height in Feet:</strong>
+                          <span id="patientHeight"></span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <strong>Address:</strong>
+                          <span id="patientAddress"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="patientId" />
+
+              <!-- Additional Data Tables -->
+              <div class="">
+                <div class="mb-3">
+                  <h5 class="primary">Patient Appointments</h5>
+                </div>
+                <div class="mb-3">
+                  <table class="table2">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody id="appointmentsTableBody">
+                      <!-- Add more rows as needed -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="">
+                <div class="mb-3">
+                  <h5 class="primary">Patient Visits</h5>
+                </div>
+                <div class="mb-3">
+                  <table class="table2">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="vistisTableBody">
+                      <!-- Add more rows as needed -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Bills -->
+              <div class="">
+                <div class="mb-3">
+                  <h5 class="primary">Patient Bills</h5>
+                </div>
+
+                <div class="">
+                  <table class="table2">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Date</th>
+                        <th>Bill No</th>
+                        <th>Total Amount</th>
+                        <th>Print</th>
+                      </tr>
+                    </thead>
+                    <tbody id="billsTableBody">
+                      <!-- Dynamic rows will be appended here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--part 1 ended-->
+      </div>
+      <!-- //charts -->
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="markVisitModal"
+      tabindex="-1"
+      aria-labelledby="markVisitLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="markVisitLabel">Mark Visit</h5>
+            <!-- Close button -->
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Patient Details -->
+            <p id="visitDetails"><strong></strong></p>
+
+            <!-- Visit Date, Time, Height, and Weight -->
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="visitDate" class="input__label">Date</label>
+                <input
+                  type="date"
+                  id="visitDate"
+                  readonly
+                  class="form-control input-style"
+                />
+              </div>
+              
+              <div class="col-md-3">
+                <label for="height" class="input__label">Height (Feet)</label>
+                <input
+                  type="number"
+                  readonly
+                  id="height"
+                  class="form-control input-style"
+                />
+              </div>
+              <div class="col-md-3 visit">
+                <div class="form-group">
+                  <label for="exampleInputEmail1" class="input__label"
+                    >Doctor</label
+                  >
+                  <select
+                    class="form-control input-style v2"
+                    name="doctor"
+                    id="doctor"
+                    data-validation="required"
+                    data-error-message="Doctor name is required"
+                  >
+                    <option value="">Select</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-3 visit">
+                <div class="form-group">
+                  <label class="input__label">Time Slot*</label>
+                  <select
+                    class="form-control input-style v2"
+                    name="time_available"
+                    id="visitTime"
+                    data-validation="required"
+                    data-error-message="Time is required"
+                  >
+                    <option value="">Select</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label for="weight" class="input__label">Weight (Kg)</label>
+                <input
+                  type="number"
+                  id="weight"
+                  class="form-control input-style"
+                />
+              </div>
+            </div>
+
+            <!-- Fever, BP, and Sugar -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="fever" class="input__label">Fever (in °C)</label>
+                <input
+                  type="text"
+                  id="fever"
+                  class="form-control input-style"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="bp" class="input__label">BP</label>
+                <input type="text" id="bp" class="form-control input-style" />
+              </div>
+              <div class="col-md-4">
+                <label for="sugar" class="input__label">Sugar</label>
+                <input
+                  type="text"
+                  id="sugar"
+                  class="form-control input-style"
+                />
+              </div>
+            </div>
+
+            <!-- BMI -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="bmi" class="input__label">BMI</label>
+                <input
+                  type="number"
+                  id="bmi"
+                  class="form-control input-style"
+                  readonly
+                />
+              </div>
+              <div class="col-md-4"></div>
+              <!-- Empty column for spacing -->
+              <div class="col-md-4"></div>
+              <!-- Empty column for spacing -->
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="saveVisit()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <%- include('../footer') -%>
+    <script>
+      // Function to calculate BMI
+      function calculateBMI() {
+        var weight = parseFloat(document.getElementById("weight").value); // Weight in KG
+        var heightInFeet = parseFloat(document.getElementById("height").value); // Height in feet
+
+        if (isNaN(weight) || isNaN(heightInFeet) || heightInFeet <= 0) {
+          document.getElementById("bmi").value = ""; // If input is invalid, clear BMI field
+          return;
+        }
+
+        // Convert height from feet to meters (1 foot = 0.3048 meters)
+        var heightInMeters = heightInFeet * 0.3048;
+
+        // Calculate BMI: weight (kg) / height (m)^2
+        var bmi = weight / (heightInMeters * heightInMeters);
+
+        // Display the calculated BMI
+        document.getElementById("bmi").value = bmi.toFixed(2); // Display BMI to 2 decimal places
+      }
+
+      // Add event listeners to weight and height inputs to trigger BMI calculation
+      document.getElementById("weight").addEventListener("input", calculateBMI);
+      document.getElementById("height").addEventListener("input", calculateBMI);
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const id = "<%=id%>"; // Get the ID from server-side rendering
+
+        if (id !== "") {
+          // Check if id is defined and not the placeholder
+          fetchPatientById(id); // Fetch specific patient data based on ID
+        }
+
+        fetchPatients(); // Fetch all patients for search suggestions regardless of ID
+      });
+
+      // Fetch specific patient by ID
+      function fetchPatientById(id) {
+        axios
+          .get(`/getPatientbyId?id=${id}`)
+          .then((response) => {
+            const item = response.data;
+            populatePatientDetails(item); // Populate details with the fetched data
+          })
+          .catch((error) => {
+            console.error("Error fetching patient data by ID:", error);
+          });
+      }
+
+      // Fetch all patient data for search suggestions
+      let responseData = [];
+      function fetchPatients() {
+        axios
+          .get("/getPatients")
+          .then((response) => {
+            responseData = response.data;
+          })
+          .catch((error) => {
+            console.error("Error fetching patient data:", error);
+          });
+      }
+
+      // Handle input for search and display suggestions
+      document.addEventListener("input", function (event) {
+        if (event.target.classList.contains("search-input")) {
+          const query = event.target.value;
+          const suggestionsList = event.target.nextElementSibling;
+          showSuggestions(query, responseData, suggestionsList);
+        }
+      });
+
+      function showSuggestions(query, data, suggestionsList) {
+        suggestionsList.innerHTML = "";
+        if (query.length === 0) return;
+
+        const filteredData = data.filter(
+          (item) =>
+            item.name.toLowerCase().includes(query.toLowerCase()) ||
+            item.mobile.toLowerCase().includes(query.toLowerCase())
+        );
+
+        filteredData.forEach((item) => {
+          const li = document.createElement("li");
+          li.classList.add("list-group-item");
+          li.style.cursor = "pointer";
+          li.innerHTML = `
+                    <strong>Name:</strong> ${item.name} &nbsp;
+                    <strong>Gender:</strong> ${item.gender} &nbsp;
+                    <strong>Mobile:</strong> ${item.mobile} &nbsp;
+                `;
+          li.addEventListener("click", () => populatePatientDetails(item));
+          suggestionsList.appendChild(li);
+        });
+      }
+
+      // Populate patient details and display relevant data
+      function populatePatientDetails(item) {
+        // Set the patient's name in the search input field
+        const searchInput = document.getElementById("patient");
+        if (searchInput) {
+          searchInput.value = item.name;
+        }
+
+        // Clear the suggestions list if present
+        const suggestionsList = document.querySelector(".suggestions-list");
+        if (suggestionsList) {
+          suggestionsList.innerHTML = "";
+        }
+
+        // Display patient details
+        document.getElementById("patientCode").innerText = item.code || "N/A";
+        document.getElementById("patientName").innerText = item.name;
+        document.getElementById("patientEmail").innerText = item.email || "N/A";
+        document.getElementById("patientMobile").innerText = item.mobile;
+        document.getElementById("patientAge").innerText = item.age || "N/A";
+        document.getElementById("patientGender").innerText = item.gender;
+        document.getElementById("patientWeight").innerText =
+          item.weight_Kg || "N/A";
+        document.getElementById("patientHeight").innerText =
+          item.height_Feet || "N/A";
+        document.getElementById("height").value = item.height_Feet || "N/A";
+        document.getElementById("patientAddress").innerText =
+          item.address || "N/A";
+        const displayImg = document.getElementById("displayImg");
+        if (item.image) {
+          displayImg.src = `../MyUploads/${item.image}`;
+        } else {
+          displayImg.src = "../images/no-user.jpg"; // Clear image if no image data is available
+          displayImg.alt = "No image available";
+        }
+
+        document.getElementById("patientId").value = item.id;
+        document.getElementById("markVisit").removeAttribute("disabled");
+        document.getElementById("visitDate").value = new Date()
+          .toISOString()
+          .split("T")[0];
+        // Set the current time
+        const now = new Date();
+        const currentTime = now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+        // document.getElementById("visitTime").value = currentTime;
+        document.getElementById("visitDetails").innerHTML = `
+        <strong>${item.name}</strong>, <strong>${item.gender}</strong>, <strong>${item.age} years old</strong>
+    `;
+        document.getElementById("patientCard").style.display = "block";
+
+        // Fetch and display additional patient data
+        fetchPatientBills(item.id);
+        fetchPatientAppointments(item.id);
+        fetchPatientVisits(item.id);
+      }
+
+      // Fetch patient bills
+      async function fetchPatientBills(patientId) {
+        try {
+          const response = await axios.get(
+            `/getPatientBills/?patientId=${patientId}`
+          );
+          const bills = response.data;
+          const billsTableBody = document.getElementById("billsTableBody");
+          billsTableBody.innerHTML = "";
+
+          bills.forEach((bill) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${new Date(
+                          bill.createdAt
+                        ).toLocaleDateString()}</td>
+                        <td>${bill.bill_no}</td>
+                        <td>₹${bill.totalAmount}</td>
+                        
+<td><button type="button" class="btn btn-primary btn-style btn-change" onclick="printBill('${
+              bill.id
+            }')">Print</button></td>
+
+
+                    `;
+            billsTableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error fetching patient bills:", error);
+        }
+      }
+
+      function printBill(id) {
+        // Example function call with id (assuming ViewBtn is defined elsewhere)
+        ViewBtn("printBill", id);
+      }
+      function printEmr(id) {
+        // Example function call with id (assuming ViewBtn is defined elsewhere)
+        ViewBtn("printEmr", id);
+      }
+
+      // Fetch patient appointments
+      async function fetchPatientAppointments(patientId) {
+        try {
+          const response = await axios.get(
+            `/getPatientAppointments/?patientId=${patientId}`
+          );
+          const appointments = response.data;
+          const appointmentsTableBody = document.getElementById(
+            "appointmentsTableBody"
+          );
+          appointmentsTableBody.innerHTML = "";
+
+          appointments.forEach((appointment) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${new Date(
+                          appointment.date
+                        ).toLocaleDateString()}</td>
+                        <td>${appointment.time}</td>
+                    `;
+            appointmentsTableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error fetching patient appointments:", error);
+        }
+      }
+
+      // Fetch patient appointments
+      async function fetchPatientVisits(patientId) {
+        try {
+          const response = await axios.get(
+            `/getPatientVisits/?patientId=${patientId}`
+          );
+          const visits = response.data;
+          const visitsTableBody = document.getElementById("vistisTableBody");
+          visitsTableBody.innerHTML = "";
+
+          visits.forEach((visit) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${new Date(visit.date).toLocaleDateString()}</td>
+                        <td>${visit.time}</td>
+                                                
+<td><button type="button" class="btn btn-primary btn-style btn-change" onclick="printEmr('${
+              visit.id
+            }')">Print EMR</button></td>
+
+                    `;
+            visitsTableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error fetching patient visits:", error);
+        }
+      }
+
+      // Save visit information
+      async function saveVisit() {
+        const patientId = document.getElementById("patientId").value;
+        const visitDate = document.getElementById("visitDate").value;
+        const visitTime = document.getElementById("visitTime").value;
+        const weight = document.getElementById("weight").value;
+        const fever = document.getElementById("fever").value;
+        const bp = document.getElementById("bp").value;
+        const sugar = document.getElementById("sugar").value;
+        const bmi = document.getElementById("bmi").value;
+        const doctor = document.getElementById("doctor").value;
+
+        // Validate required fields
+        if (!patientId || !visitDate || !visitTime) {
+          alert(
+            "Please fill in all required visit details (Patient ID, Date, and Time)."
+          );
+          return;
+        }
+
+        try {
+          // Make POST request to save visit
+          const response = await axios.post("/saveVisit", {
+            patientId,
+            visitDate,
+            visitTime,
+            weight,
+            fever,
+            bp,
+            sugar,
+            bmi,
+            doctor,
+          });
+
+          // Check response status
+          if (response.status === 200) {
+            alert("Visit saved successfully!");
+          } else {
+            alert("Failed to save the visit. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error saving visit:", error);
+          alert("An error occurred while saving the visit.");
+        }
+      }
+    </script>
+    <script>
+      let appointments = null;
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      function isOverlapping(slot1, slot2) {
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [startHour2, startMinute2] = slot2.start.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const startTime2 = startHour2 * 60 + startMinute2;
+
+        // Overlap occurs if the end time of slot1 is greater than or equal to the start time of slot2
+        return endTime1 >= startTime2;
+      }
+
+      function mergeTwoSlots(slot1, slot2) {
+        const start = slot1.start; // Start time remains the same
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [endHour2, endMinute2] = slot2.end.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const endTime2 = endHour2 * 60 + endMinute2;
+
+        // The end time is the maximum of the two
+        const newEndTime = Math.max(endTime1, endTime2);
+        const newEndHour = Math.floor(newEndTime / 60);
+        const newEndMinute = newEndTime % 60;
+
+        return {
+          start,
+          end: `${String(newEndHour).padStart(2, "0")}:${String(
+            newEndMinute
+          ).padStart(2, "0")}`,
+        };
+      }
+
+      function generateTimeSlots(slotRanges) {
+        const selectElement = document.getElementById("visitTime");
+        if (!selectElement) return;
+        let date = new Date(); // Create a Date object from the input string
+        const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
+        const day = days[dayIndex];
+        let notAvailableSlots = [];
+        if (appointments && appointments.length) {
+          appointments.forEach((a) => {
+            const date = new Date(a.date); // Create a Date object from the input string
+            const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
+            const thisDay = days[dayIndex];
+            if (thisDay === day) {
+              notAvailableSlots.push(a.time);
+            }
+          });
+        }
+
+        // Clear existing options
+        selectElement.innerHTML = `<option value="">Select</option>`;
+
+        // Loop through each slot range and generate 15-minute intervals
+        slotRanges.forEach((range) => {
+          const [startHour, startMinute] = range.start.split(":").map(Number);
+          const [endHour, endMinute] = range.end.split(":").map(Number);
+
+          let currentHour = startHour;
+          let currentMinute = startMinute;
+
+          while (
+            currentHour < endHour ||
+            (currentHour === endHour && currentMinute < endMinute)
+          ) {
+            const formattedHour = currentHour.toString().padStart(2, "0");
+            const formattedMinute = currentMinute.toString().padStart(2, "0");
+
+            // Format the time slot in "HH:MM AM/PM" format
+            const amPm = currentHour < 12 ? "AM" : "PM";
+            const displayHour = currentHour % 12 === 0 ? 12 : currentHour % 12;
+            const formattedTime = `${displayHour}:${formattedMinute} ${amPm}`;
+
+            // Create an <option> element
+            const option = document.createElement("option");
+            option.value = `${formattedHour}:${formattedMinute}`;
+            option.textContent = formattedTime;
+
+            // Increment the time by 15 minutes
+            currentMinute += 15;
+            if (currentMinute >= 60) {
+              currentMinute = 0;
+              currentHour += 1;
+            }
+            if (
+              notAvailableSlots.includes(
+                `${formattedHour}:${formattedMinute}:00`
+              )
+            ) {
+              continue;
+            } else {
+              console.log(notAvailableSlots);
+
+              selectElement.appendChild(option);
+            }
+          }
+        });
+      }
+
+      const fetchDoctor = async () => {
+        try {
+          // Fetch data from the endpoint
+          const response = await fetch("/getDoctors");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+
+          // Find the select element
+          const selectElement = document.getElementById("doctor");
+
+          // Clear any existing options (except the placeholder)
+          selectElement.innerHTML = `<option value="">Select</option>`;
+
+          // Populate options from the fetched data
+          data.forEach((doctor) => {
+            const option = document.createElement("option");
+            option.value = doctor.id; // Assuming `doctor.id` is the unique identifier
+            option.textContent = doctor.name; // Assuming `doctor.name` is the name of the doctor
+            selectElement.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching doctors:", error);
+        }
+      };
+      let timeTable = null;
+      const fetchTimeTable = async (id) => {
+        try {
+          // Fetch the timetable data based on the given ID
+          const date = new Date(); // Create a Date object from the input string
+          const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
+          const val = days[dayIndex];
+          console.log(val);
+          const response = await fetch(`/timeTable?id=${id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+          timeTable = data.dayArray;
+          if (!timeTable) {
+            return;
+          }
+
+          timeTable.forEach((day) => {
+            if (day.dayType === val) {
+              day.timeTable.sort((a, b) => {
+                // Split "HH:MM" into hours and minutes
+                const [hourA, minuteA] = a.start.split(":").map(Number);
+                const [hourB, minuteB] = b.start.split(":").map(Number);
+
+                // Convert time to total minutes since midnight
+                const totalMinutesA = hourA * 60 + minuteA;
+                const totalMinutesB = hourB * 60 + minuteB;
+
+                // Compare the total minutes
+                return totalMinutesA - totalMinutesB;
+              });
+              const merged = [];
+              for (const slot of day.timeTable) {
+                // If merged is empty or there's no overlap, add the current slot
+                if (
+                  merged.length === 0 ||
+                  !isOverlapping(merged[merged.length - 1], slot)
+                ) {
+                  merged.push(slot);
+                } else {
+                  // Merge the current slot with the last slot in the merged array
+                  merged[merged.length - 1] = mergeTwoSlots(
+                    merged[merged.length - 1],
+                    slot
+                  );
+                }
+              }
+              generateTimeSlots(merged);
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching timetable data:", error);
+        }
+      };
+
+      document.getElementById("doctor").addEventListener("change", () => {
+        const id = document.getElementById("doctor").value;
+        fetchTimeTable(id);
+      });
+
+      // // Call the function to populate the dropdown (replace `id` with the actual ID value)
+      // fetchTimeTable("someId");
+
+      // Call the function to populate the dropdown
+      fetchDoctor();
+      document.getElementById("day").addEventListener("change", () => {});
+    </script>
+  </head>
+</html>

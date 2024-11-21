@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinkr</title>
+    <%-include('../header');  -%>
+     <style>
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid transparent;
+            text-align: center;
+            flex: 1;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+        .tab.active {
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .fs14{font-size:14px;}
+     </style>  
+
+
+            <!-- content -->
+            <div class="container-fluid">
+
+                <!-- charts -->
+                <div class="col-lg-12 pl-lg-0 mt-2">
+                    <h4 class="primary">Prefix Master</h4>
+                </div>
+                <div class="chart">
+                    <div class="row">
+
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <!--part 1-->
+                            <div class="card card_border">
+                                <div class="">
+
+                                    <div class="col-xl-12 pr-xl-2 mb-4">
+                                            <div class="tabs">
+                                                <div class="tab active" data-tab="patient-id-generation">Patient ID Generation</div>
+                                                <div class="tab" data-tab="invoice-id-generation">Invoice ID Generation</div>
+                                                <div class="tab" data-tab="receipt-id-generation">Receipt ID Generation</div>
+                                            </div>
+                                            <div id="patient-id-generation" class="tab-content active">
+                                                <h5 class="primary">Patient ID Generation</h5>
+                                                <p class="fs14 mt-2">You need to select an <b>Initial Value</b>. You can choose an alphanumeric prefix (will not be incremented), and a numeric part which will be automatically incremented for every new Patient.</p>
+                                                <div class="form-section mt-3">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                        <div class="col-md-2">
+                                                        <label for="prefix" class="input__label">Initial Patient Number:</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="prefix" placeholder="Patient ID Prefix (optional)">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="numeric" placeholder="Numeric Only">
+                                                        </div>
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 text-right">
+                                                    <button class="btn btn-primary btn-style mt-3" type="button">Use this Value</button>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div id="invoice-id-generation" class="tab-content">
+                                                <h5 class="primary">Invoice ID Generation</h5>
+                                                <p>Setup for automatic invoice ID generation.</p>
+                                                <div class="form-section mt-3">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                        <div class="col-md-2">
+                                                        <label for="prefix" class="input__label">Initial Invoice Number:</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="prefix" placeholder="Invoice ID Prefix (optional)">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="numeric" placeholder="Numeric Only">
+                                                        </div>
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 text-right">
+                                                    <button class="btn btn-primary btn-style mt-3" type="button">Use this Value</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="receipt-id-generation" class="tab-content">
+                                                <h5 class="primary">Receipt ID Generation</h5>
+                                                <p>Setup for automatic receipt ID generation.</p>
+                                                <div class="form-section mt-3">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                        <div class="col-md-2">
+                                                        <label for="prefix" class="input__label">Initial Receipt Number:</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="prefix" placeholder="Receipt ID Prefix (optional)">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        <input type="text" class="form-control input-style" id="numeric" placeholder="Numeric Only">
+                                                        </div>
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 text-right">
+                                                    <button class="btn btn-primary btn-style mt-3" type="button">Use this Value</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                    
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--part 1 ended-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- //charts -->
+            </div>
+
+
+            <%-include('../footer');  -%>
+            <script>
+                // JavaScript for Tab Functionality
+                const tabs = document.querySelectorAll('.tab');
+                const tabContents = document.querySelectorAll('.tab-content');
+        
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs
+                        tabs.forEach(t => t.classList.remove('active'));
+                        // Add active class to the clicked tab
+                        tab.classList.add('active');
+        
+                        // Hide all tab contents
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        // Show the content corresponding to the clicked tab
+                        const target = document.getElementById(tab.getAttribute('data-tab'));
+                        target.classList.add('active');
+                    });
+                });
+            </script>

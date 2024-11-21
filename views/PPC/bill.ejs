@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinkr</title>
+<%- include('../header') -%>
+        <!-- main content start -->
+            <!-- content -->
+            <div class="container-fluid">
+
+                <!-- charts -->
+                <div class="col-lg-12 pl-lg-0 mt-2">
+                    <h4 class="primary">Create Bill</h4>
+                </div>
+                <div class="chart">
+                    <div class="row">
+
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <!--part 1-->
+                            <div class="card card_border">
+                                <div class="">
+                                    <div class="col-xl-12 pr-xl-2 p-heading">
+                                        <h6 class="p-text">Billing</h6>
+                                    </div>
+
+                                    <div class="col-xl-12 pr-xl-2 mb-4">
+                                     <div class="">
+    <!-- Patient Search -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="searchPatient" class="form-label">Search Patient</label>
+            <input type="text" id="patient" class="form-control input-style search-input" placeholder="Search Name/Mobile" name="patient"
+                                        data-validation="required" data-error-message="Patient is required">
+										<ul class="list-group suggestions-list" style="position: absolute; z-index: 100;"></ul>
+        </div>
+    </div>
+<!-- 
+    <div class="alert alert-info alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <strong>No Patient Selected!</strong> Use search to find the Patient 
+    </div> -->
+
+    <div class="d-flex  justify-content-between top-myometrium">
+        <div class="heading-myomertium d-flex align-items-center" > 
+            <img src="./images/human-resource.svg" alt="" style="width:20px;margin-right:10px;">
+            <span id="patientDetails"></span>
+            <input type="hidden" name="patientId" id="patientId" >
+        </div>
+    </div>
+
+    <!-- Billing Sections -->
+    <div class="row">
+        <!-- Consultation Section (Mandatory) -->
+        <div class="col-md-12 mb-3 mt-3">
+            <h5 class="mb-2">Consultation</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="service">
+                   
+                </tbody >
+            </table>
+        </div>
+
+        <!-- Tests Section -->
+        <div class="col-md-12 mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="testsCheckbox">
+                <label class="form-check-label" for="testsCheckbox">Include Tests</label>
+            </div>
+            <div id="testsSection" class="mt-2" style="display:none;">
+                <h5 class="mb-2">Tests</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="testTableBody">
+                        <!-- Tests will be populated here -->
+                    </tbody>
+                </table>
+                <div class="col-md-6">
+                    <h5> Total Test Amount: <span id="TotalTestAmount">Rs. 0.00</span></h5>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="patientId" value=""> <!-- Hidden field for selected patient ID -->
+        
+        <div class="col-md-12 mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="pharmacyCheckbox">
+                <label class="form-check-label" for="pharmacyCheckbox">Include Pharmacy</label>
+            </div>
+            <div id="pharmacySection" class="mt-2" style="display:none;">
+                <h5 class="mb-2">Pharmacy</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Medicine</th>
+                        
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pharmacyTableBody">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+                <div class="col-md-6">
+                    <h5> Total Pharmacy Amount: <span id="TotalPharmacyAmount">Rs. 0.00</span></h5>
+                </div>
+            </div>
+            
+        </div>
+        
+        
+        
+    </div>
+
+
+   <!-- Discount  -->
+<!--    
+   <div class="row mt-4">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+        <div class="col-md-3"><label for="paymentMode" class="form-label">Discount </label></div>
+        <div class="col-md-8">
+<input type="number"  class="input-style form-control" name="discount" id="discount" placeholder="₹">
+    </div>
+    </div>
+    </div>
+</div> -->
+
+<!-- Discount Section -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h5>Total: <span id="totalAmount">Rs. 0.00</span></h5>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <!-- Discount Type Radio Buttons -->
+            <div class="col-md-3">
+                <label for="discountType" class="form-label">Discount Type</label>
+            </div>
+            <div class="col-md-9">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="discountType" id="fixedAmount" value="fixed" checked>
+                    <label class="form-check-label" for="fixedAmount">Fixed Amount (₹)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="discountType" id="percentageDiscount" value="percentage">
+                    <label class="form-check-label" for="percentageDiscount">Percentage (%)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discount Input -->
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label for="discount" class="form-label">Discount</label>
+            </div>
+            <div class="col-md-8">
+                <input type="number" class="input-style form-control" name="discount" id="discount" >
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Total and Payment Options -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5> Net Amount: <span id="NetAmount">Rs. 0.00</span></h5>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+            <div class="col-md-3"><label for="paymentMode" class="form-label">Payment Mode</label></div>
+            <div class="col-md-8"><select id="paymentMode" class="form-control input-style">
+                <option value="cash">Cash</option>
+                <option value="credit">Credit Card</option>
+                <option value="debit">Debit Card</option>
+                <option value="upi">UPI</option>
+            </select></div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Collect Payment Button -->
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-primary" id="collectPayment">Collect Payment</button>
+        </div>
+    </div>
+</div>
+
+									</div>
+
+                                </div>
+                            </div>
+                            <!--part 1 ended-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- //charts -->
+            </div>
+<script>
+document.getElementById('testsCheckbox').addEventListener('change', function () {
+    document.getElementById('testsSection').style.display = this.checked ? 'block' : 'none';
+});
+
+document.getElementById('pharmacyCheckbox').addEventListener('change', function () {
+    document.getElementById('pharmacySection').style.display = this.checked ? 'block' : 'none';
+});
+
+</script>
+
+
+<%- include('../footer') -%>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchConsultation();
+        fetchPatients();
+    });
+
+    // Fetch Consultation Data
+    function fetchConsultation() {
+        axios.get('/getConsultation')
+            .then(response => {
+                const responseData = response.data;
+                let tableRows = '';
+                responseData.forEach(function(item) {
+                    tableRows += `
+                        <tr data-bbm-id="${item.id}">
+                            <td>${item.name}</td>
+                            <td><input type="number" name="price" class="form-control input-style" value="${item.price || ''}"></td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('service').innerHTML = tableRows;
+            })
+            .catch(error => {
+                console.error('Error fetching consultation data:', error);
+            });
+    }
+
+    // Fetch Patient Data
+    let responseData = [];
+    function fetchPatients() {
+        axios.get('/getPatients')
+            .then(response => {
+                responseData = response.data;
+            })
+            .catch(error => { 
+                console.error('Error fetching patient data:', error);
+            });
+    }
+
+    // Populate Patient Details and Suggestions
+    document.addEventListener('input', function(event) {
+        if (event.target.classList.contains('search-input')) {
+            const query = event.target.value;
+            const suggestionsList = event.target.nextElementSibling;
+            showSuggestions(query, responseData, suggestionsList);
+        }
+    });
+
+    function showSuggestions(query, data, suggestionsList) {
+        suggestionsList.innerHTML = '';
+        if (query.length === 0) return;
+
+        const filteredData = data.filter(item => 
+            item.name.toLowerCase().includes(query.toLowerCase()) ||
+            item.mobile.toLowerCase().includes(query.toLowerCase())
+        );
+
+        filteredData.forEach(item => {
+            const li = document.createElement('li');
+            li.classList.add('list-group-item');
+            li.style.cursor = 'pointer';
+            li.innerHTML = `
+                <strong>Name:</strong> ${item.name} &nbsp;
+                <strong>Gender:</strong> ${item.gender} &nbsp;
+                <strong>Mobile:</strong> ${item.mobile} &nbsp;
+            `;
+            li.addEventListener('click', () => {
+                const input = suggestionsList.previousElementSibling;
+                input.value = item.name;
+                calculateTotalAmount();
+                document.getElementById('patientDetails').innerHTML = `
+                    <strong>Name:</strong> ${item.name} 
+                    <strong>Gender:</strong> ${item.gender} 
+                    <strong>Mobile:</strong> ${item.mobile} 
+                    <strong>Email:</strong> ${item.email || 'N/A'}
+                `;
+                document.getElementById('patientId').value = item.id;
+                suggestionsList.innerHTML = '';
+            });
+            suggestionsList.appendChild(li);
+        });
+    }
+
+    // Toggle Tests Section and Fetch Data
+    document.getElementById('testsCheckbox').addEventListener('change', function() {
+        if (this.checked) {
+            fetchRecommendedTests();
+        } else {
+            document.getElementById('testsSection').style.display = 'none';
+            document.getElementById('testTableBody').innerHTML = '';
+        }
+    });
+
+    function fetchRecommendedTests() {
+        const patientId = document.getElementById('patientId').value;
+        if (!patientId) {
+            alert("Please select a patient first.");
+            document.getElementById('testsCheckbox').checked = false;
+            return;
+        }
+        axios.get(`/getRecommendedTests?patientId=${patientId}`)
+            .then(response => {
+                const testsData = response.data;
+                if (!testsData || !testsData.tests || testsData.tests.length === 0) {
+                    alert("No recommended tests found for the selected patient.");
+                    document.getElementById('testsSection').style.display = 'none';
+                    document.getElementById('testsCheckbox').checked = false;
+                    return;
+                }
+                const testTableBody = document.getElementById('testTableBody');
+                testTableBody.innerHTML = '';
+
+                testsData.tests.forEach(test => {
+                    const row = `
+                        <tr>
+                            <td>${test.name}</td>
+                            <td><input type="number" class="form-control input-style" name="testPrice" value="${test.price || ''}"></td>
+                        </tr>
+                    `;
+                    testTableBody.insertAdjacentHTML('beforeend', row);
+                    calculateTotalAmount();
+                });
+                document.getElementById('testsSection').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching recommended tests:', error);
+                alert("No Test Recommended.");
+            });
+    }
+
+    // Toggle Pharmacy Section and Fetch Data
+    document.getElementById('pharmacyCheckbox').addEventListener('change', function() {
+        if (this.checked) {
+            fetchLatestPharmacyItems();
+        } else {
+            document.getElementById('pharmacySection').style.display = 'none';
+            document.getElementById('pharmacyTableBody').innerHTML = '';
+        }
+    });
+
+    function fetchLatestPharmacyItems() {
+        const patientId = document.getElementById('patientId').value;
+        if (!patientId) {
+            alert("Please select a patient first.");
+            document.getElementById('pharmacyCheckbox').checked = false;
+            return;
+        }
+        axios.get(`/getLatestPharmacyItems?patientId=${patientId}`)
+            .then(response => {
+                const pharmacyData = response.data.prescriptions;
+                const pharmacyTableBody = document.getElementById('pharmacyTableBody');
+                pharmacyTableBody.innerHTML = '';
+                pharmacyData.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td>${item.drug}</td>
+                            <td><input type="number" class="form-control input-style" name="pharmacyQuantity" placeholder="Qty" value="${item.dose || ''}"></td>
+                            <td><input type="number" class="form-control input-style" name="pharmacyPrice" placeholder="Price" value="${item.price || ''}"></td>
+                        </tr>
+                    `;
+                    pharmacyTableBody.insertAdjacentHTML('beforeend', row);
+                    calculateTotalAmount();
+                });
+                document.getElementById('pharmacySection').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching pharmacy items:', error);
+                alert("No Medicine Prescribed.");
+            });
+    }
+
+    function calculateTotalAmount() {
+    let total = 0;
+
+    // Initialize separate totals for pharmacy and tests
+    let totalPharmacyAmount = 0;
+    let totalTestAmount = 0;
+
+    // Consultation (Total)
+    document.querySelectorAll('#service input[name="price"]').forEach(input => {
+        total += parseFloat(input.value) || 0;
+    });
+
+    // Tests (Total)
+    if (document.getElementById('testsCheckbox').checked) {
+        document.querySelectorAll('#testTableBody input[name="testPrice"]').forEach(input => {
+            totalTestAmount += parseFloat(input.value) || 0;
+        });
+    }
+
+    // Pharmacy (Total)
+    if (document.getElementById('pharmacyCheckbox').checked) {
+        document.querySelectorAll('#pharmacyTableBody tr').forEach(row => {
+            const quantity = parseInt(row.querySelector('input[name="pharmacyQuantity"]').value) || 1;
+            const price = parseFloat(row.querySelector('input[name="pharmacyPrice"]').value) || 0;
+            totalPharmacyAmount += quantity * price;
+        });
+    }
+
+    // Calculate the overall total amount
+    total += totalTestAmount + totalPharmacyAmount;
+
+    // Update the Total Pharmacy Amount display
+    document.getElementById("TotalPharmacyAmount").innerText = `Rs. ${totalPharmacyAmount.toFixed(2)}`;
+
+    // Update the Total Test Amount display
+    document.getElementById("TotalTestAmount").innerText = `Rs. ${totalTestAmount.toFixed(2)}`;
+
+    // Update the Total Amount display
+    document.getElementById('totalAmount').innerText = `Rs. ${total.toFixed(2)}`;
+
+    // Call updateNetAmount() to update the Net Amount after the calculation
+    updateNetAmount();
+}
+
+    // Attach event listeners to recalculate total on input changes
+    document.addEventListener('input', event => {
+        if (event.target.matches('#service input[name="price"], #testTableBody input[name="testPrice"], #pharmacyTableBody input')) {
+            calculateTotalAmount();
+        }
+    });
+
+    document.getElementById('collectPayment').addEventListener('click', function () {
+    const patientId = document.getElementById('patientId').value;
+    const discount = parseFloat(document.getElementById('discount').value) || 0;
+    const paymentMode = document.getElementById('paymentMode').value;
+
+    if (!patientId) {
+        alert("Please select a patient first.");
+        return;
+    }
+
+    // Collect Consultation Data
+    const consultation = [];
+    document.querySelectorAll('#service tr').forEach(row => {
+        const service = row.querySelector('td:nth-child(1)').innerText.trim();
+        const price = parseFloat(row.querySelector('input[name="price"]').value) || 0;
+        consultation.push({ service, price });
+    });
+
+    // Collect Test Data
+    const test = [];
+    if (document.getElementById('testsCheckbox').checked) {
+        document.querySelectorAll('#testTableBody tr').forEach(row => {
+            const testName = row.querySelector('td:nth-child(1)').innerText.trim();
+            const testPrice = parseFloat(row.querySelector('input').value) || 0;
+            test.push({ testName, testPrice });
+        });
+    }
+
+    // Collect Pharmacy Data
+    const pharmacy = [];
+    if (document.getElementById('pharmacyCheckbox').checked) {
+        document.querySelectorAll('#pharmacyTableBody tr').forEach(row => {
+            const medicine = row.querySelector('td:nth-child(1)').innerText.trim();
+            const quantity = parseInt(row.querySelector('input[name="pharmacyQuantity"]').value) || 0;
+            const price = parseFloat(row.querySelector('input[name="pharmacyPrice"]').value) || 0;
+            pharmacy.push({ medicine, quantity, price });
+        });
+    }
+
+    // Calculate Total Amount
+    const totalAmount = consultation.reduce((sum, item) => sum + item.price, 0) +
+                        test.reduce((sum, item) => sum + item.testPrice, 0) +
+                        pharmacy.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Calculate Net Amount
+    let discountAmount = 0;
+
+    // If discount is provided as percentage, calculate discount amount
+    const discountType = document.querySelector('input[name="discountType"]:checked')?.value;
+    if (discountType === 'percentage') {
+        discountAmount = (totalAmount * discount) / 100;
+    } else {
+        // If it's a fixed amount, just use the discount as entered
+        discountAmount = discount;
+    }
+
+    const netAmount = totalAmount - discountAmount;
+
+    // Construct Data Object
+    const billData = {
+        patientId,
+        consultation,
+        test,
+        pharmacy,
+        totalAmount,
+        paymentMode,
+        discount: discountAmount,  // Store the actual discount value
+        netAmount  
+    };
+
+    console.log(billData);
+
+    // Send Axios POST request to save the bill
+    axios.post('/saveBill', billData)
+        .then(response => {
+            console.log(response.data);
+            ViewBtn('printBill', response.data.id);
+        })
+        .catch(error => {
+            console.error('Error saving bill:', error);
+            alert('Failed to collect payment. Please try again.');
+        });
+});
+
+    // Function to update the Net Amount based on the discount
+    function updateNetAmount() {
+        const totalAmount = parseFloat(document.getElementById("totalAmount").innerText.replace("Rs. ", "")) || 0;
+        const discount = parseFloat(document.getElementById("discount").value) || 0;
+
+        const discountType = document.querySelector('input[name="discountType"]:checked').value;
+
+        let netAmount = 0;
+
+        if (discountType === 'fixed') {
+            netAmount = totalAmount - discount;
+        } else if (discountType === 'percentage') {
+            netAmount = totalAmount - (totalAmount * discount / 100);
+        }
+
+        document.getElementById("NetAmount").innerText = `Rs. ${netAmount.toFixed(2)}`;
+    }
+
+    // Add event listeners to recalculate net amount on discount changes
+    document.getElementById("discount").addEventListener("input", updateNetAmount);
+    document.querySelectorAll('input[name="discountType"]').forEach(radio => {
+        radio.addEventListener("change", updateNetAmount);
+    });
+</script>

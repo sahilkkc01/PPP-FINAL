@@ -1,0 +1,1553 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinker</title>
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/style-starter.css?v=0.2">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header_patient_dropdown.css">
+    <link rel="stylesheet" href="notification.css">
+
+
+    <!-- google fonts -->
+    <link href="//fonts.googleapis.com/css?family=Montserrat:300,400,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="sidebar-menu-collapsed">
+    <div class="se-pre-con"></div>
+    <section>
+        <!-- sidebar menu start -->
+        <div class="sidebar-menu sticky-sidebar-menu">
+
+            <!-- logo start -->
+            <div class="logo">
+                <h1><a href="index.html"><img src="./images/logo.png" alt="logo"></a></h1>
+            </div>
+
+            <!-- if logo is image enable this -->
+            <!-- image logo --
+    <div class="logo">
+      <a href="index.html">
+        <img src="image-path" alt="Your logo" title="Your logo" class="img-fluid" style="height:35px;" />
+      </a>
+    </div>
+    <!-- //image logo -->
+
+            <div class="logo-icon text-center">
+                <a href="index.html" title="logo"><img src="./images/favicon.png" alt="logo-icon"> </a>
+            </div>
+            <!-- //logo end -->
+
+
+            <div class="sidebar-menu-inner">
+
+                <!-- sidebar nav start -->
+                <ul class="nav nav-pills nav-stacked custom-nav">
+
+                    <!--? Search Bar  -->
+                    <li class="d-flex align-items-center search-bar-li mx-2 px-2 mt-2 mb-3">
+                        <span>
+                            <i class="d-flex justify-content-center fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="search" name="search" id="nav-search" placeholder="Search">
+                    </li>
+
+                    <!--? Menu Bar -->
+
+                    <!-- <li> -->
+
+                    <div class="align-items-center Left_Side my-2 Menu_Top">
+                        <div class="Menu d-flex align-items-center me-3">
+                            <span><img class="icon-menu-flat" src="./images/menu.svg" alt="menu"></span>
+                            <span class="ms-2">Menu</span>
+                        </div>
+                        <div class="Menu-icon Timer-icon me-3">
+                            <i class="d-flex justify-content-center fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div class="Menu-icon list-icon">
+                            <i class="d-flex justify-content-center fa-solid fa-star"></i>
+                        </div>
+                    </div>
+
+                    <div class="Menu-Box-Icon">
+                        <img class="icon-menu-flat" src="./images/menu.svg" alt="menu">
+                    </div>
+
+                    <!-- </li> -->
+
+                    <!--? Dashboard  -->
+                    <li class="menu-list dash-menu">
+                        <a href="index.html" class="d-flex align-items-center">
+                            <!-- <i class="fa-solid fa-arrow-trend-up"></i> -->
+                            <img class="icon-img" src="./images/dashboard.svg" alt="">
+                            <span class="link-name">DASHBOARD</span>
+                            <i class="bookmark-icon fa-solid fa-star"></i>
+                        </a>
+                    </li>
+
+
+                    <!--? Operations -->
+                    <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-briefcase"></i> -->
+                            <img class="icon-img" src="./images/operations.svg" alt="">
+                            <span class="link-name">OPERATIONS</span><i
+                                class="bookmark-icon fa-regular fa-star"></i></a>
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li class="short-menu">
+                                <a href="#">Patient</a>
+                                <ul class="sub-short-menu-list">
+                                    <li><a href="#" class="sub-short-menu">New Patient</a> </li>
+                                    <li><a href="#" class="sub-short-menu">View Patient</a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fa-solid fa-file-invoice"></i> -->
+                            <img class="icon-img" src="./images/billing.svg" alt="">
+                            <span class="link-name">BILLING</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li><a href="#">Visits</i></a></li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-plus"></i> -->
+                            <img class="icon-img" src="./images/clinic.svg" alt="">
+                            <span class="link-name">CLINICAL</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                    </li>
+
+                    <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-plus"></i> -->
+                            <img class="icon-img" src="./images/embroyology.svg" alt="">
+                            <span class="link-name">EMBROLOGY</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                    </li>
+
+                    <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-star-of-life"></i> -->
+                            <img class="icon-img" src="./images/inventory.svg" alt="">
+                            <span class="link-name">INVENTORY</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                    </li>
+
+                    <li class="menu-list">
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li class="short-menu">
+                                <a href="#">Patient</a>
+                                <ul class="sub-short-menu-list">
+                                    <li><a href="#" class="sub-short-menu">New Patient</a> </li>
+                                    <li><a href="#" class="sub-short-menu">View Patient</a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fas fa-calculator"></i> -->
+                            <img class="icon-img" src="./images/purchase-and-account.svg" alt="">
+                            <span class="link-name">PURCHASE & ACCOUNT</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                    </li>
+
+                    <li class="menu-list">
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li class="short-menu">
+                                <a href="#">Patient</a>
+                                <ul class="sub-short-menu-list">
+                                    <li><a href="#" class="sub-short-menu">New Patient</a> </li>
+                                    <li><a href="#" class="sub-short-menu">View Patient</a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fa-solid fa-database"></i> -->
+                            <img class="icon-img" src="./images/database.svg" alt="">
+                            <span class="link-name">MIS</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i></a>
+                    </li>
+
+                    <li class="menu-list">
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li class="short-menu">
+                                <a href="#">Patient</a>
+                                <ul class="sub-short-menu-list">
+                                    <li><a href="#" class="sub-short-menu">New Patient</a> </li>
+                                    <li><a href="#" class="sub-short-menu">View Patient</a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class=" fa-solid fa-star" ></i> -->
+                            <img class="icon-img" src="./images/adminstration.svg" alt="" height="20">
+                            <span class="link-name">ADMINSTRATION</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i>
+                        </a>
+                    </li>
+
+                    <li class="menu-list">
+                        <ul class="sub-menu-list">
+                            <li><a href="carousels.html">Leads</a> </li>
+                            <li><a href="cards.html">Appointments</a> </li>
+                            <li class="short-menu">
+                                <a href="#">Patient</a>
+                                <ul class="sub-short-menu-list">
+                                    <li><a href="#" class="sub-short-menu">New Patient</a> </li>
+                                    <li><a href="#" class="sub-short-menu">View Patient</a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Prescription</a> </li>
+                            <li><a href="#">Procedure</a> </li>
+                            <li><a href="#">Conversion</a> </li>
+                            <li><a href="#">Revenue</a> </li>
+                            <li><a href="#">Collection</a> </li>
+                        </ul>
+                        <a href="#" class="d-flex align-items-center">
+                            <!-- <i class="fa-solid fa-user-tie"></i> -->
+                            <img class="icon-img" src="./images/human-resource.svg" alt="">
+                            <span class="link-name">HUMAN RESOURCE</span>
+                            <i class="bookmark-icon fa-regular fa-star"></i>
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- //sidebar nav end -->
+                <!-- toggle button start -->
+                <a class="toggle-btn">
+                    <span class="collapse-sidebar-text">Collapse Sidebar</span></i>
+                    <i class="fa fa-angle-double-right menu-collapsed__right"></i>
+                </a>
+                <!-- //toggle button end -->
+            </div>
+        </div>
+        <!-- //sidebar menu end -->
+        <!-- header-starts -->
+        <div class="header sticky-header">
+
+
+
+        </div>
+        <!-- //header-ends -->
+        <!-- main content start -->
+        <div class="main-content">
+
+            <div class="row content-top-gap2">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                        <a class="navbar-brand text-center mr-5" href="#">
+                            <span class="dash-icon"><img src="./images/dashboard.png" alt="dashboard"></span>
+                            Dashboard
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item active text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/user.png" alt=""></span>
+                                        Master
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/transaction.png" alt=""></span>
+                                        Transaction
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/patient.png" alt=""></span>
+                                        Patient 360
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/outside-receipt.png" alt=""></span>
+                                        Outside Reciept
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/outpatient-department.png"
+                                                alt=""></span>
+                                        Outpatient Department
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/analytics.png" alt=""></span>
+                                        Analytics
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/waiting-list.png" alt=""></span>
+                                        Waiting List
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center mr-5">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/adminstration.png" alt=""></span>
+                                        Adminstration
+                                    </a>
+                                </li>
+                                <li class="nav-item text-center">
+                                    <a class="nav-link" href="#">
+                                        <span class="dash-icon"><img src="./images/additional.png" alt=""></span>
+                                        Additional
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+
+
+            <!-- content -->
+
+
+        </div>
+        <!-- //charts -->
+
+
+
+        </div>
+
+
+
+
+
+
+        <!--
+======================================
+? => Stock Manager 2 HTML Screen Starts            
+=====================================
+-->
+
+        <div class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="chart">
+                    <div class="row">
+                        <div class="col-lg-12 pl-lg-2 mt-2">
+                            <h4 class="primary">Stock Manager</h4>
+                        </div>
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <form>
+                                <div class="card card_border">
+                                    <div class="">
+                                        <div class="col-xl-12 p-heading">
+                                            <h6 class="p-text">LIST OF StOCK</h6>
+                                        </div>
+
+                                        <!--? First Screen  -->
+                                        <div class="card-body">
+
+                                            <div class="form-row d-flex justify-content-end">
+                                                <div class="col-6  d-flex justify-content-end">
+                                                    <div class="col-lg-4 form-group">
+                                                        <label class="input__label">From</label>
+                                                        <input name="dob" id="dob" type="date" class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+
+                                                    <div class="col-lg-4 form-group">
+                                                        <label class="input__label">To</label>
+                                                        <input name="dob" id="dob" type="date" class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="col-lg-6 col-md-12 mt-1 mb-2 d-flex">
+                                                    <div class="form-group mr-4 d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox"
+                                                            checked="">
+                                                        <label class="input__label mb-0">Stock In
+                                                        </label>
+
+                                                    </div>
+                                                    <div class="form-group d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox"
+                                                            checked="">
+                                                        <label class="input__label mb-0">Stock In
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="col-12 mb-3 mb-3">
+                                                    <div class="form-group">
+                                                        <div class="col col-12 p-0">
+                                                            <div class="slidx">
+                                                                <table class="table2" id="tableid">
+                                                                    <thead>
+                                                                        <tr>
+
+                                                                            <th>SNo.</th>
+                                                                            <th>Item</th>
+                                                                            <th>Quantity</th>
+                                                                            <th>Rate</th>
+                                                                            <!-- <th>Total</th>
+                                                                            <th>Paid</th>
+                                                                            <th>To-be Paid</th>
+                                                                            <th>Received</th> -->
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="">
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                                <div id="paginationControls"><button
+                                                                        class="page-btn btn-primary btn-style active"
+                                                                        data-page="1">1</button><button
+                                                                        class="page-btn btn-primary btn-style "
+                                                                        data-page="2">2</button><button
+                                                                        class="page-btn btn-primary btn-style "
+                                                                        data-page="3">3</button></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- <hr> -->
+
+                                        <!--? Second Screen  -->
+
+                                        <div class="card-body py-0">
+
+                                            <div class="form-row d-flex justify-content-end">
+                                                <div class="col-6  d-flex justify-content-end">
+                                                    <div class="col-lg-4 form-group">
+                                                        <label class="input__label">From</label>
+                                                        <input name="dob" id="dob" type="date" class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+
+                                                    <div class="col-lg-4 form-group">
+                                                        <label class="input__label">To</label>
+                                                        <input name="dob" id="dob" type="date" class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="col-lg-6 col-md-12 mt-1 mb-2 d-flex">
+                                                    <div class="form-group mr-4 d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox" checked="">
+                                                        <label class="input__label mb-0">Stock In
+                                                        </label>
+
+                                                    </div>
+                                                    <div class="form-group d-inline-flex align-items-center">
+                                                        <input class="form-check-input mt-0 mr-2" type="checkbox" checked="">
+                                                        <label class="input__label mb-0">Stock In
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="col-12 mb-3 mb-3">
+                                                    <div class="form-group">
+                                                        <div class="col col-12 p-0">
+                                                            <div class="slidx">
+                                                                <table class="table2" id="tableid">
+                                                                    <thead>
+                                                                        <tr>
+
+                                                                            <th>SNo.</th>
+                                                                            <th>Item</th>
+                                                                            <th>Quantity</th>
+                                                                            <th>Rate</th>
+                                                                            <!-- <th>Total</th>
+                                                                            <th>Paid</th>
+                                                                            <th>To-be Paid</th>
+                                                                            <th>Received</th> -->
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="">
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                        <tr style="display: table-row;">
+                                                                            <td>1</td>
+                                                                            <td>Para</td>
+                                                                            <td>500 Cap</td>
+                                                                            <td>1000</td>
+                                                                            <!-- <td>5000000</td>
+                                                                            <td>50,000</td>
+                                                                            <td>1000000</td>
+                                                                            <td>5000000</td> -->
+
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                                <div id="paginationControls"><button class="page-btn btn-primary btn-style active" data-page="1" fdprocessedid="h249m">1</button><button class="page-btn btn-primary btn-style " data-page="2" fdprocessedid="s6muz">2</button><button class="page-btn btn-primary btn-style " data-page="3" fdprocessedid="8rdbn">3</button></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                            </form>
+                        </div>
+
+
+                        <!--footer section start-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <!--
+======================================
+! => Stock Manager 2 HTML Screen Ends            
+=====================================
+-->
+
+
+
+
+
+        <footer class="dashboard footer footer-section bg-white py-4 mt-10">
+            <div class="container">
+                <div class="row text-center text-md-start d-flex flex-column align-items-center">
+                    <!-- Logo Section -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0 d-flex justify-content-center align-items-center">
+                        <img src="../images/logo.svg" alt="LifeLinkr Logo" class="img-fluid" style="max-height: 30px;">
+                        <!-- <span><img class="ganesh-ji-img" src="../images/ganesh-ji-1.svg" alt=""></span> -->
+                    </div>
+
+                    <!-- Copyright Text -->
+                    <div class="mt-1 col-12 col-md-6 text-center text-md-end">
+                        <p class="mb-0">All Rights Reserved 2023–24 © Copyright – LifeLinkr
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="row mt-0">
+                    <div class="col-12 text-center">
+                        <div class="footer-links d-inline-block">
+                            <a href="#">Technical Support</a> |
+                            <a href="#">Support Documents</a> |
+                            <a href="#">Training</a> |
+                            <a href="#" class="blue-link-footer">Compare Us</a> |
+                            <a href="#" class="blue-link-footer">Customer Sales</a> |
+                            <a href="#">Report a Bug</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ganesh-ji-img">
+                    <span><img class="ganesh-ji-img" src="../images/ganesh-ji-orange.svg" alt=""></span>
+                </div>
+            </div>
+
+        </footer>
+        <!--footer section end-->
+        <!-- move top -->
+        <button onclick="topFunction()" id="movetop" class="bg-primary" title="Go to top" style="display: none;">
+            <span class="fa fa-angle-up"></span>
+        </button>
+
+        <!-- Quick Menu starts here--->
+        <div class="shortcut-menu">
+            <div class="shortcut-icon" id="openMenu" title="Quick Menu" alt="Quick Menu">
+                <i class="fa-solid fa-bars"></i> <!-- Bootstrap icon -->
+            </div>
+
+            <div class="menu-items" id="menuItems">
+                <a href="#link3" class="menu-item" onclick="createNote()" id="add-note-btn">
+                    <i class="fa-regular fa-note-sticky" title="Sticky Notes" alt="Sticky Notes"></i>
+                </a>
+                <a href="#link4" class="menu-item" id="patient360" title="Search Patient" alt="Search Patient">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+                <div class="close-menu" id="closeMenu" title="Close" alt="Close">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('openMenu').addEventListener('click', function () {
+                document.getElementById('menuItems').classList.add('show');
+            });
+
+            document.getElementById('closeMenu').addEventListener('click', function () {
+                document.getElementById('menuItems').classList.remove('show');
+            });
+            document.getElementById("patient360").addEventListener("click", () => {
+                console.log("Button clicked!");
+                window.location.href = "/main/dash";
+            })
+        </script>
+
+        <script>
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+            let currentNote = null;
+
+            // Predefined colors for sticky notes
+            const noteColors = [
+                { background: "#fff740", text: "#000000" }, // Yellow
+                { background: "#ff7eb9", text: "#000000" }, // Pink
+                { background: "#7afcff", text: "#000000" }, // Blue
+                { background: "#98ff98", text: "#000000" }, // Green
+                { background: "#ff9e9e", text: "#000000" }, // Red
+                { background: "#dcd0ff", text: "#000000" }, // Purple
+            ];
+
+            document.addEventListener("DOMContentLoaded", loadNotes);
+
+            async function loadNotes() {
+                try {
+                    const response = await fetch("/api/notes");
+                    const notes = await response.json();
+                    notes.forEach((note) => {
+                        createNoteElement(note);
+                    });
+                } catch (error) {
+                    console.error("Error loading notes:", error);
+                }
+            }
+
+            async function createNote() {
+                const randomColor =
+                    noteColors[Math.floor(Math.random() * noteColors.length)];
+                const note = {
+                    title: "New Note",
+                    description: "Add description here",
+                    x_coordinate: Math.random() * (window.innerWidth - 250) + 50,
+                    y_coordinate: Math.random() * (window.innerHeight - 250) + 50,
+                    ClinicId: 1,
+                    color: randomColor.background,
+                };
+
+                try {
+                    const response = await fetch("/api/notes", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(note),
+                    });
+                    const savedNote = await response.json();
+                    createNoteElement(savedNote);
+                } catch (error) {
+                    console.error("Error creating note:", error);
+                }
+            }
+
+            function createNoteElement(note) {
+                const noteElement = document.createElement("div");
+                noteElement.className = "sticky-note";
+                noteElement.id = `note-${note.id}`;
+                noteElement.style.left = `${note.x_coordinate}px`;
+                noteElement.style.top = `${note.y_coordinate}px`;
+                noteElement.style.backgroundColor =
+                    note.color || noteColors[0].background;
+
+                noteElement.innerHTML = `
+    <input type="color" class="color-picker" value="${note.color || noteColors[0].background
+                    }" 
+           onchange="updateNoteColor(${note.id}, this.value)">
+    <span class="delete-btn" onclick="deleteNote(${note.id
+                    })">×</span>
+    <input type="text" value="${note.title}" onchange="updateNote(${note.id
+                    })">
+    <textarea onchange="updateNote(${note.id})">${note.description
+                    }</textarea>
+`;
+
+                noteElement.addEventListener("mousedown", dragStart);
+                document.addEventListener("mousemove", drag);
+                document.addEventListener("mouseup", dragEnd);
+
+                document.getElementById("notes-container").appendChild(noteElement);
+            }
+
+            async function updateNoteColor(id, color) {
+                const noteElement = document.getElementById(`note-${id}`);
+                noteElement.style.backgroundColor = color;
+                await updateNote(id);
+            }
+
+            async function updateNote(id) {
+                const noteElement = document.getElementById(`note-${id}`);
+                const note = {
+                    id: id,
+                    title: noteElement.querySelector('input[type="text"]').value,
+                    description: noteElement.querySelector("textarea").value,
+                    x_coordinate: parseInt(noteElement.style.left),
+                    y_coordinate: parseInt(noteElement.style.top),
+                    color: noteElement.querySelector('input[type="color"]').value,
+                    ClinicId: 1,
+                };
+
+                try {
+                    await fetch(`/api/notes/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(note),
+                    });
+                } catch (error) {
+                    console.error("Error updating note:", error);
+                }
+            }
+
+            async function deleteNote(id) {
+                const noteElement = document.getElementById(`note-${id}`);
+                noteElement.style.transform = "scale(0)";
+                noteElement.style.opacity = "0";
+
+                setTimeout(async () => {
+                    try {
+                        await fetch(`/api/notes/${id}`, {
+                            method: "DELETE",
+                        });
+                        noteElement.remove();
+                    } catch (error) {
+                        console.error("Error deleting note:", error);
+                    }
+                }, 300);
+            }
+
+            // Replace your dragStart function with this:
+            function dragStart(e) {
+                currentNote = e.target.closest(".sticky-note");
+                if (!currentNote) return;
+
+                // Reset these values on initial click
+                xOffset = 0;
+                yOffset = 0;
+
+                // Calculate initial position based on current element position
+                const rect = currentNote.getBoundingClientRect();
+                initialX = e.clientX - rect.left;
+                initialY = e.clientY - rect.top;
+
+                if (
+                    e.target.tagName.toLowerCase() === "input" ||
+                    e.target.tagName.toLowerCase() === "textarea"
+                ) {
+                    return;
+                }
+
+                isDragging = true;
+                currentNote.classList.add("dragging");
+                currentNote.style.zIndex = "1000";
+            }
+
+            // And update your drag function:
+            function drag(e) {
+                if (!isDragging) return;
+
+                e.preventDefault();
+
+                // Calculate new position
+                const newX = e.clientX - initialX;
+                const newY = e.clientY - initialY;
+
+                currentNote.style.left = `${newX}px`;
+                currentNote.style.top = `${newY}px`;
+            }
+
+            function dragEnd(e) {
+                if (!isDragging) return;
+
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+
+                if (currentNote) {
+                    const noteId = currentNote.id.split("-")[1];
+                    updateNote(noteId);
+                }
+            }
+        </script>
+
+
+        <script>
+
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("movetop").style.display = "block";
+                } else {
+                    document.getElementById("movetop").style.display = "none";
+                }
+            }
+
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+        <!-- check the data if it is available then show rest of embrology field -->
+
+
+        <!-- /move top -->
+
+        <script>
+            console.log(window.performance);
+        </script>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="../javascripts/updateStatus.js"></script>
+
+
+        <script src="../javascripts/ViewBtn.js"></script>
+        <script src="../javascripts/Pan&amp;GstinVal.js"></script>
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="../javascripts/jquery-3.3.1.min.js"></script>
+        <script src="../javascripts/jquery-1.10.2.min.js"></script>
+        <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+        <script src="../javascripts/Pan&amp;GstinVal.js"></script>
+
+        <!-- chart js -->
+        <script src="../javascripts/Chart.min.js"></script>
+        <script src="../javascripts/utils.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <!-- //chart js -->
+
+        <!-- Different scripts of charts.  Ex.Barchart, Linechart -->
+        <!-- <script src="../javascripts/bar.js"></script>
+<script src="../javascripts/linechart.js"></script> -->
+        <!-- <script> 
+const languagesData = { 
+    labels: ['Rajori Garden', 'Patel Nagar', 'Vasant Kunj', 'Tilak Nagar', 'Dwarka', 'Saket'], 
+    datasets: [{ 
+        data: [25, 20, 15, 10, 10, 20], 
+        backgroundColor: ['#4ac2b7', '#fac10c',  
+            '#fba119', '#f9655e', '#2196f3', '#8585ff'], 
+    }], 
+}; 
+const config = { 
+    type: 'doughnut', 
+    data: languagesData, 
+    options: { 
+    aspectRatio: 3.75,
+        legend: {
+    display: true,
+position: 'right'
+ }, 
+    }, 
+}; 
+const ctx = document.getElementById( 
+    'programmingLanguagesPieChart').getContext('2d'); 
+      
+new Chart(ctx, config); 
+</script> -->
+
+        <!-- //Different scripts of charts.  Ex.Barchart, Linechart -->
+
+
+        <script src="../javascripts/jquery.nicescroll.js"></script>
+        <script src="../javascripts/scripts.js"></script>
+        <script src="../javascripts/GenrateCode.js"></script>
+        <!-- <script>
+// $('.check').show();
+
+axios.get('/embrology/check').then(res=>{
+console.log('ansh');
+if(res.data.check){
+$('.check').show();
+}
+}).catch(err=>console.log(err))
+</script> -->
+
+        <script>
+            document.getElementById('logoutButton').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the default action of following the link
+
+                fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Logout failed');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data.msg); // Log the logout message
+                        window.location.href = '/1'; // Redirect to login page after successful logout
+                    })
+                    .catch(error => {
+                        console.error('Error logging out:', error);
+                        alert('Failed to log out. Please try again.'); // Provide user feedback
+                    });
+            });
+        </script>
+
+        <!-- close script -->
+        <script>
+            var closebtns = document.getElementsByClassName("close-grid");
+            var i;
+
+            for (i = 0; i < closebtns.length; i++) {
+                closebtns[i].addEventListener("click", function () {
+                    this.parentElement.style.display = 'none';
+                });
+            }
+        </script>
+        <!-- //close script -->
+
+        <!-- disable body scroll when navbar is in active -->
+        <script>
+            $(function () {
+                $('.sidebar-menu-collapsed').click(function () {
+                    $('body').toggleClass('noscroll');
+                })
+            });
+
+            $(document).ready(function () {
+                $('#nav-search').on('keyup', function () {
+                    var value = $(this).val().toLowerCase();
+                    if (value === "") {
+                        // Close or hide all menu items
+                        $('#mymenulst li').removeClass("nav-active");
+                    } else {
+
+                        // Show all hidden list items before filtering
+                        $('#mymenulst li').addClass("nav-active");
+
+                        // Filter the list based on the search value
+                        $('#mymenulst li').filter(function () {
+                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                        });
+                    }
+                });
+            });
+        </script>
+        <!-- disable body scroll when navbar is in active -->
+
+        <!-- loading-gif Js -->
+        <script src="../javascripts/modernizr.js"></script>
+        <script>
+            $(window).load(function () {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");;
+            });
+        </script>
+        <!--// loading-gif Js -->
+
+        <!-- Bootstrap Core javascriptsss -->
+        <script src="../javascripts/bootstrap.min.js"></script>
+        <!-- <script src="../javascripts/main.js"></script> -->
+        <script src="../javascripts/upwardJquery.js"></script>
+        <p id="pgload">
+            Page Load Time: 791 ms<br>
+            Page Render Time: 422 ms<br>
+            Total Page Size: 23.66 KB (0.02 MB)
+        </p> <!-- This is the paragraph where we will display the values -->
+
+        <script>
+            $('input').on("input", function () {
+                $(this).removeClass('is-invalid');
+            });
+        </script>
+        <script>
+            window.onload = function () {
+                // Use setTimeout to ensure that loadEventEnd has time to register
+                setTimeout(function () {
+                    // Performance timings
+                    const performanceTiming = window.performance.timing;
+
+                    // Ensure loadEventEnd is not 0 before calculating load time
+                    if (performanceTiming.loadEventEnd > 0) {
+                        // Calculate loading time
+                        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+                        const pageRenderTime = performanceTiming.domComplete - performanceTiming.domLoading;
+
+                        // Calculate total page size
+                        let pageSize = 0;
+                        window.performance.getEntriesByType('resource').forEach(resource => {
+                            if (resource.transferSize) {
+                                pageSize += resource.transferSize; // transferSize gives the size of resource in bytes
+                            }
+                        });
+
+                        // Convert page size to KB/MB
+                        let pageSizeInKB = (pageSize / 1024).toFixed(2); // KB
+                        let pageSizeInMB = (pageSize / (1024 * 1024)).toFixed(2); // MB if needed
+
+                        // Prepare the text content
+                        let displayText = `
+            Page Load Time: ${pageLoadTime} ms<br>
+            Page Render Time: ${pageRenderTime} ms<br>
+            Total Page Size: ${pageSizeInKB} KB (${pageSizeInMB} MB)
+        `;
+
+                        // Output the results into the <p> tag with id "pgload"
+                        document.getElementById('pgload').innerHTML = displayText;
+                    } else {
+                        document.getElementById('pgload').innerHTML = "Page Load Time data is not available.";
+                    }
+                }, 0); // Delay execution to ensure all resources are fully loaded
+            };
+
+            document.querySelectorAll('input[type="date"]').forEach(function (dateInput) {
+                dateInput.addEventListener('click', function () {
+                    this.showPicker();
+                });
+            });
+        </script>
+
+
+
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <a href="#" class="btn-close" data-bs-dismiss="modal"><i
+                                class="fa-solid fa-circle-xmark"></i></a>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="card-body pt-2 pb-2 pl-lg-3 pr-lg-3">
+                                <div class="form-row">
+                                    <canvas id="barcode"></canvas>
+                                    <div id="details"></div>
+                                </div>
+                                <button type="button" id="printQr" onclick="printDiv('details')"
+                                    class="btn-secondary btn-style btn mt-3 mr-2">
+                                    <strong> Print</strong>
+                                </button>
+
+                                <button type="button" class="btn-danger btn-style btn mt-3" data-bs-dismiss="modal">
+                                    <strong><i class="fas fa-times"></i> Close</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            &nbsp;&nbsp;
+        </div>
+        <script>
+            function getRowIdFromSession(event) {
+                $.get('/findpatient/getRowId', function (response) {
+                    if (response.rowId) {
+                        // If row ID exists, open the modal and create the barcode
+                        $('#myModal').modal('show');
+                        createBarcode(response.rowId);
+                    } else {
+                        // If row ID does not exist, show alert and do not open modal
+                        alert('Select a Patient First');
+                    }
+                }).fail(function () {
+                    alert('Select a Patient First');
+                });
+            }
+
+            function createBarcode(code) {
+                if (!code) {
+                    alert('Select a Patient First');
+                    return;
+                }
+                // Generate the barcode
+                JsBarcode("#barcode", code, {
+                    format: "CODE128",
+                    displayValue: true,
+                    fontSize: 18,
+                    height: 100,
+                    width: 2
+                });
+            }
+
+            // Example usage: call the function to get row ID stored in session
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+        <script>
+            function printDiv() {
+                // Convert canvas to image
+                const canvas = document.getElementById('barcode');
+                const img = document.createElement('img');
+                img.src = canvas.toDataURL();
+                img.id = 'barcode-img';
+                img.style.width = '100%';  // Ensuring the image fits the print page width
+
+                // Create a print-friendly area
+                const printArea = document.createElement('div');
+                printArea.id = 'print-area';
+                printArea.appendChild(img);  // Append only the barcode image to the print area
+                document.body.appendChild(printArea);
+
+                window.print();  // Start the print process
+
+                // Cleanup
+                printArea.remove();  // Remove the print area after printing
+            }
+
+
+        </script>
+        <script>
+            document
+                .getElementById("dob")
+                .addEventListener("change", calculateAge);
+
+            function calculateAge() {
+                const dob = new Date(document.getElementById("dob").value);
+                const today = new Date();
+                let ageYears = today.getFullYear() - dob.getFullYear();
+                let ageMonths = today.getMonth() - dob.getMonth();
+                let ageDays = today.getDate() - dob.getDate();
+
+                if (ageDays < 0) {
+                    ageMonths--;
+                    ageDays += new Date(
+                        today.getFullYear(),
+                        today.getMonth(),
+                        0
+                    ).getDate();
+                }
+
+                if (ageMonths < 0) {
+                    ageYears--;
+                    ageMonths += 12;
+                }
+
+                document.getElementById("age_years").value = ageYears;
+                // document.getElementById("spouse_age_month").value = ageMonths;
+                // document.getElementById("spouse_age_day").value = ageDays;
+            }
+        </script>
+        <script>
+            async function fetchFilteredData(table, filters = {}, limit = 10, offset = 0, sortby = 'id') {
+                try {
+                    const response = await axios.get('/findpatient/filter-data', {
+                        params: {
+                            table,
+                            ...filters,
+                            limit,
+                            offset,
+                            sortby
+                        }
+                    });
+
+                    return response.data;
+                } catch (error) {
+                    console.error('Error fetching filtered data:', error);
+                    throw error;
+                }
+            }
+
+
+            async function loadData() {
+                const table = 'PR_patientReg'
+                const filterElements = document.querySelectorAll('.filter-input');
+                let filters = {};
+
+                filterElements.forEach(element => {
+                    filters[element.name] = element.value;
+                });
+
+                try {
+                    const data = await fetchFilteredData(table, filters);
+                    renderTableData(data.rows);
+                } catch (error) {
+                    console.error('An error occurred while fetching data:', error);
+                }
+            }
+
+            function renderTableData(data) {
+                console.log(data)
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = ''; // Clear existing data
+
+                data.reverse().forEach(item => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = item.id; // Add data-id attribute to each row
+                    row.innerHTML = `
+<td>${item.mr_no}</td>
+<td>${item.firstName} ${item.middleName} ${item.lastName}</td>
+<td>${item.dob || ''}</td>
+<td>${item.babyBirthWeight || ''}</td>
+<td>${item.date || ''}</td>
+<td>${item.mobile_1 || ''} ${item.mobile_2 || ''}</td>    
+<td>${item.email || ''}</td>
+<td>${item.gender || ''}</td>
+<td>${item.marital_status || ''}</td>
+<td>${item.id_proof_type || ''}</td>
+<td>${item.id_proof_number || ''}</td>
+<td>${item.special_registration || ''}</td>
+<td>${item.registeredFrom || ''}</td>
+<td>${item.oldRegistration || ''}</td>
+<td>${item.donorCode || ''}</td>
+`;
+                    tableBody.appendChild(row);
+                });
+
+                // Add click event listener to each row
+                // Add click event listener to each row
+                document.querySelectorAll('#table-body tr').forEach(row => {
+                    row.addEventListener('click', function () {
+                        const rowId = this.dataset.id;
+
+                        // Remove the 'locked' class from all rows
+                        document.querySelectorAll('#table-body tr').forEach(r => {
+                            r.classList.remove('locked');
+                        });
+
+                        // Add the 'locked' class to the clicked row
+                        this.classList.add('locked');
+
+                        // Store the rowId via an AJAX POST request
+                        $.post('/MainBill/storeRowId', { rowId: rowId }, function (response) {
+                            alert('Row ID ' + response.rowId + ' stored in session');
+                        });
+                    });
+                });
+
+            }
+
+
+            $('#table-body tr').click(function () {
+                const rowId = $(this).data('id');
+
+                // Add the 'locked' class to the clicked row
+                $(this).addClass('locked');
+
+                $.post('/findpatient/storeRowId', { rowId: rowId }, function (response) {
+                    alert('Patient Selected');
+                });
+            });
+
+        </script>
+        </div>
+
+
+
+
+
+
+        <!--
+======================================
+! => Daily-Summary HTML Ends            
+=====================================
+-->
+
+
+
+        <!--footer section start-->
+        <footer class="dashboard">
+            <p>&copy 2024 LifeLnker. All Rights Reserved</p>
+        </footer>
+        <!--footer section end-->
+        <!-- move top -->
+        <button onclick="topFunction()" id="movetop" class="bg-primary" title="Go to top">
+            <span class="fa fa-angle-up"></span>
+        </button>
+        <script>
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("movetop").style.display = "block";
+                } else {
+                    document.getElementById("movetop").style.display = "none";
+                }
+            }
+
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+        <!-- /move top -->
+
+
+        <script src="assets/js/jquery-3.3.1.min.js"></script>
+        <script src="assets/js/jquery-1.10.2.min.js"></script>
+
+        <!-- chart js -->
+        <script src="assets/js/Chart.min.js"></script>
+        <script src="assets/js/utils.js"></script>
+        <!-- //chart js -->
+
+        <!-- Different scripts of charts.  Ex.Barchart, Linechart -->
+        <script src="assets/js/bar.js"></script>
+        <script src="assets/js/linechart.js"></script>
+        <script>
+
+
+
+            const languagesData = {
+                labels: ['Rajori Garden', 'Patel Nagar', 'Vasant Kunj', 'Tilak Nagar', 'Dwarka', 'Saket'],
+                datasets: [{
+                    data: [25, 20, 15, 10, 10, 20],
+                    backgroundColor: ['#4ac2b7', '#fac10c',
+                        '#fba119', '#f9655e', '#2196f3', '#8585ff'],
+                }],
+            };
+            const config = {
+                type: 'doughnut',
+                data: languagesData,
+                options: {
+                    aspectRatio: 3.75,
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    },
+                },
+            };
+            const ctx = document.getElementById(
+                'programmingLanguagesPieChart').getContext('2d');
+
+            new Chart(ctx, config); 
+        </script>
+
+
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/scripts.js"></script>
+
+        <!-- close script -->
+        <script>
+            var closebtns = document.getElementsByClassName("close-grid");
+            var i;
+
+            for (i = 0; i < closebtns.length; i++) {
+                closebtns[i].addEventListener("click", function () {
+                    this.parentElement.style.display = 'none';
+                });
+            }
+        </script>
+        <!-- //close script -->
+
+        <!-- disable body scroll when navbar is in active -->
+        <script>
+            $(function () {
+                $('.sidebar-menu-collapsed').click(function () {
+                    $('body').toggleClass('noscroll');
+                })
+            });
+        </script>
+        <!-- disable body scroll when navbar is in active -->
+
+        <!-- loading-gif Js -->
+        <script src="assets/js/modernizr.js"></script>
+        <script>
+            $(window).load(function () {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");;
+            });
+        </script>
+        <!--// loading-gif Js -->
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="assets/js/bootstrap.min.js"></script>
+
+        <script src="./main.js"></script>
+        <script src="./custom.js"></script>
+
+
+
+</body>
+
+</html>

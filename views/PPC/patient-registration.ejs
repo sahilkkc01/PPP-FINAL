@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Add Patient - LifeLinkr</title>
+
+    <%-include('../header'); -%>
+    <!-- main content start -->
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Add Patient</h4>
+      </div>
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!--part 1-->
+            <div class="card card_border">
+              <div class="">
+                <div class="col-xl-12 pr-xl-2 p-heading">
+                  <h6 class="p-text">Patient Profile</h6>
+                </div>
+
+                <div class="col-xl-12 pr-xl-2 mb-4">
+                  <form
+                    id="patientForm"
+                    enctype="multipart/form-data"
+                    method="post"
+                    class="mt-2"
+                  >
+                    <input type="hidden" name="query" id="query" value="0" />
+                    <div id="errordiv"></div>
+                    <div class="row">
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Code*</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control input-style"
+                            id="code"
+                            name="code"
+                            data-validation="required"
+                            data-error-message="Code is required"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label class="input__label">Patient Name*</label>
+                          <input
+                            type="text"
+                            class="form-control input-style"
+                            id="name"
+                            name="name"
+                            data-validation="required"
+                            data-error-message="Patient Name is required"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Email</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control input-style"
+                            id="email"
+                            name="email"
+                            aria-describedby="emailHelp"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Mobile*</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="mobile"
+                            name="mobile"
+                            aria-describedby="emailHelp"
+                            data-validation=" mobileNum required"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Age*</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="age"
+                            name="age"
+                            placeholder=""
+                            data-validation="required"
+                            data-error-message="Age is required"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Gender*</label
+                          >
+                          <select
+                            class="form-control input-style"
+                            id="gender"
+                            name="gender"
+                            data-validation="required"
+                            data-error-message="Gender is required"
+                          >
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Weight in KG</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="weight_Kg"
+                            name="weight_Kg"
+                            step="any"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Height in Feet</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="height_Feet"
+                            name="height_Feet"
+                            aria-describedby="emailHelp"
+                            step="any"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="temperature" class="input__label"
+                            >Temperature In C</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="temperature"
+                            name="temperature"
+                            step="any"
+                            data-validation=""
+                            data-error-message="Temperature is required"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="pulse" class="input__label">Pulse</label>
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="pulse"
+                            name="pulse"
+                            step="any"
+                            data-validation=""
+                            data-error-message="Pulse is required"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="bmi" class="input__label">BMI</label>
+                          <input
+                            type="number"
+                            class="form-control input-style"
+                            id="bmi"
+                            name="bmi"
+                            step="any"
+                            data-validation=""
+                            data-error-message="BMI is required"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="bloodPressure" class="input__label"
+                            >Blood Pressure</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control input-style"
+                            id="bloodPressure"
+                            name="bloodPressure"
+                            data-validation=""
+                            data-error-message="Blood Pressure is required"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="bloodGroup" class="input__label"
+                            >Blood Group</label
+                          >
+                          <select
+                            class="form-control input-style"
+                            id="bloodGroup"
+                            name="bloodGroup"
+                            data-validation=""
+                            data-error-message="Blood Group is required"
+                          >
+                            <option value="" disabled="" selected="">
+                              Select Blood Group
+                            </option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-xl-3">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Profile Image</label
+                          >
+                          <input
+                            type="file"
+                            class="form-control input-style"
+                            id="image"
+                            name="image"
+                          />
+                        </div>
+                      </div> -->
+                      <div class="col-3 mt-1">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Profile Image</label
+                          >
+                          <img
+                            id="displayimg"
+                            alt=""
+                            src="../MyUploads/<%=data.image%>"
+                            style="max-width: 350px; max-height: 150px"
+                          />
+
+                          <input
+                            type="file"
+                            class="form-control input-style"
+                            id="image"
+                            name="image"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-xl-3">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Report</label
+                          >
+                          <img
+                            id="displayimg"
+                            alt=""
+                            src="../MyUploads/<%=data.report%>"
+                            style="max-width: 350px; max-height: 150px"
+                          />
+                          <input
+                            type="file"
+                            class="form-control input-style"
+                            id="report"
+                            name="report"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-6 pr-xl-2">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Address</label
+                          >
+                          <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            class="form-control input-style expandable-textbox"
+                          />
+                        </div>
+                      </div>
+                      <div style="display: none" class="col-xl-3 visit">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Doctor</label
+                          >
+                          <select
+                            class="form-control input-style v2"
+                            name="doctor"
+                            id="doctor"
+                            data-validation=""
+                            data-error-message="Doctor name is required"
+                          >
+                            <option value="">Select</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div style="display: none" class="col-xl-3 pr-xl-2 visit">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Appointment Day*</label
+                          >
+                          <select
+                            class="form-control input-style v2"
+                            name="day"
+                            id="day"
+                            data-validation=""
+                            data-error-message="Day is required"
+                          >
+                            <option value="">Select</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div style="display: none" class="col-xl-3 pr-xl-2 visit">
+                        <div class="form-group">
+                          <label class="input__label">Appointment Time*</label>
+                          <select
+                            class="form-control input-style v2"
+                            name="time_available"
+                            id="time"
+                            data-validation=""
+                            data-error-message="Time is required"
+                          >
+                            <option value="">Select</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 pr-xl-2 mt-4">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1" class="input__label"
+                            >Mark Visit</label
+                          >
+                          <input
+                            type="checkbox"
+                            class=""
+                            id="markVisit"
+                            name="markVisit"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div id="loadingIndicator"></div>
+                    <div class="text-right">
+                      <button
+                        type="button"
+                        onclick="updateQuery()"
+                        id="mod-btn"
+                        class="btn btn-primary btn-style mt-3 mr-3"
+                      >
+                        <i class="fa-regular fa-pen-to-square"></i> Modify
+                      </button>
+                      <button
+                        type="button"
+                        onclick=" window.location.href = '/patients'"
+                        class="btn btn-danger btn-style mt-3 mr-3"
+                      >
+                        <i class="fas fa-times"></i> Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        id="sub-btn"
+                        class="btn btn-primary btn-style mt-3"
+                      >
+                        <i class="far fa-save"></i> Save
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!--part 1 ended-->
+          </div>
+        </div>
+      </div>
+      <!-- //charts -->
+    </div>
+
+    <%-include('../footer'); -%>
+    <script>
+      // Function to calculate BMI
+      function calculateBMI() {
+        var weight = parseFloat(document.getElementById("weight_Kg").value); // Weight in KG
+        var heightInFeet = parseFloat(
+          document.getElementById("height_Feet").value
+        ); // Height in feet
+
+        if (isNaN(weight) || isNaN(heightInFeet) || heightInFeet <= 0) {
+          document.getElementById("bmi").value = ""; // If input is invalid, clear BMI field
+          return;
+        }
+
+        // Convert height from feet to meters (1 foot = 0.3048 meters)
+        var heightInMeters = heightInFeet * 0.3048;
+
+        // Calculate BMI: weight (kg) / height (m)^2
+        var bmi = weight / (heightInMeters * heightInMeters);
+
+        // Display the calculated BMI
+        document.getElementById("bmi").value = bmi.toFixed(2); // Display BMI to 2 decimal places
+      }
+
+      // Add event listeners to weight and height inputs to trigger BMI calculation
+      document
+        .getElementById("weight_Kg")
+        .addEventListener("input", calculateBMI);
+      document
+        .getElementById("height_Feet")
+        .addEventListener("input", calculateBMI);
+    </script>
+
+    <script>
+      function updateQuery() {
+        document.getElementById("query").value = 1;
+        $("#mod-btn").prop("disabled", true);
+        $("input, select").prop("disabled", false);
+        $("#code").prop("readonly", true);
+        document.getElementById("sub-btn").disabled = false;
+      }
+
+      if ("<%= data.id %>" !== "") {
+        $("input, select").prop("disabled", true);
+        document.getElementById("sub-btn").disabled = true;
+        document.getElementById("mod-btn").disabled = false;
+        document.getElementById("code").value = "<%=data.code%>";
+        document.getElementById("name").value = "<%=data.name%>";
+        document.getElementById("email").value = "<%=data.email%>";
+        document.getElementById("mobile").value = "<%=data.mobile%>";
+        document.getElementById("age").value = "<%=data.age%>";
+        document.getElementById("weight_Kg").value = "<%=data.weight_Kg%>";
+        document.getElementById("height_Feet").value = "<%=data.height_Feet%>";
+        document.getElementById("gender").value = "<%=data.gender%>";
+        document.getElementById("address").value = "<%=data.address%>";
+      } else {
+        document.getElementById("mod-btn").disabled = true;
+      }
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        console.log("Document is ready");
+        const formId = "#patientForm";
+        $(formId).on("submit", function (event) {
+          event.preventDefault();
+          const { isValid, errorMessage } = validateForm(formId);
+          const errorDivId = "#errordiv";
+
+          if (isValid) {
+            const url = "/savePatient";
+            const loadingDiv = "#loadingIndicator";
+            const formData = new FormData(this);
+
+            // Log the form data entries for debugging
+            const dataArray = Array.from(formData.entries());
+            console.log("Form data entries:", dataArray);
+
+            saveFormImg(formData, errorDivId, url, loadingDiv)
+              .then(function (patientData) {
+                console.log("Patient data received:", patientData);
+
+                // Create new FormData and add only specified fields
+                // const newForm = new FormData();
+                // newForm.append("patientId", patientData.newPatient.id); // From response
+                // newForm.append(
+                //   "heightFeet",
+                //   patientData.newPatient.height_Feet
+                // ); // From response
+                // newForm.append("weightKg", patientData.newPatient.weight_Kg); // From response
+
+                // // Add only specified fields from original formData
+                // newForm.append("pulse", formData.get("pulse"));
+                // newForm.append("bloodPressure", formData.get("bloodPressure"));
+                // newForm.append("bloodGroup", formData.get("bloodGroup"));
+                // newForm.append("temperature", formData.get("temperature"));
+                // newForm.append("bmi", formData.get("bmi"));
+
+                // // Log newForm data for verification
+                // const newFormDataArray = Array.from(newForm.entries());
+                // console.log("New form data entries:", newFormDataArray);
+
+                // saveForm(
+                //   newForm,
+                //   errorDivId,
+                //   "/saveEmrExamination",
+                //   "#loadingIndicator"
+                // );
+              })
+              .catch(function (error) {
+                console.error("Error saving patient data:", error);
+              });
+          } else {
+            $(errorDivId)
+              .removeClass("alert-success")
+              .addClass("alert-danger")
+              .text(errorMessage)
+              .show();
+          }
+        });
+      });
+    </script>
+    <script>
+      let appointments = null;
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      function isOverlapping(slot1, slot2) {
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [startHour2, startMinute2] = slot2.start.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const startTime2 = startHour2 * 60 + startMinute2;
+
+        // Overlap occurs if the end time of slot1 is greater than or equal to the start time of slot2
+        return endTime1 >= startTime2;
+      }
+
+      function mergeTwoSlots(slot1, slot2) {
+        const start = slot1.start; // Start time remains the same
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [endHour2, endMinute2] = slot2.end.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const endTime2 = endHour2 * 60 + endMinute2;
+
+        // The end time is the maximum of the two
+        const newEndTime = Math.max(endTime1, endTime2);
+        const newEndHour = Math.floor(newEndTime / 60);
+        const newEndMinute = newEndTime % 60;
+
+        return {
+          start,
+          end: `${String(newEndHour).padStart(2, "0")}:${String(
+            newEndMinute
+          ).padStart(2, "0")}`,
+        };
+      }
+
+      function generateTimeSlots(slotRanges) {
+        const selectElement = document.getElementById("time");
+        if (!selectElement) return;
+        const day = document.getElementById("day").value;
+        let notAvailableSlots = [];
+        if (appointments && appointments.length) {
+          appointments.forEach((a) => {
+            const date = new Date(a.date); // Create a Date object from the input string
+            const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
+            const thisDay = days[dayIndex];
+            if (thisDay === day) {
+              notAvailableSlots.push(a.time);
+            }
+          });
+        }
+
+        // Clear existing options
+        selectElement.innerHTML = `<option value="">Select</option>`;
+
+        // Loop through each slot range and generate 15-minute intervals
+        slotRanges.forEach((range) => {
+          const [startHour, startMinute] = range.start.split(":").map(Number);
+          const [endHour, endMinute] = range.end.split(":").map(Number);
+
+          let currentHour = startHour;
+          let currentMinute = startMinute;
+
+          while (
+            currentHour < endHour ||
+            (currentHour === endHour && currentMinute < endMinute)
+          ) {
+            const formattedHour = currentHour.toString().padStart(2, "0");
+            const formattedMinute = currentMinute.toString().padStart(2, "0");
+
+            // Format the time slot in "HH:MM AM/PM" format
+            const amPm = currentHour < 12 ? "AM" : "PM";
+            const displayHour = currentHour % 12 === 0 ? 12 : currentHour % 12;
+            const formattedTime = `${displayHour}:${formattedMinute} ${amPm}`;
+
+            // Create an <option> element
+            const option = document.createElement("option");
+            option.value = `${formattedHour}:${formattedMinute}`;
+            option.textContent = formattedTime;
+
+            // Increment the time by 15 minutes
+            currentMinute += 15;
+            if (currentMinute >= 60) {
+              currentMinute = 0;
+              currentHour += 1;
+            }
+            if (
+              notAvailableSlots.includes(
+                `${formattedHour}:${formattedMinute}:00`
+              )
+            ) {
+              continue;
+            } else {
+              console.log(notAvailableSlots);
+
+              selectElement.appendChild(option);
+            }
+          }
+        });
+      }
+
+      const fetchDoctor = async () => {
+        try {
+          // Fetch data from the endpoint
+          const response = await fetch("/getDoctors");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+
+          // Find the select element
+          const selectElement = document.getElementById("doctor");
+
+          // Clear any existing options (except the placeholder)
+          selectElement.innerHTML = `<option value="">Select</option>`;
+
+          // Populate options from the fetched data
+          data.forEach((doctor) => {
+            const option = document.createElement("option");
+            option.value = doctor.id; // Assuming `doctor.id` is the unique identifier
+            option.textContent = doctor.name; // Assuming `doctor.name` is the name of the doctor
+            selectElement.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching doctors:", error);
+        }
+      };
+      let timeTable = null;
+      const fetchTimeTable = async (id) => {
+        try {
+          // Fetch the timetable data based on the given ID
+          const response = await fetch(`/timeTable?id=${id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+          timeTable = data.dayArray;
+
+          // Find the select element
+          const selectElement = document.getElementById("day");
+
+          // Clear any existing options (except the placeholder)
+          selectElement.innerHTML = `<option value="">Select</option>`;
+          appointments = data.appointment;
+
+          // Populate options from the fetched dayArray
+          if (data.dayArray && Array.isArray(data.dayArray)) {
+            data.dayArray.forEach((dayType) => {
+              if (dayType.dayType === "All") {
+                const days = [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday",
+                ];
+                days.forEach((d) => {
+                  const option = document.createElement("option");
+                  option.value = "All";
+                  option.textContent = d;
+                  selectElement.appendChild(option);
+                });
+
+                return;
+              }
+              const option = document.createElement("option");
+              option.value = dayType.dayType; // Set the value as the day type string
+              option.textContent = dayType.dayType; // Set the displayed text as the day type string
+              selectElement.appendChild(option);
+            });
+          } else {
+            console.warn("dayArray is not available or not an array.");
+          }
+        } catch (error) {
+          console.error("Error fetching timetable data:", error);
+        }
+      };
+
+      document.getElementById("doctor").addEventListener("change", () => {
+        const id = document.getElementById("doctor").value;
+        fetchTimeTable(id);
+      });
+
+      // // Call the function to populate the dropdown (replace `id` with the actual ID value)
+      // fetchTimeTable("someId");
+
+      // Call the function to populate the dropdown
+      fetchDoctor();
+      document.getElementById("day").addEventListener("change", () => {
+        const val = document.getElementById("day").value;
+        timeTable.forEach((day) => {
+          if (day.dayType === val) {
+            day.timeTable.sort((a, b) => {
+              // Split "HH:MM" into hours and minutes
+              const [hourA, minuteA] = a.start.split(":").map(Number);
+              const [hourB, minuteB] = b.start.split(":").map(Number);
+
+              // Convert time to total minutes since midnight
+              const totalMinutesA = hourA * 60 + minuteA;
+              const totalMinutesB = hourB * 60 + minuteB;
+
+              // Compare the total minutes
+              return totalMinutesA - totalMinutesB;
+            });
+            const merged = [];
+            for (const slot of day.timeTable) {
+              // If merged is empty or there's no overlap, add the current slot
+              if (
+                merged.length === 0 ||
+                !isOverlapping(merged[merged.length - 1], slot)
+              ) {
+                merged.push(slot);
+              } else {
+                // Merge the current slot with the last slot in the merged array
+                merged[merged.length - 1] = mergeTwoSlots(
+                  merged[merged.length - 1],
+                  slot
+                );
+              }
+            }
+            generateTimeSlots(merged);
+          }
+        });
+      });
+
+      document.getElementById("markVisit").addEventListener("click", () => {
+        const flag = document.getElementById("markVisit").checked;
+        if (!flag) {
+          document.querySelectorAll(".visit").forEach((cont) => {
+            cont.style.display = "none";
+            cont.querySelector(".v2").dataset.validation = "";
+          });
+        } else {
+          document.querySelectorAll(".visit").forEach((cont) => {
+            cont.style.display = "";
+            cont.querySelector(".v2").dataset.validation = "required";
+          });
+        }
+      });
+    </script>
+  </head>
+</html>

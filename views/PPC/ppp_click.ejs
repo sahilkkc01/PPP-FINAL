@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinic Pay Per Visit</title>
+    <%-include('../header');  -%>
+        <!-- Custom CSS -->
+    <style>
+      .card {
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        font-size: 1.1rem;
+      }
+      .pay-now-btn {
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+      .pay-now-btn:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+      }
+    </style>
+
+      <section id="details" class="py-3">
+      <div class="container-fluid">
+        <h4 class="primary">Subscription Summary</h4>
+        <div class="table-responsive">
+          <table class="table table2">
+            <thead class="">
+              <tr>
+                <th scope="col">Time Period</th>
+                <th scope="col">Visits</th>
+                <th scope="col">Cost (₹50 per visit)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Today</td>
+                <td id="today"></td>
+                <!-- Replace this with actual data if dynamic -->
+                <td id="todayp"></td>
+                <!-- Calculated as 5 visits * ₹50 -->
+              </tr>
+              <tr>
+                <td>Till Now</td>
+                <td id="till"></td>
+                <td id="tillp"></td>
+                <!-- Calculated as 10 visits * ₹50 -->
+              </tr>
+              <tr>
+                <td>Weekly</td>
+                <td id="week"></td>
+                <td id="weekp"></td>
+                <!-- Calculated as 70 visits * ₹50 -->
+              </tr>
+              <tr>
+                <td>Monthly</td>
+                <td id="month"></td>
+                <td id="monthp"></td>
+                <!-- Calculated as 70 visits * ₹50 -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Financial Overview Section -->
+    <section id="balance" class="bg-light py-5">
+      <div class="daily-summary container">
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table2">
+              <thead class="">
+                <tr>
+                  <th scope="col">Description</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total Balance</td>
+                  <td id="tBal">₹2,000</td>
+                </tr>
+                <tr>
+                  <td>Advance Payment</td>
+                  <td id="tAdd">₹1,000</td>
+                </tr>
+                <tr>
+                  <td>Paid Amount</td>
+                  <td id="tPaid">₹1,000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6 col-12 sumarry-right-col pr-0  d-flex align-items-center ">
+            <div class="row w-100">
+                <div class="col-2 ">
+                    <img src="./images/atm-card 1.svg" alt="">
+                </div>
+                <div class="col-8 text-center">
+                   <p>Credit Limit of Clinic</p>
+                   <span>₹ 50000</span>
+                </div>
+                <div class="col-2 text-right">
+                    <img src="./images/rupee 1.svg" alt="">
+                </div>
+            </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pay Now Section -->
+    <section id="paynow" class="py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 text-center">
+            <p class="lead">
+              Click below to make a payment and settle your outstanding balance.
+              Use any available payment method to process your payment securely.
+            </p>
+            <a href="#" class="btn btn-primary btn-style mt-3">Pay Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('../footer'); -%>
+    <script>
+      const fetchData = async () => {
+        try {
+          const response = await fetch("/getvisits");
+          const data = await response.json();
+          console.log(data);
+          document.getElementById("today").innerText = data.todayCount;
+          document.getElementById("till").innerText = data.totalVisits;
+          document.getElementById("week").innerText = data.thisWeekCount;
+          document.getElementById("month").innerText = data.thisMonthCount;
+          document.getElementById("todayp").innerText = data.todayCount * 50;
+          document.getElementById("tillp").innerText = data.totalVisits * 50;
+          document.getElementById("weekp").innerText = data.thisWeekCount * 50;
+          document.getElementById("monthp").innerText =
+            data.thisMonthCount * 50;
+          document.getElementById("tBal").innerText = `₹ ${data.totalAmount}`;
+          document.getElementById(
+            "tAdd"
+          ).innerText = `₹ ${data.advancePayment}`;
+          document.getElementById("tPaid").innerText = `₹ ${data.paidAmount}`;
+          //   document.getElementById("clinicId").innerText =
+          //     data.result.clinicBillAmount;
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchData();
+    </script>

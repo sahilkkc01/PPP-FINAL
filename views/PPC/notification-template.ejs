@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+      rel="stylesheet"
+    />
+
+    <title>LifeLinkr</title>
+    <%-include('../header'); -%>
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Add Symptoms</h4>
+      </div>
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!--part 1-->
+            <div class="card card_border p-3">
+              <style>
+                .nav > li {
+                  width: auto !important;
+                  display: inline-block ;
+                }
+                .nav-link {
+                  color: #666 !important;
+                }
+              </style>
+              <ul class="nav nav-tabs mb-3" id="communicationTabs">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="#appointmentSms"
+                    data-bs-toggle="tab"
+                    >Appointment & Followup SMS/WhatsApp</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#emails" data-bs-toggle="tab"
+                    >Emails</a
+                  >
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- Appointment & Followup SMS Tab -->
+                <div class="tab-pane fade show active" id="appointmentSms">
+                  <h5>Contact Information</h5>
+
+            
+                  <div class="row p-3">
+                       <div class="mb-3 col-lg-6">
+                    <label for="contactNumber" class="form-label"
+                      >Contact Number</label
+                    >
+                    <input
+                      type="text"
+                      id="contactNumber"
+                      class="form-control input-style"
+                      placeholder="091 23 456789"
+                    />
+                    <small class="form-text text-muted"
+                      >Maximum 15 characters & represented as
+                      {{ CONTACTNUMBER }}</small
+                    >
+                  </div>
+                  <div class="mb-3 col-lg-6">
+                    <label for="emailAddress" class="form-label"
+                      >Email Address</label
+                    >
+                    <input
+                      type="email"
+                      id="emailAddress"
+                      class="form-control input-style"
+                      placeholder="example@domain.com"
+                    />
+                    <small class="form-text text-muted"
+                      >All replies by patients for emails will be sent to this
+                      address</small
+                    >
+                  </div>
+                  </div>
+
+                 
+
+                  <!-- Appointment Confirmation SMS -->
+
+
+                  <div class="row px-3 pb-3 pt-0">
+                    
+                  <div class=" col-lg-6">
+                    <lable>Appointment Confirmation SMS</lable>
+                    <div class="form-check  pl-0">
+                     
+                    </div>
+                    <textarea
+                      id="smsAddTemp"
+                      class="form-control input-style"
+                      rows="3"
+                    >
+                                    {{
+                        PATIENT
+                      }}, your appointment has been confirmed at {{
+                        CLINIC
+                      }} on {{ DATE }} {{ TIME }} ({{
+                        CATEGORY
+                      }}). Any query call {{ CLINICCONTACTNUMBER }}.
+                    </textarea
+                    >
+                     <label
+                        class="form-check-label"
+                        for="enableConfirmationSms"
+                      >
+                        SMS is sent to the Patient on successfully adding an
+                        appointment
+                      </label>
+                  </div>
+
+                  <!-- Appointment Cancellation SMS -->
+                  <div class=" col-lg-6">
+                    <lable>Appointment Cancellation SMS</lable>
+                    <div class="form-check  pl-0">
+                    
+                    </div>
+                    <textarea
+                      id="smsCanTemp"
+                      class="form-control input-style "
+                      rows="3"
+                    >
+                                    {{
+                        PATIENT
+                      }}, your appointment has been cancelled at {{
+                        CLINIC
+                      }} on {{ DATE }} ({{ CATEGORY }}). Any query call {{
+                        CLINICCONTACTNUMBER
+                      }}.
+                      </textarea
+                    >  <label
+                        class="form-check-label"
+                        for="enableCancellationSms"
+                      >
+                        SMS is sent to the Patient when the appointment is
+                        cancelled
+                      </label>
+                  </div>
+                  </div>
+
+                </div>
+
+                <!-- Placeholder Tabs for Birthday wish SMS and Emails -->
+
+                <div class="tab-pane fade" id="emails">
+                  <!-- Emails Tab -->
+                  <div class="tab-pane fade show active" id="emails">
+
+                   <div class="row ">
+                     <div class="col-lg-4 custom-box">
+                      
+                    <h5>Appointment Confirmation Email</h5>
+                    <p>
+                      Email is sent to the Patient on successfully <br> adding an
+                      appointment
+                    </p>
+                    <button
+                      class="btn btn-primary  custom-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#myModal"
+                    >
+                      Show Preview
+                    </button>
+                    </div>
+
+                    <div class="col-lg-4  custom-box">
+                      <h5>Appointment Cancellation Email</h5>
+                    <p>
+                      Email is sent to the Patient when the <br> appointment is
+                      cancelled
+                    </p>
+                    <button
+                      class="btn btn-primary custom-btn "
+                      data-bs-toggle="modal"
+                      data-bs-target="#myModal2"
+                    >
+                      Show Preview
+                    </button>
+
+                    </div>
+
+                     <div class="col-lg-4  custom-box">
+                     <!-- Follow-up Reminder Email -->
+                      <div class="">
+                         <h5>Follow-up Reminder Email</h5>
+                      <p>
+                      Email is sent to the Patient on the <br> morning of their
+                      planned follow-up date
+                    </p>
+                      </div>
+                   
+                    <button
+                      class="btn btn-primary custom-btn "
+                      data-bs-toggle="modal"
+                      data-bs-target="#myModal3"
+                    >
+                      Show Preview
+                    </button>
+
+                   </div>
+
+                   </div>
+
+
+                   
+                    
+
+                    <div class="row mt-4">
+                      <div class="col-lg-12 pl-3 custom-box">
+                      <h5>Appointment Reminder Email</h5>
+                    <p class="pt-1">
+                      Email is sent to the Patient on the morning <br> of the
+                      appointment date
+                    </p>
+                    <div class="row">
+                      <div class="form-check mb-2 pl-0 col-lg-12">
+                      <label class="form-check-label pl-3 pt-3" for="sendReminderMorning">
+                        Send reminder Email on the day of appointment at
+                        <input
+                          type="time"
+                          id="morningReminderTime"
+                          class="form-control d-inline-block input-style "
+                          style="width: 100%"
+                        />
+                      </label>
+                    </div>
+                    <div class="form-check mb-3 pl-0 col-lg-12">
+                      <label
+                        class="form-check-label pl-3 pt-2"
+                        for="sendReminderPreviousDay"
+                      >
+                        Send reminder Email previous day of appointment at   
+                        <input
+                          type="time"
+                          id="previousDayReminderTime"
+                          class="form-control d-inline-block input-style "
+                          style="width: 100%"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Save Settings Button -->
+                    
+                    </div>
+                    </div>
+
+                    <div class="text-right">
+                      <button id="saveButton" class="btn btn-primary ml-3 text-right">
+                        Save Settings
+                      </button>
+                    </div>
+
+                
+                  
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modal Structure -->
+              <div
+                class="modal fade"
+                id="myModal"
+                tabindex="-1"
+                aria-labelledby="myModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="myModalLabel">
+                        Extra-Large Modal
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div id="compHeader" class="modal-body"></div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="modal fade"
+                id="myModal2"
+                tabindex="-1"
+                aria-labelledby="myModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="myModalLabel2">
+                        Extra-Large Modal 2
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div id="compHeader2" class="modal-body"></div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="modal fade"
+                id="myModal3"
+                tabindex="-1"
+                aria-labelledby="myModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="myModalLabel3">
+                        Extra-Large Modal 3
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div id="compHeader3" class="modal-body"></div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--part 1 ended-->
+          </div>
+        </div>
+      </div>
+      <!-- //charts -->
+    </div>
+
+    <%-include('../footer'); -%>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+
+    <script>
+      const quill = new Quill("#compHeader", {
+        theme: "snow",
+      });
+      const quill2 = new Quill("#compHeader2", {
+        theme: "snow",
+      });
+      const quill3 = new Quill("#compHeader3", {
+        theme: "snow",
+      });
+      document
+        .getElementById("saveButton")
+        .addEventListener("click", async () => {
+          const SMSTemplate = {
+            confSmsTemp: document.getElementById("smsAddTemp").value,
+            canSmsTemp: document.getElementById("smsCanTemp").value,
+            confEmailTemp: quill.root.innerHTML,
+            canEmailTemp: quill2.root.innerHTML,
+            phone: document.getElementById("contactNumber").value,
+            email: document.getElementById("emailAddress").value,
+            apntDayTime: document.getElementById("morningReminderTime").value,
+            apntDayPrev: document.getElementById("previousDayReminderTime")
+              .value,
+            folEmailTemp: quill3.root.innerHTML,
+          };
+          const response = await fetch("/saveTemplate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(SMSTemplate),
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.msg);
+          } else {
+            alert(result.msg);
+          }
+        });
+    </script>
+  </head>
+</html>

@@ -1,0 +1,132 @@
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinker</title>
+
+  <%- include('../header'); -%>
+
+
+            <!-- content -->
+
+
+        </div>
+        <!-- //charts -->
+
+
+
+        </div>
+
+
+
+
+
+
+        <!--
+======================================
+? => Master For Inbound HTML Screen Starts            
+=====================================
+-->
+
+        <div class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="chart">
+                    <div class="row">
+                        <div class="col-lg-12 pl-lg-2 mt-2">
+                            <h4 class="primary">Master</h4>
+                        </div>
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <form>
+                                <div class="card card_border">
+                                    <div class="">
+                                        <div class="col-xl-12 p-heading">
+                                            <h6 class="p-text">MASTER FOR INBOUND INVENTORY</h6>
+                                        </div>
+
+                                        <!--? First Screen  -->
+                                        <div class="card-body">
+                                           
+                                            <div class="form-row card-body pt-2 pb-2 px-0">
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Code</label>
+                                                        <input name="" type="text"
+                                                            class="form-control input-style " placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Supplier Name</label>
+                                                        <input name="" id="" type="number"
+                                                            class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+                                                </div>
+                                              
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Supply of Which Item</label>
+                                                        <select name=""
+                                                            class="form-control input-style ">
+                                                            <option></option>
+                                                            <option>Option 1</option>
+                                                            <option>Option 2</option>
+                                                            <option>Option 3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">GST</label>
+                                                        <input name="" id="" type=""
+                                                            class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Drug Licence</label>
+                                                        <input name="" id="" type="number"
+                                                            class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Validity</label>
+                                                        <input name="" id="" type="text"
+                                                            class="form-control input-style filter-input" placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">NA BL Lab Non</label>
+                                                        <input name="" id="" type=""
+                                                            class="form-control input-style filter-input"
+                                                            placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mt-1 mb-4 text-right">
+                                                <button type="button" class="btn-danger btn-style btn mt-3 mr-2" data-bs-toggle="modal" data-bs-target="#myModal" onclick="getRowIdFromSession()" fdprocessedid="ko20mc">
+                                                  <strong><i class="fas fa-xmark"></i> Cancel</strong>
+                                                </button>
+                              
+                                                <button type="button" class="btn-primary btn-style btn mt-3" id="loadButton" fdprocessedid="ka7x68">
+                                                  <strong><i class="fas fa-save"> </i> Save</strong>
+                                                </button>
+                                              </div>
+                                        </div>
+                                    </div>
+
+                            </form>
+                        </div>
+
+
+                        <%- include('../footer'); -%>

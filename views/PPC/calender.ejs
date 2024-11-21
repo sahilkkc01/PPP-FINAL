@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Calender - LifeLinkr</title>
+
+    <%- include('../header'); -%>
+
+    <style>
+      .calendar {
+        display: grid;
+        grid-template-columns: 100px repeat(7, 1fr);
+        border: 1px solid #ddd;
+      }
+
+      .time-slot {
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+        padding: 10px;
+        height: 60px;
+      }
+
+      .date-header {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #ddd;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+      }
+
+      .appointment {
+        position: absolute;
+        width: 90%;
+        background-color: #007bff;
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .appointment-container {
+        position: relative;
+        border: 1px solid #ddd;
+        height: 60px;
+      }
+    </style>
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Patient Appointment Calender</h4>
+      </div>
+
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!-- Date Filter Section -->
+            <div class="col-md-12 text-center">
+              <div class="row">
+                <div class="col-md-6 text-left mb-2">
+                  <!--div class="row">
+                                            <div class="col-md-6">
+                                                <label for="fromDate">From:</label>
+                                                <input type="date" id="fromDate" class="form-control input-style">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="toDate">To:</label>
+                                                <input type="date" id="toDate" class="form-control input-style">
+                                            </div>
+                                          </div-->
+                </div>
+                <div class="col-md-6 text-right">
+                  <button id="todayBtn" class="btn btn-outline-primary">
+                    Today's Appointments
+                  </button>
+                  <button id="weeklyBtn" class="btn btn-outline-secondary">
+                    Weekly Appointments
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="calendar" id="calendarID">
+              <!-- Date Headers -->
+              <div class="date-header"></div>
+              <!-- Empty for time slots -->
+
+              <!-- Time Slots -->
+              <div class="time-slot">10:00 AM</div>
+              <div class="appointment-container" id="mon-10"></div>
+              <div class="appointment-container" id="tue-10"></div>
+              <div class="appointment-container" id="wed-10"></div>
+              <div class="appointment-container" id="thu-10"></div>
+              <div class="appointment-container" id="fri-10"></div>
+              <div class="appointment-container" id="sat-10"></div>
+              <div class="appointment-container" id="sun-10"></div>
+
+              <div class="time-slot">11:00 AM</div>
+              <div class="appointment-container" id="mon-11"></div>
+              <div class="appointment-container" id="tue-11"></div>
+              <div class="appointment-container" id="wed-11"></div>
+              <div class="appointment-container" id="thu-11"></div>
+              <div class="appointment-container" id="fri-11"></div>
+              <div class="appointment-container" id="sat-11"></div>
+              <div class="appointment-container" id="sun-11"></div>
+
+              <div class="time-slot">12:00 PM</div>
+              <div class="appointment-container" id="mon-12"></div>
+              <div class="appointment-container" id="tue-12"></div>
+              <div class="appointment-container" id="wed-12"></div>
+              <div class="appointment-container" id="thu-12"></div>
+              <div class="appointment-container" id="fri-12"></div>
+              <div class="appointment-container" id="sat-12"></div>
+              <div class="appointment-container" id="sun-12"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../footer'); -%>
+    <script>
+      function isOverlapping(slot1, slot2) {
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [startHour2, startMinute2] = slot2.start.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const startTime2 = startHour2 * 60 + startMinute2;
+
+        // Overlap occurs if the end time of slot1 is greater than or equal to the start time of slot2
+        return endTime1 >= startTime2;
+      }
+
+      function mergeTwoSlots(slot1, slot2) {
+        const start = slot1.start; // Start time remains the same
+        const [endHour1, endMinute1] = slot1.end.split(":").map(Number);
+        const [endHour2, endMinute2] = slot2.end.split(":").map(Number);
+        const endTime1 = endHour1 * 60 + endMinute1;
+        const endTime2 = endHour2 * 60 + endMinute2;
+
+        // The end time is the maximum of the two
+        const newEndTime = Math.max(endTime1, endTime2);
+        const newEndHour = Math.floor(newEndTime / 60);
+        const newEndMinute = newEndTime % 60;
+
+        return {
+          start,
+          end: `${String(newEndHour).padStart(2, "0")}:${String(
+            newEndMinute
+          ).padStart(2, "0")}`,
+        };
+      }
+
+      async function getTimeTableData() {
+        const response = await fetch("/timeTable?id=12");
+        const data = await response.json();
+        console.log(data);
+        if (!data.timeTableArray) {
+          alert("No time table");
+          return;
+        }
+        data.timeTableArray.sort((a, b) => {
+          // Split "HH:MM" into hours and minutes
+          const [hourA, minuteA] = a.start.split(":").map(Number);
+          const [hourB, minuteB] = b.start.split(":").map(Number);
+
+          // Convert time to total minutes since midnight
+          const totalMinutesA = hourA * 60 + minuteA;
+          const totalMinutesB = hourB * 60 + minuteB;
+
+          // Compare the total minutes
+          return totalMinutesA - totalMinutesB;
+        });
+
+        console.log(data.timeTableArray);
+
+        // Step 2: Merge overlapping slots
+        const merged = [];
+        for (const slot of data.timeTableArray) {
+          // If merged is empty or there's no overlap, add the current slot
+          if (
+            merged.length === 0 ||
+            !isOverlapping(merged[merged.length - 1], slot)
+          ) {
+            merged.push(slot);
+          } else {
+            // Merge the current slot with the last slot in the merged array
+            merged[merged.length - 1] = mergeTwoSlots(
+              merged[merged.length - 1],
+              slot
+            );
+          }
+        }
+        console.log(merged);
+        await fetchData();
+        generateTimeSlots(merged);
+        renderAppointments();
+      }
+
+      getTimeTableData();
+
+      function generateTimeSlots(slotRanges) {
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const container = document.getElementById("calendarID");
+        if (!container) return;
+
+        // Clear the container content
+        container.innerHTML = `<div class="date-header"></div>`;
+
+        // Get the current date
+        const currentDate = new Date();
+
+        // Loop through the next 7 days
+        for (let i = 0; i < 7; i++) {
+          // Calculate the date for each day
+          const date = new Date(currentDate);
+          date.setDate(currentDate.getDate() + i);
+          // if (date.getDay() === 0) continue;
+
+          // Get the day of the week and date (e.g., "Mon, 18")
+          const dayOfWeek = daysOfWeek[date.getDay()];
+          const dayOfMonth = date.getDate();
+          const dateHeader = `${dayOfWeek}, ${dayOfMonth}`;
+
+          // Create a date header element
+          const dateHeaderElement = document.createElement("div");
+          dateHeaderElement.classList.add("date-header");
+          dateHeaderElement.textContent = dateHeader;
+          container.appendChild(dateHeaderElement);
+        }
+
+        // Loop through each slot range and generate 15-minute intervals
+        slotRanges.forEach((range) => {
+          const [startHour, startMinute] = range.start.split(":").map(Number);
+          const [endHour, endMinute] = range.end.split(":").map(Number);
+
+          let currentHour = startHour;
+          let currentMinute = startMinute;
+
+          while (
+            currentHour < endHour ||
+            (currentHour === endHour && currentMinute < endMinute)
+          ) {
+            const formattedHour = currentHour.toString().padStart(2, "0");
+            const formattedMinute = currentMinute.toString().padStart(2, "0");
+            const date = new Date(currentDate);
+            date.setDate(currentDate.getDate() + i);
+
+            // Create a time slot label (e.g., "10:15 AM")
+            const timeSlot = document.createElement("div");
+            const amPm = currentHour < 12 ? "AM" : "PM";
+            const displayHour = currentHour % 12 === 0 ? 12 : currentHour % 12;
+            timeSlot.classList.add("time-slot");
+            timeSlot.textContent = `${displayHour}:${formattedMinute} ${amPm}`;
+            container.appendChild(timeSlot);
+            // if (date.getDay() === 0) continue;
+
+            // Create appointment containers for each day of the week
+            for (let i = 0; i < 7; i++) {
+              const date = new Date(currentDate);
+              date.setDate(currentDate.getDate() + i);
+              // if (date.getDay() === 0) continue;
+              const dayOfWeek = daysOfWeek[date.getDay()].toLowerCase();
+              const appointmentContainer = document.createElement("div");
+              appointmentContainer.classList.add("appointment-container");
+              appointmentContainer.id = `${dayOfWeek}-${formattedHour}-${formattedMinute}`;
+              container.appendChild(appointmentContainer);
+            }
+
+            // Increment the time by 15 minutes
+            currentMinute += 15;
+            if (currentMinute >= 60) {
+              currentMinute = 0;
+              currentHour += 1;
+            }
+          }
+        });
+      }
+
+      // generateTimeSlots();
+
+      const colors = [
+        "#FF5733", // Vibrant Red-Orange
+        "#33A1FF", // Sky Blue
+        "#FFC300", // Bright Yellow
+        "#8E44AD", // Rich Purple
+        "#16A085", // Teal Green
+        "#FF6F61", // Coral Pink
+        "#4CAF50", // Fresh Green
+        "#FF8C00", // Deep Orange
+        "#6A5ACD", // Slate Blue
+        "#FF1493", // Deep Pink
+        "#1E90FF", // Dodger Blue
+        "#FFD700", // Gold
+        "#20B2AA", // Light Sea Green
+        "#FF6347", // Tomato Red
+        "#3CB371", // Medium Sea Green
+      ];
+      function getRandomColor() {
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+      }
+
+      // Sample appointments data
+      let appointments = [];
+      let d = null;
+
+      function getDayOfWeek(dateString) {
+        const date = new Date(dateString);
+        const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+        const dayIndex = date.getUTCDay(); // Using getUTCDay() for UTC dates
+        return days[dayIndex];
+      }
+
+      const fetchData = async () => {
+        const response = await fetch("/getTodaysAppointments");
+        const data = await response.json();
+
+        console.log("data: ", data);
+        appointments = data.todaysAppointments;
+        d = data;
+      };
+
+      // Function to render appointments
+      function renderAppointments() {
+        appointments.forEach((appointment) => {
+          const containerId = `${getDayOfWeek(appointment.date)}-${
+            appointment.time ? appointment.time.split(":")[0] : "N/A"
+          }-${appointment.time ? appointment.time.split(":")[1] : "N/A"}
+          `.trim();
+          console.log(`"${containerId}"`);
+
+          const container = document.getElementById(containerId);
+
+          if (container) {
+            const appointmentBlock = document.createElement("div");
+            appointmentBlock.classList.add("appointment");
+            appointmentBlock.style.backgroundColor = getRandomColor();
+            appointmentBlock.textContent = `${appointment.patient.name} \\ ${appointment.patient.age} \\ ${appointment.patient.gender[0]}`;
+
+            // Update the container safely
+            container.innerHTML = appointmentBlock.outerHTML;
+          } else {
+            console.warn(`Element with ID ${containerId} not found.`);
+          }
+        });
+      }
+
+      // Function to show today's appointments (example logic)
+      function showTodayAppointments() {
+        appointments = d.todaysAppointments;
+
+        // Clear weekly appointments
+        d.weeklyAppointments.forEach((appointment) => {
+          const containerId = `${getDayOfWeek(appointment.date)}-${
+            appointment.time ? appointment.time.split(":")[0] : "N/A"
+          }-${appointment.time ? appointment.time.split(":")[1] : "N/A"}
+          `.trim();
+          const container = document.getElementById(containerId);
+
+          // Check if container exists before updating
+          if (container) {
+            container.innerHTML = "";
+          }
+        });
+
+        // Render today's appointments
+        renderAppointments();
+      }
+
+      // Function to show weekly appointments (example logic)
+      function showWeeklyAppointments() {
+        // alert("Showing Weekly Appointments (This is a placeholder function)");
+        appointments = d.weeklyAppointments;
+        renderAppointments();
+      }
+
+      // Event Listeners for buttons
+      document
+        .getElementById("todayBtn")
+        .addEventListener("click", showTodayAppointments);
+      document
+        .getElementById("weeklyBtn")
+        .addEventListener("click", showWeeklyAppointments);
+
+      // // Render appointments on page load
+      document.addEventListener("DOMContentLoaded", renderAppointments);
+    </script>
+  </head>
+</html>

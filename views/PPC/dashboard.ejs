@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <%-include('../header'); -%>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+      .metric-value {
+        font-size: 1.5rem;
+      }
+      .chart-container {
+        max-width: 100%; /* Make the charts take full width of the container */
+        /* height: 400px; Increase height for better visibility */
+        margin: auto;
+      }
+    </style>
+
+    <!-- Calender modal... -->
+
+    <div class="container-fluid mt-2">
+      <h2 class="primary text-center mb-3">Dashboard</h2>
+
+      <!-- Dashboard Metrics with Graphs -->
+      <div class="row">
+        <div class="col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">Appointments Overview</h5>
+              <div class="chart-container">
+                <canvas id="appointmentsOverviewChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">
+                This Month vs Last Month Comparison
+              </h5>
+              <div class="chart-container">
+                <canvas id="monthlyComparisonChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">Revenue Comparison</h5>
+              <div class="chart-container">
+                <canvas id="chart3"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">
+                Subscription Fees
+              </h5>
+              <div class="chart-container">
+                <table class="table2">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">Time Period</th>
+                      <th scope="col">Visits</th>
+                      <th scope="col">Cost (₹50 per visit)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Today</td>
+                      <td id="today">5</td>
+                      <!-- Replace this with actual data if dynamic -->
+                      <td id="todayp">₹250</td>
+                      <!-- Calculated as 5 visits * ₹50 -->
+                    </tr>
+                    <tr>
+                      <td>Till Now</td>
+                      <td id="till">10</td>
+                      <td id="tillp">₹500</td>
+                      <!-- Calculated as 10 visits * ₹50 -->
+                    </tr>
+                    <tr>
+                      <td>Weekly</td>
+                      <td id="week"></td>
+                      <td id="weekp">₹3,500</td>
+                      <!-- Calculated as 70 visits * ₹50 -->
+                    </tr>
+                    <tr>
+                      <td>Monthly</td>
+                      <td id="month"></td>
+                      <td id="monthp">500</td>
+                      <!-- Calculated as 70 visits * ₹50 -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal Structure -->
+    <%-include('../footer'); -%>
+    <script>
+      async function fetchDashboardData() {
+        try {
+          const response = await axios.get("/getvisits"); // Replace with your actual API endpoint
+
+          // Assuming the API returns data in the following format:
+          // { totalAppointments, appointmentsThisMonth, appointmentsThisWeek, appointmentsToday, lastMonth }
+          const data = response.data;
+          console.log(data);
+
+          // Initialize the charts
+          initializeOverviewChart(data);
+          initializeMonthlyComparisonChart(data);
+        } catch (error) {
+          console.error("Error fetching dashboard data:", error);
+        }
+      }
+
+      function initializeOverviewChart(data) {
+        const ctx = document
+          .getElementById("appointmentsOverviewChart")
+          .getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Today", "This Week", "This Month", "Total"],
+            datasets: [
+              {
+                label: "Number of Visits",
+                data: [
+                  data.todayCount,
+                  data.thisWeekCount,
+                  data.thisMonthCount,
+                  data.totalVisits,
+                ],
+                borderColor: ["#dc3545", "#ffc107", "#28a745", "#007bff"],
+                backgroundColor: [
+                  "rgba(220, 53, 69, 0.2)",
+                  "rgba(255, 193, 7, 0.2)",
+                  "rgba(40, 167, 69, 0.2)",
+                  "rgba(0, 123, 255, 0.2)",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false }, // Hide legend since we have only one dataset
+            },
+            scales: {
+              y: { beginAtZero: true, suggestedMax: 10 },
+            },
+          },
+        });
+        const ctz = document.getElementById("chart3").getContext("2d");
+        new Chart(ctz, {
+          type: "line",
+          data: {
+            labels: ["Today", "This Week", "This Month", "Total"],
+            datasets: [
+              {
+                label: "Number of Visits",
+                data: [
+                  data.todayCount * 50 - 10,
+                  data.thisWeekCount * 50 - 10,
+                  data.thisMonthCount * 50 - 10,
+                  data.totalVisits * 50 - 10,
+                ],
+                borderColor: ["#dc3545", "#ffc107", "#28a745", "#007bff"],
+                backgroundColor: [
+                  "rgba(220, 53, 69, 0.2)",
+                  "rgba(255, 193, 7, 0.2)",
+                  "rgba(40, 167, 69, 0.2)",
+                  "rgba(0, 123, 255, 0.2)",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false }, // Hide legend since we have only one dataset
+            },
+            scales: {
+              y: { beginAtZero: true, suggestedMax: 10 },
+            },
+          },
+        });
+      }
+
+      function initializeMonthlyComparisonChart(data) {
+        const ctx = document
+          .getElementById("monthlyComparisonChart")
+          .getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: ["This Month", "Last Month"],
+            datasets: [
+              {
+                label: "Appointments",
+                data: [data.thisMonthCount, data.prevMonthCount],
+                borderColor: "#17a2b8",
+                backgroundColor: "rgba(23, 162, 184, 0.2)",
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true },
+            },
+            scales: {
+              y: { beginAtZero: true },
+            },
+          },
+        });
+        document.getElementById("today").innerText = data.todayCount;
+        document.getElementById("till").innerText = data.totalVisits;
+        document.getElementById("week").innerText = data.thisWeekCount;
+        document.getElementById("month").innerText = data.thisMonthCount;
+        document.getElementById("todayp").innerText = data.todayCount * 50;
+        document.getElementById("tillp").innerText = data.totalVisits * 50;
+        document.getElementById("weekp").innerText = data.thisWeekCount * 50;
+        document.getElementById("monthp").innerText = data.thisMonthCount * 50;
+      }
+
+      // Call the function to populate data and initialize charts on page load
+      fetchDashboardData();
+    </script>

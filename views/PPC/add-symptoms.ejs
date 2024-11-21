@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinkr</title>
+    <%-include('../header');  -%>
+       
+
+
+            <!-- content -->
+            <div class="container-fluid">
+
+                <!-- charts -->
+                <div class="col-lg-12 pl-lg-0 mt-2">
+                    <h4 class="primary">Add Symptoms</h4>
+                </div>
+                <div class="chart">
+                    <div class="row">
+
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                            <!--part 1-->
+                            <div class="card card_border">
+                                <div class="">
+                                    <div class="col-xl-12 pr-xl-2 p-heading">
+                                        <h6 class="p-text">Add Symptoms</h6>
+                                    </div>
+
+                                    <div class="col-xl-12 pr-xl-2 mb-4">
+                                        <form id="symptomsForm"  class="mt-2">
+                                            <input type="hidden" name="query" id="query" value="0">
+                                            <div id="errordiv"></div>
+                                            <div class="row">
+                                                <div class="col-xl-4 col-xs-6 pr-xl-2">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1" class="input__label">Code*</label>
+                                                        <input type="text" class="form-control input-style"
+                                                            id="code" name="code"  data-validation="required" data-error-message="Code is required"
+                                                            placeholder="">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xl-4 col-xs-6 pr-xl-2">
+                                                    <div class="form-group">
+                                                        <label
+                                                            class="input__label">Description*</label>
+                                                        <input type="text" class="form-control input-style"
+                                                            id="name" name="name"  data-validation="required" data-error-message="Description is required"
+                                                            placeholder="">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div id="loadingIndicator"></div>
+                                            <div class="text-right">
+                                                <button type="button" onclick="updateQuery()" id="mod-btn" class="btn btn-primary btn-style mt-3 mr-3"><i class="fa-regular fa-pen-to-square"></i> Modify</button>
+                                                <button type="button" onclick=" window.location.href = '/speciality'" class="btn btn-danger btn-style mt-3 mr-3"><i
+                                                    class="fas fa-times"></i> Cancel</button>
+                                                <button type="submit" id="sub-btn" class="btn btn-primary btn-style mt-3"><i
+                                                        class="far fa-save"></i> Save</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--part 1 ended-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- //charts -->
+            </div>
+
+
+            <%-include('../footer');  -%>
+            <script>
+                function updateQuery(){
+       document.getElementById('query').value=1;
+       $('#mod-btn').prop('disabled', true);   
+       $('input, select').prop('disabled', false);
+       $('#code').prop('disabled', true);
+       document.getElementById('sub-btn').disabled = false;
+     }
+            
+   if('<%= data.id %>'!==''){
+       $('input[data-validation], select').prop('disabled', true);
+       document.getElementById('sub-btn').disabled = true;
+       document.getElementById('mod-btn').disabled = false;
+       document.getElementById('code').value='<%=data.code%>'
+       document.getElementById('name').value='<%=data.name%>'
+       
+     }else{
+     
+       document.getElementById('mod-btn').disabled = true;
+     }
+           </script>
+
+            <script>
+                 $(document).ready(function () {
+                    console.log("Document is ready");
+                    const formId = '#symptomsForm'
+                    $(formId).on('submit', function (event) {
+                        event.preventDefault();
+                        const { isValid, errorMessage ,formData} = validateForm(formId);
+                        const errorDivId = '#errordiv';
+
+                        if (isValid) {
+                            const url = '/saveSymptoms';
+                            const loadingDiv = '#loadingIndicator';
+                            // console.log('1')
+                            console.log('sd',formData)
+
+                            saveForm(formData, errorDivId, url, loadingDiv);
+                        } else {
+                            $(errorDivId).removeClass('alert-success').addClass('alert-danger').text(errorMessage).show();
+                        }
+                    });
+
+                });
+
+
+
+
+            </script>

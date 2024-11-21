@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>LifeLinker</title>
+<%- include('../header'); -%>
+
+
+
+     
+
+        <!--
+======================================
+? => Stock Manager HTML Screen Starts            
+=====================================
+-->
+
+
+
+            <div class="container-fluid">
+
+                <div class="chart">
+                    <div class="row">
+                        <div class="col-lg-12 pl-lg-2 mt-2">
+                            <h4 class="primary">Purchase Manager</h4>
+                        </div>
+                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                     
+                                <div class="card card_border">
+                                    <div class="col-xl-12 p-heading">
+                                        <h6 class="p-text">MANAGER</h6>
+                                    </div>
+                        
+                                    <!-- Checkbox Toggle Section -->
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-lg-6 col-md-12 mt-1 mb-2 d-flex pl-2">
+                                                <div class="form-group mr-4 d-inline-flex align-items-center">
+                                                    <input class="form-check-input mt-0 mr-2" type="checkbox" checked id="purchaseCheckbox">
+                                                    <label class="input__label mb-0">Purchase</label>
+                                                </div>
+                                                <div class="form-group d-inline-flex align-items-center">
+                                                    <input class="form-check-input mt-0 mr-2" type="checkbox" id="expenseCheckbox">
+                                                    <label class="input__label mb-0">Expense</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        <form id="itemForm">
+                            <div id="errordiv1"></div>
+                                    <!-- Purchase Screen -->
+                                    <div id="purchaseScreen" class="card-body py-0" style="display: none;">
+                                        <h6>Purchase Manager</h6>
+                                        <div class="form-row">
+                                            <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Date</label>
+                                                    <input name="date" type="date" id="date" class="form-control input-style" data-validation="required" data-error-message="Date is required">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Voucher No.</label>
+                                                    <input name="voucherNo" id="voucherNo" type="text" class="form-control input-style" data-validation="required" data-error-message="Voucher No is required">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Supplier</label>
+                                                    <select name="client" id="client" class="form-control input-style" data-validation="required" data-error-message="Client is required">
+                                                        <option value="">Select</option>
+                                                       
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <!-- Items Section for Purchase -->
+                                      <!-- Items Section for Purchase -->
+                                      <div id="itemsContainer">
+                                        <div class="form-row item-row">
+                                            <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Item</label>
+                                                    <input name="item" type="text" class="form-control input-style search-input" placeholder="Medicine/Tests" data-validation="required" data-error-message="Item is required">
+                                                    <ul class="list-group suggestions-list" style="position: absolute; z-index: 100;"></ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Quantity</label>
+                                                    <input name="quantity" type="number" class="form-control input-style quantity-input" data-validation="required" data-error-message="Quantity is required">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Rate</label>
+                                                    <input name="rate" type="number" class="form-control input-style rate-input" data-validation="required" data-error-message="Rate is required">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-3 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Total</label>
+                                                    <input name="total" type="number" class="form-control input-style total-input" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1 col-md-2 col-sm-12 mb-2 d-flex align-items-end">
+                                                <button type="button" class="btn btn-primary add-item-btn fix-btn"><i class="fa-solid fa-plus"></i></button>
+                                                <button type="button" class="btn btn-danger remove-item-btn ml-2 fix-btn"><i class="fa-solid fa-minus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
+<!-- Grand Total Section -->
+<div class="form-group mt-3 mb-4">
+    <h6>Grand Total: <span id="grandTotal">0.00</span></h6>
+</div>
+
+<!-- Payment Status Radio Buttons -->
+<div class="form-group mt-3 mb-4">
+    <label class="input__label">Payment Status:</label>
+    <div class="d-flex">
+        <div class="form-check mr-3">
+            <input type="radio" class="form-check-input" name="paymentStatus" id="paidOption" value="Paid">
+            <label class="form-check-label" for="paidOption">Paid</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="paymentStatus" id="toBePaidOption" value="To be Paid" checked>
+            <label class="form-check-label" for="toBePaidOption">To be Paid</label>
+        </div>
+    </div>
+</div>
+
+<!-- Comment Section -->
+<div class="form-group mt-3 mb-4">
+    <label class="input__label">Comments:</label>
+    <textarea id="PurchaseComment"  class="form-control input-style" rows="3" placeholder="Enter any additional comments or notes..."></textarea>
+</div>
+
+
+                        
+                                        <!-- Action Buttons for Purchase -->
+                                        <div class="form-group mt-3 mb-4 text-right">
+                                            <button type="button" class="btn btn-danger btn-style mr-2" id="cancelPurchase">
+                                                <strong><i class="fas fa-xmark"></i> Cancel </strong>
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-style" id="savePurchase">
+                                                <strong><i class="fas fa-save"></i> Save </strong>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                        
+                                <form id="expenseForm">
+                                    <div id="errordiv2"></div>
+                                    <!-- Expense Screen -->
+                                    <div id="expenseScreen" class="card-body pt-0" style="display: none;">
+                                        <h6>Expense Manager</h6>
+                                        <div class="form-row">
+                                            <div class="col-lg-6 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Date</label>
+                                                    <input name="expenseDate" id="expenseDate" type="date" class="form-control input-style" data-validation="required" data-error-message="Date is required">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-4 col-sm-12 mb-2">
+                                                <div class="form-group">
+                                                    <label class="input__label">Voucher No.</label>
+                                                    <input name="expenseVoucherNo" type="text" class="form-control input-style" data-validation="required" data-error-message="Voucher No is required">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Expenses Section -->
+                                        <div id="expensesContainer">
+                                            <div class="form-row expense-row">
+                                                <div class="col-lg-6 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Expense Name</label>
+                                                        <input name="expenseName" type="text" class="form-control input-style expense-input" placeholder="Expense">
+                                                        <ul class="list-group expense-suggestions" style="position: absolute; z-index: 100;"></ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 col-md-4 col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <label class="input__label">Rate</label>
+                                                        <input name="expenseRate" type="number" class="form-control input-style expense-rate-input" data-validation="required" data-error-message="Rate is required">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-1 col-md-2 col-sm-12 mb-2 d-flex align-items-end">
+                                                    <button type="button" class="btn btn-primary add-expense-btn fix-btn"><i class="fa-solid fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-danger remove-expense-btn ml-2 fix-btn"><i class="fa-solid fa-minus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    
+                                        <!-- Grand Total for Expenses -->
+                                        <div class="form-group mt-3 mb-4">
+                                            <h6>Grand Total (Expenses): <span id="grandTotalExpense">0.00</span></h6>
+                                        </div>
+                                        <!-- Comment Section -->
+<div class="form-group mt-3 mb-4">
+    <label class="input__label">Comments:</label>
+    <textarea id="ExpenseComment"  class="form-control input-style" rows="3" placeholder="Enter any additional comments or notes..."></textarea>
+</div>
+                                    
+                                        <!-- Action Buttons for Expense -->
+                                        <div class="form-group mt-3 mb-4 text-right">
+                                            <button type="button" class="btn btn-danger btn-style mr-2" id="cancelExpense">
+                                                <strong><i class="fas fa-xmark"></i> Cancel </strong>
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-style" id="saveExpense">
+                                                <strong><i class="fas fa-save"></i> Save </strong>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                           
+                        </div>
+                        
+                       </div> 
+                        
+
+
+                        <%- include('../footer') -%>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                fetchData();
+                            });
+                        
+                            let responseData = { items: [], tests: [] };
+                            let expenses = [];
+                        
+                            // Fetch both items/tests and expenses data
+                            async function fetchData() {
+                                try {
+                                    const [itemsTestsResponse, expensesResponse] = await Promise.all([
+                                        axios.get('/getItemsAndTests'),
+                                        axios.get('/getExpenses'),
+                                    ]);
+                                    responseData = itemsTestsResponse.data;
+                                    expenses = expensesResponse.data;
+                                } catch (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            }
+                        
+                            // Add or remove item row
+                            document.addEventListener('click', (event) => {
+                                if (event.target.classList.contains('add-item-btn')) {
+                                    addNewItemRow();
+                                } else if (event.target.classList.contains('remove-item-btn')) {
+                                    removeItemRow(event.target);
+                                }
+                            });
+                        
+                            // Add a new item row
+                            function addNewItemRow() {
+                                const newRow = document.querySelector('.item-row').cloneNode(true);
+                                newRow.querySelectorAll('input').forEach(input => input.value = '');
+                                document.getElementById('itemsContainer').appendChild(newRow);
+                                updateGrandTotal();
+                            }
+                        
+                            // Remove an item row
+                            function removeItemRow(button) {
+                                const row = button.closest('.item-row');
+                                if (document.querySelectorAll('.item-row').length > 1) {
+                                    row.remove();
+                                    updateGrandTotal();
+                                } else {
+                                    alert('At least one item row is required.');
+                                }
+                            }
+                        
+                            // Handle input suggestions for items and expenses
+                            document.addEventListener('input', (event) => {
+                                if (event.target.classList.contains('search-input')) {
+                                    const query = event.target.value;
+                                    const suggestionsList = event.target.nextElementSibling;
+                                    showItemSuggestions(query, suggestionsList, event.target);
+                                } else if (event.target.classList.contains('expense-input')) {
+                                    const query = event.target.value;
+                                    const suggestionsList = event.target.nextElementSibling;
+                                    showExpenseSuggestions(query, suggestionsList, event.target);
+                                }
+                            });
+                        
+                            // Show item suggestions and populate rate
+                            function showItemSuggestions(query, suggestionsList, inputElement) {
+                                suggestionsList.innerHTML = '';
+                                if (!query) return;
+                        
+                                const combinedData = [...responseData.items, ...responseData.tests];
+                                const filteredData = combinedData.filter(item =>
+                                    (item.name && item.name.toLowerCase().includes(query.toLowerCase())) ||
+                                    (item.molecule && item.molecule.toLowerCase().includes(query.toLowerCase()))
+                                );
+                        
+                                filteredData.forEach(item => {
+                                    const li = document.createElement('li');
+                                    li.classList.add('list-group-item');
+                                    li.style.cursor = 'pointer';
+                                    const sellingPrice = item.sellingPrice || item.mrp || 'N/A';
+                                    li.innerHTML = `
+                                        <strong>Name:</strong> ${item.name || 'N/A'} &nbsp;
+                                        <strong>Molecule:</strong> ${item.molecule || 'N/A'} &nbsp;
+                                        <strong>Price:</strong> ${sellingPrice}
+                                    `;
+                                    li.addEventListener('click', () => {
+                                        inputElement.value = item.name;
+                                        const rateInput = inputElement.closest('.item-row').querySelector('.rate-input');
+                                        const quantityInput = inputElement.closest('.item-row').querySelector('.quantity-input');
+                                        const totalInput = inputElement.closest('.item-row').querySelector('.total-input');
+                        
+                                        rateInput.value = sellingPrice;
+                                        calculateTotal(quantityInput, rateInput, totalInput);
+                                        suggestionsList.innerHTML = '';
+                                    });
+                                    suggestionsList.appendChild(li);
+                                });
+                            }
+                        
+                            // Show expense suggestions (only name)
+                            function showExpenseSuggestions(query, suggestionsList, inputElement) {
+                                suggestionsList.innerHTML = '';
+                                if (!query) return;
+                        
+                                const filteredExpenses = expenses.filter(expense =>
+                                    expense.name.toLowerCase().includes(query.toLowerCase())
+                                );
+                        
+                                filteredExpenses.forEach(expense => {
+                                    const li = document.createElement('li');
+                                    li.classList.add('list-group-item');
+                                    li.style.cursor = 'pointer';
+                                    li.textContent = expense.name;
+                                    li.addEventListener('click', () => {
+                                        inputElement.value = expense.name;
+                                        suggestionsList.innerHTML = '';
+                                    });
+                                    suggestionsList.appendChild(li);
+                                });
+                            }
+                        
+                            // Calculate total for each item row
+                            document.addEventListener('input', (event) => {
+                                const itemRow = event.target.closest('.item-row');
+                                if (!itemRow) return;
+                        
+                                const quantityInput = itemRow.querySelector('.quantity-input');
+                                const rateInput = itemRow.querySelector('.rate-input');
+                                const totalInput = itemRow.querySelector('.total-input');
+                        
+                                if (event.target.classList.contains('quantity-input') || event.target.classList.contains('rate-input')) {
+                                    calculateTotal(quantityInput, rateInput, totalInput);
+                                }
+                            });
+                        
+                            // Calculate total amount for a row
+                            function calculateTotal(quantityInput, rateInput, totalInput) {
+                                const quantity = parseFloat(quantityInput.value) || 0;
+                                const rate = parseFloat(rateInput.value) || 0;
+                                const total = quantity * rate;
+                                totalInput.value = total.toFixed(2);
+                                updateGrandTotal();
+                            }
+                        
+                            // Update the grand total for all items
+                            function updateGrandTotal() {
+                                const totalInputs = document.querySelectorAll('.total-input');
+                                let grandTotal = 0;
+                        
+                                totalInputs.forEach(input => {
+                                    grandTotal += parseFloat(input.value) || 0;
+                                });
+                        
+                                document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+                            }
+                        </script>
+                        
+                        
+
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const purchaseCheckbox = document.getElementById('purchaseCheckbox');
+                    const expenseCheckbox = document.getElementById('expenseCheckbox');
+                    const purchaseScreen = document.getElementById('purchaseScreen');
+                    const expenseScreen = document.getElementById('expenseScreen');
+            
+                    function toggleScreens() {
+                        purchaseScreen.style.display = purchaseCheckbox.checked ? 'block' : 'none';
+                        expenseScreen.style.display = expenseCheckbox.checked ? 'block' : 'none';
+                    }
+            
+                    purchaseCheckbox.addEventListener('change', toggleScreens);
+                    expenseCheckbox.addEventListener('change', toggleScreens);
+            
+                    // Initial toggle state
+                    toggleScreens();
+                });
+            </script>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                setTodayDate();
+            });
+        
+            // Set today's date for date inputs
+            function setTodayDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('date').value = today;
+                document.getElementById('expenseDate').value = today;
+            }
+        
+            // Add or remove expense row
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('add-expense-btn')) {
+                    addNewExpenseRow();
+                } else if (event.target.classList.contains('remove-expense-btn')) {
+                    removeExpenseRow(event.target);
+                }
+            });
+        
+            // Add a new expense row
+            function addNewExpenseRow() {
+                const newExpenseRow = document.querySelector('.expense-row').cloneNode(true);
+                newExpenseRow.querySelectorAll('input').forEach(input => input.value = '');
+                document.getElementById('expensesContainer').appendChild(newExpenseRow);
+                updateGrandTotalExpense();
+            }
+        
+            // Remove an expense row
+            function removeExpenseRow(button) {
+                const row = button.closest('.expense-row');
+                const totalRows = document.querySelectorAll('.expense-row').length;
+        
+                if (totalRows > 1) {
+                    row.remove();
+                    updateGrandTotalExpense();
+                } else {
+                    alert('At least one expense row is required.');
+                }
+            }
+        
+            // Calculate grand total for expenses
+            document.addEventListener('input', function(event) {
+                if (event.target.classList.contains('expense-rate-input')) {
+                    updateGrandTotalExpense();
+                }
+            });
+        
+            // Update the grand total for expenses
+            function updateGrandTotalExpense() {
+                const rateInputs = document.querySelectorAll('.expense-rate-input');
+                let grandTotal = 0;
+        
+                rateInputs.forEach(input => {
+                    grandTotal += parseFloat(input.value) || 0;
+                });
+        
+                document.getElementById('grandTotalExpense').textContent = grandTotal.toFixed(2);
+            }
+        </script>
+        
+          
+          <script>
+                // Save Purchase (Item Manager)
+                document.getElementById('savePurchase').addEventListener('click', async () => {
+                    const date = document.getElementById('date').value;
+                    const voucherNo = document.getElementById('voucherNo').value;
+                    const client = document.getElementById('client').value;
+                    const comment = document.getElementById('PurchaseComment').value;
+                    const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked').value;
+                    const items = [];
+            
+                    // Collect item data from the form
+                    document.querySelectorAll('.item-row').forEach(row => {
+                        const itemName = row.querySelector('[name="item"]').value;
+                        const quantity = parseFloat(row.querySelector('[name="quantity"]').value) || 0;
+                        const rate = parseFloat(row.querySelector('[name="rate"]').value) || 0;
+            
+                        if (itemName && quantity && rate) {
+                            items.push({ itemName, quantity, rate });
+                        }
+                    });
+            
+                    const grandTotal = items.reduce((total, item) => total + (item.quantity * item.rate), 0);
+            
+                    // Prepare data payload
+                    const data = {
+                        date,
+                        voucherNo,
+                        client,
+                        items,
+                        paymentStatus,
+                        comment,
+                        grandTotal: grandTotal.toFixed(2),
+                    };
+                    const { isValid, errorMessage } = validateForm('#itemForm');
+                
+                if(isValid){
+                    try {
+                        const response = await axios.post('/savePurchaseItem', data);
+                        // alert('Purchase saved successfully!');
+                        $('#sucs1').modal('show');
+                        const successMsg =
+        response.data.message || "Form submitted successfully!";
+                        $('#errordiv1')
+        .removeClass("alert-danger")
+        .addClass("alert-success")
+        .text(successMsg)
+        .show();
+                        console.log(response.data);
+                    } catch (error) {
+                        console.error('Error saving purchase:', error);
+                        alert('Failed to save purchase.');
+                    }
+                }else{
+                    $('#errordiv1').removeClass('alert-success').addClass('alert-danger').text(errorMessage).show();
+                }
+                });
+            
+                // Save Expense (Expense Manager)
+                document.getElementById('saveExpense').addEventListener('click', async () => {
+                    const date = document.querySelector('[name="expenseDate"]').value;
+                    const voucherNo = document.querySelector('[name="expenseVoucherNo"]').value;
+                    const comment = document.getElementById('ExpenseComment').value;
+                    const expenses = [];
+            
+                    // Collect expense data from the form
+                    document.querySelectorAll('.expense-row').forEach(row => {
+                        const expenseName = row.querySelector('[name="expenseName"]').value;
+                        const rate = parseFloat(row.querySelector('[name="expenseRate"]').value) || 0;
+            
+                        if (expenseName && rate) {
+                            expenses.push({ expenseName, rate });
+                        }
+                    });
+            
+                    const grandTotal = expenses.reduce((total, expense) => total + expense.rate, 0);
+            
+                    // Prepare data payload
+                    const data = {
+                        date,
+                        voucherNo,
+                        expenses,
+                        comment,
+                        grandTotal: grandTotal.toFixed(2),
+                    };
+
+                    const { isValid, errorMessage } = validateForm('#expenseForm');
+            
+                    if(isValid){
+                    try {
+                        const response = await axios.post('/saveExpenses', data);
+                        $('#sucs1').modal('show');
+                        // alert('Expense saved successfully!');
+                            // Display success message in both alert and error div
+      const successMsg =
+        response.data.message || "Form submitted successfully!";
+                        $('#errordiv2')
+        .removeClass("alert-danger")
+        .addClass("alert-success")
+        .text(successMsg)
+        .show();
+                        console.log(response.data);
+                    } catch (error) {
+                        console.error('Error saving expense:', error);
+                        alert('Failed to save expense.');
+                    }
+                }else{
+                    $('#errordiv2').removeClass('alert-success').addClass('alert-danger').text(errorMessage).show();
+                }
+                });
+            </script>
+            <script>
+                // Fetch clients and populate the dropdown
+                async function loadClients() {
+                    try {
+                        const response = await axios.get('/getPurchaseClients'); // Replace with your API endpoint
+                        const clients = response.data || [];
+            
+                        // Populate the dropdown
+                        const clientSelect = document.getElementById('client');
+                        clients.forEach(client => {
+                            const option = document.createElement('option');
+                            option.value = client.name;
+                            option.textContent = client.name;
+                            clientSelect.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Error loading clients:', error);
+                    }
+                }
+            
+                // Load clients on page load
+                document.addEventListener('DOMContentLoaded', loadClients);
+            </script>
+            
+            
+            
+                        
+                        
+                        
