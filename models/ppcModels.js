@@ -212,6 +212,7 @@ const EmrComplaints = sequelize.define(
   {
     patientId: DataTypes.STRING,
     complaints: DataTypes.JSON,
+    disId: DataTypes.INTEGER,
   },
   {
     tableName: "emrcomplaints",
@@ -219,6 +220,9 @@ const EmrComplaints = sequelize.define(
     timestamps: true,
   }
 );
+
+// EmrComplaints.sync({ alter: true });
+
 const EmrPrescription = sequelize.define(
   "EmrPrescription",
   {
@@ -897,6 +901,75 @@ const ClinicMaster = sequelize.define(
   }
 );
 
+const DeseaseTable = sequelize.define(
+  "deseaseTable",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    clinicId: {
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    timestamps: false, // If you want to manage the timestamps manually
+    tableName: "deseaseTable",
+  }
+);
+
+const TestsTable = sequelize.define(
+  "testsTable",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    disId: {
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    timestamps: false, // If you want to manage the timestamps manually
+    tableName: "testsTable",
+  }
+);
+
+const MedicineTable = sequelize.define(
+  "medicationTable",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.JSON,
+    },
+    disId: {
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    timestamps: false,
+    tableName: "medicationTable",
+  }
+);
+
+// DeseaseTable.sync({ alter: true });
+
+// TestsTable.sync({ alter: true });
+
+// MedicineTable.sync({ alter: true });
+
 // ClinicMaster.sync({ alter: true });
 
 // sequelize.sync({ alter: true });
@@ -954,4 +1027,7 @@ module.exports = {
   DoctorTimeTable,
   CodeFormat,
   ClinicMaster,
+  DeseaseTable,
+  TestsTable,
+  MedicineTable,
 };

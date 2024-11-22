@@ -71,10 +71,15 @@
 
                             </div>
                         </div>
+                        
 
                         <div class="row left-right-myometrium-div mt-2">
                             <div class="col-xl-12 my-2">
-                                
+                                <div class="col-xl-12 my-2">
+                                    <select name="" class="form-select input-style" id="diseaseSelect">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
 								<div class="mt-4">
 									<div class="card">
 										<div class="card-header d-flex justify-content-between align-items-center px-2 py-0">
@@ -1399,6 +1404,118 @@ function shbtn(a, b) {
 
     // // Render appointments on page load
     // document.addEventListener("DOMContentLoaded", renderAppointments);
+  </script>
+
+  <script>
+    const fetchDiseses = async ()=>{
+        try{
+            const response = await fetch('/getDisease');
+            const diseases = await response.json();
+            diseases.forEach(disease => {
+                const option = document.createElement('option');
+                option.value = disease.id;
+                option.textContent = disease.name;
+                document.getElementById('diseaseSelect').appendChild(option);
+            });
+        } catch(error){
+            console.error('Error loading diseases:', error);
+        }
+    }
+    fetchDiseses();
+    const getAllpoints = async (id)=>{
+        try{
+            const response = await fetch(`/diseaseSelect?id=${id}`);
+            const points = await response.json();
+            console.log(points);
+            const container = document.getElementById('recommendedTestAdd');
+
+            if(points.complaints && points.complaints.length){
+                points.complaints[0].complaints.forEach(point => {
+                    const container = document.getElementById('complaintsContainer');
+					const newRow = document.createElement('div');
+					newRow.classList.add('row', 'align-items-center', 'mb-2');
+					newRow.innerHTML = `
+						<div class="col-md-8">
+							<div class="form-group">
+								<input type="text" class="form-control input-style" value="${point}" name="complaint[]" disabled placeholder="Add Complaints" data-validation="required" data-error-message="Complaint is required">
+							</div>
+						</div>
+						<div class="col-md-1 text-center">
+							<i title="Remove Row" class="btn-secondary btn-style btn fas fa-minus " onclick="removeRow(this)"></i>
+						</div>`;
+					container.appendChild(newRow);
+                })
+            }
+            if(points.tests && points.tests.length > 0){
+                points.tests.forEach(point => {
+                    const newRow = document.createElement('div');
+    newRow.classList.add('row', 'align-items-center', 'mb-2');
+
+    // Set up the basic structure of the row
+    newRow.innerHTML = `
+        <div class="col-md-5">
+            <div class="form-group">
+                <input class="form-control input-style" name="selectTest[]" data-validation="required" value="${point.name}" disabled data-error-message="Test selection is required" />
+            </div>
+        </div>
+        <div class="col-md-2 text-center">
+            <button type="button" class="btn btn-danger btn-style" onclick="removeTestRow(this)">
+                <i class="fa-solid fa-minus"></i>
+            </button>
+        </div>
+    `;
+
+    // Append the new row to the container
+    container.appendChild(newRow);
+                });
+            }
+
+            if(points.medicines && points.medicines.length){
+                points.medicines.forEach(point=>{
+                    const prescriptionTable = document.getElementById("prescriptionTable");
+        const newRow = document.createElement("tr");
+        newRow.classList.add(
+          "my-3",
+          "gap-4",
+          "justify-content-between",
+          "align-items-center",
+          "row-0"
+        );
+
+        newRow.innerHTML = `
+          <td class="form-group position-relative">
+              <input type="text" class="form-control input-style search-input" value="${point.name.drug}" disabled
+                     name="drug" data-validation="required" data-error-message="Drug/Molecule is required">
+              <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
+          </td>
+          <td><input type="number" name="dose" placeholder="Dose" class="form-control input-style"
+                     data-validation="required" value="${point.name.dose}" disabled data-error-message="Dose is required"></td>
+          <td>
+              <input name="frequency" class="form-select input-style"
+                      data-validation="required" value="${point.name.frequency}" disabled data-error-message="Frequency is required" />
+          </td>
+          <td><input type="number" name="days" placeholder="Days" value="${point.name.days}" disabled class="form-control input-style"
+                     data-validation="required" data-error-message="Days are required"></td>
+          <td class="text-center">
+              <button type="button" class="btn btn-danger btn-style" onclick="removePrescriptionRow(this)">
+                  <i class="fa-solid fa-minus"></i>
+              </button>
+          </td>
+      `;
+
+        prescriptionTable.appendChild(newRow);
+                })
+            }
+            
+            
+        } catch(error){
+            console.error('Error loading points:', error);
+        }
+    }
+    document.getElementById("diseaseSelect").addEventListener("change",(e)=>{
+        const id = e.target.value;
+        getAllpoints(id);
+    })
   </script>
 
 			

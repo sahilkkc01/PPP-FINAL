@@ -90,6 +90,9 @@ const {
   SMSTemplate,
   DoctorTimeTable,
   CodeFormat,
+  DeseaseTable,
+  TestsTable,
+  MedicineTable,
 } = require("../models/ppcModels"); // Adjust the import based on your model files
 
 const saveClinic = async (req, res) => {
@@ -2794,6 +2797,119 @@ const getDoctorNotification = async (req, res) => {
   }
 };
 
+const setDeseaseTable = async (req, res) => {
+  try {
+    const { disease, symptoms, tests, medicine } = req.body;
+    const deceases = await DeseaseTable.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${disease}%`,
+        },
+      },
+    });
+    if (deceases.length) {
+      return res.status(401).json({ msg: "Desease already exist" });
+    }
+    console.log("Clinic Id:", req.session.clinicId);
+
+    const newDesease = await DeseaseTable.create({
+      name: disease,
+      clinicId: req.session.clinicId,
+    });
+
+    let newTests = null;
+    let newMedicine = null;
+    let newSymptoms = await EmrComplaints.create({
+      disId: newDesease.id,
+      complaints: symptoms,
+    });
+    if (tests.length > 0) {
+      const testArray = [];
+      tests.forEach((t) => {
+        testArray.push({
+          disId: newDesease.id,
+          name: t,
+        });
+      });
+      newTests = await TestsTable.bulkCreate(testArray);
+    }
+    if (medicine.length) {
+      const medicineArray = [];
+      medicine.forEach((m) => {
+        medicineArray.push({
+          disId: newDesease.id,
+          name: m,
+        });
+      });
+      newMedicine = await MedicineTable.bulkCreate(medicineArray);
+    }
+
+    return res.status(200).json({
+      message: "Desease appended successfully",
+      newDesease,
+      newSymptoms,
+      newTests,
+      newMedicine,
+    });
+  } catch (err) {
+    console.error("Error setting desease table:", err);
+    return res.status(500).json({ msg: "Error during desease table save" });
+  }
+};
+
+const getDisease = async (req, res) => {
+  try {
+    const dis = req.query.name;
+    if (dis === undefined) {
+      const disease = await DeseaseTable.findAll();
+      return res.status(200).json(disease);
+    }
+    const disease = await DeseaseTable.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${dis}%`,
+        },
+      },
+    });
+    if (disease.length) {
+      return res.status(400).json({
+        message: "disease already exists",
+      });
+    }
+    return res.status(200).json({ message: true });
+  } catch (err) {
+    console.error("Error fetching diseases:", err);
+    return res.status(500).json({ msg: "Error during diseases fetch" });
+  }
+};
+
+const getAllpointsDisease = async (req, res) => {
+  const { id } = req.query;
+  if (!id) {
+    return res.status(400).json({ message: "Please provide clinic id." });
+  }
+  const tests = await TestsTable.findAll({
+    where: {
+      disId: id,
+    },
+  });
+  const medicines = await MedicineTable.findAll({
+    where: {
+      disId: id,
+    },
+  });
+  const complaints = await EmrComplaints.findAll({
+    where: {
+      disId: id,
+    },
+  });
+  return res.status(200).json({
+    tests,
+    medicines,
+    complaints,
+  });
+};
+
 // Export all the controller functions
 module.exports = {
   saveClinic,
@@ -2851,4 +2967,7 @@ module.exports = {
   getDoctorTimeTable,
   getCodeFormat,
   getDoctorNotification,
+  setDeseaseTable,
+  getDisease,
+  getAllpointsDisease,
 };

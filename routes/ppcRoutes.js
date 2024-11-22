@@ -73,6 +73,9 @@ const {
   getCodeFormat,
   getDoctorTimeTable,
   getDoctorNotification,
+  getDisease,
+  setDeseaseTable,
+  getAllpointsDisease,
 } = require("../controllers/ppcControllers");
 const {
   my_Notes: Note,
@@ -955,5 +958,23 @@ router.get("/add-prifix", async (req, res) => {
 
 router.get("/getCode", getCodeFormat);
 router.get("/getDoctorNotify", getDoctorNotification);
+router.get("/addDisease", async (req, res) => {
+  const emrPrescriptions = await EmrPrescription.findAll({
+    where: { patientId: 2 },
+    order: [["createdAt", "DESC"]],
+  });
+
+  const prescriptions = emrPrescriptions.map((prescription) => ({
+    createdAt: prescription.createdAt,
+    prescriptions: prescription.prescriptions,
+    prescribedComment: prescription.prescribedComment,
+  }));
+
+  res.render("PPC/add-disease", { prescriptions });
+});
+
+router.get("/getDisease", getDisease);
+router.post("/saveDisease", setDeseaseTable);
+router.get("/diseaseSelect", getAllpointsDisease);
 
 module.exports = router;
