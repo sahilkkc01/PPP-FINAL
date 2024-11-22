@@ -132,36 +132,38 @@
         });
 
         let tableRow3 = "";
-        data.userAppointmentStatus.forEach((item) => {
-          tableRow3 += `
+        data.userAppointmentStatus.forEach((item, i) => {
+          if (i === 0) {
+            tableRow3 += `
             <tr>
-          <td>${item.name}</td>
+          <td>User</td>
           <td><input type="checkbox" id="appntMail-${item.id}" ${
-            item.appntMail ? "checked" : ""
-          } onchange="updateUserStatus(${item.id}, 'appntMail')" /></td>
+              item.appntMail ? "checked" : ""
+            } onchange="updateUserStatus(${item.id}, 'appntMail')" /></td>
           <td><input type="checkbox" id="appntSMS-${item.id}" ${
-            item.appntSMS ? "checked" : ""
-          } onchange="updateUserStatus(${item.id}, 'appntSMS')" /></td>
+              item.appntSMS ? "checked" : ""
+            } onchange="updateUserStatus(${item.id}, 'appntSMS')" /></td>
           <td><input type="checkbox" id="reprtWatsp-${item.id}" ${
-            item.reprtWatsp ? "checked" : ""
-          } onchange="updateUserStatus(${item.id},  'reprtWatsp')" /></td>
+              item.reprtWatsp ? "checked" : ""
+            } onchange="updateUserStatus(${item.id},  'reprtWatsp')" /></td>
            <td><input type="checkbox" id="rprtMail-${item.id}" ${
-            item.rprtMail ? "checked" : ""
-          } onchange="updateUserStatus(${item.id}, 'rprtMail')" /></td>
+              item.rprtMail ? "checked" : ""
+            } onchange="updateUserStatus(${item.id}, 'rprtMail')" /></td>
            <td><input type="checkbox" id="prscrpWatsp-${item.id}" ${
-            item.prscrpWatsp ? "checked" : ""
-          } onchange="updateUserStatus(${item.id},  'prscrpWatsp')" /></td>
+              item.prscrpWatsp ? "checked" : ""
+            } onchange="updateUserStatus(${item.id},  'prscrpWatsp')" /></td>
            <td><input type="checkbox" id="prscrpMail-${item.id}" ${
-            item.prscrpMail ? "checked" : ""
-          } onchange="updateUserStatus(${item.id}, 'prscrpMail')" /></td>
+              item.prscrpMail ? "checked" : ""
+            } onchange="updateUserStatus(${item.id}, 'prscrpMail')" /></td>
            <td><input type="checkbox" id="billMail-${item.id}" ${
-            item.billMail ? "checked" : ""
-          } onchange="updateUserStatus(${item.id},  'billMail')" /></td>
+              item.billMail ? "checked" : ""
+            } onchange="updateUserStatus(${item.id},  'billMail')" /></td>
            <td><input type="checkbox" id="billWatsp-${item.id}" ${
-            item.billWatsp ? "checked" : ""
-          } onchange="updateUserStatus(${item.id}, 'billWatsp')" /></td>
+              item.billWatsp ? "checked" : ""
+            } onchange="updateUserStatus(${item.id}, 'billWatsp')" /></td>
         </tr>
           `;
+          }
         });
         document.getElementById("docTable").innerHTML = tableRow;
         document.getElementById("staffBody").innerHTML = tableRow2;

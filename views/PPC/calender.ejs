@@ -63,6 +63,22 @@
             <!-- Date Filter Section -->
             <div class="col-md-12 text-center">
               <div class="row">
+                <div class="col-xl-3 visit">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1" class="input__label"
+                      >Doctor</label
+                    >
+                    <select
+                      class="form-control input-style v2"
+                      name="doctor"
+                      id="doctor"
+                      data-validation=""
+                      data-error-message="Doctor name is required"
+                    >
+                      <option value="">Select</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-md-6 text-left mb-2">
                   <!--div class="row">
                                             <div class="col-md-6">
@@ -92,32 +108,6 @@
               <!-- Empty for time slots -->
 
               <!-- Time Slots -->
-              <div class="time-slot">10:00 AM</div>
-              <div class="appointment-container" id="mon-10"></div>
-              <div class="appointment-container" id="tue-10"></div>
-              <div class="appointment-container" id="wed-10"></div>
-              <div class="appointment-container" id="thu-10"></div>
-              <div class="appointment-container" id="fri-10"></div>
-              <div class="appointment-container" id="sat-10"></div>
-              <div class="appointment-container" id="sun-10"></div>
-
-              <div class="time-slot">11:00 AM</div>
-              <div class="appointment-container" id="mon-11"></div>
-              <div class="appointment-container" id="tue-11"></div>
-              <div class="appointment-container" id="wed-11"></div>
-              <div class="appointment-container" id="thu-11"></div>
-              <div class="appointment-container" id="fri-11"></div>
-              <div class="appointment-container" id="sat-11"></div>
-              <div class="appointment-container" id="sun-11"></div>
-
-              <div class="time-slot">12:00 PM</div>
-              <div class="appointment-container" id="mon-12"></div>
-              <div class="appointment-container" id="tue-12"></div>
-              <div class="appointment-container" id="wed-12"></div>
-              <div class="appointment-container" id="thu-12"></div>
-              <div class="appointment-container" id="fri-12"></div>
-              <div class="appointment-container" id="sat-12"></div>
-              <div class="appointment-container" id="sun-12"></div>
             </div>
           </div>
         </div>
@@ -156,8 +146,8 @@
         };
       }
 
-      async function getTimeTableData() {
-        const response = await fetch("/timeTable?id=12");
+      async function getTimeTableData(id) {
+        const response = await fetch(`/timeTable?id=${id}`);
         const data = await response.json();
         console.log(data);
         if (!data.timeTableArray) {
@@ -201,8 +191,6 @@
         generateTimeSlots(merged);
         renderAppointments();
       }
-
-      getTimeTableData();
 
       function generateTimeSlots(slotRanges) {
         const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -390,6 +378,40 @@
 
       // // Render appointments on page load
       document.addEventListener("DOMContentLoaded", renderAppointments);
+    </script>
+    <script>
+      const fetchDoctor = async () => {
+        try {
+          // Fetch data from the endpoint
+          const response = await fetch("/getDoctors");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+
+          // Find the select element
+          const selectElement = document.getElementById("doctor");
+
+          // Clear any existing options (except the placeholder)
+          selectElement.innerHTML = `<option value="">Select</option>`;
+
+          // Populate options from the fetched data
+          data.forEach((doctor) => {
+            const option = document.createElement("option");
+            option.value = doctor.id; // Assuming `doctor.id` is the unique identifier
+            option.textContent = doctor.name; // Assuming `doctor.name` is the name of the doctor
+            selectElement.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching doctors:", error);
+        }
+      };
+      fetchDoctor();
+      document.getElementById("doctor").addEventListener("change", () => {
+        let id = document.getElementById("doctor").value;
+        getTimeTableData(id);
+      });
     </script>
   </head>
 </html>

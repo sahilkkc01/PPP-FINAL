@@ -408,13 +408,13 @@
                                         <i class="fa-regular fa-bell"></i>
                                         <span class="badge blue">3</span>
                                     </a>
-                                    <!--ul class="dropdown-menu">
+                                    <ul id="notifications" class="dropdown-menu">
                                         <li>
                                             <div class="notification_header">
-                                                <h3>You have 3 new notifications</h3>
+                                                <h3>You have <span id="numOfNot"></span> new notifications</h3>
                                             </div>
                                         </li>
-                                        <li><a href="#" class="grid">
+                                        <!-- <li><a href="#" class="grid">
                                                 <div class="user_img"></div>
                                                 <div class="notification_desc">
                                                     <p>Johnson purchased template</p>
@@ -424,8 +424,8 @@
                                             <div class="notification_bottom">
                                                 <a href="#all" class="bg-primary">See all notifications</a>
                                             </div>
-                                        </li>
-                                    </ul-->
+                                        </li> -->
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -541,6 +541,8 @@
            });
            </script>
            <script>
+           
+            
             // Debounce function: delays invoking the search function until the user stops typing for a certain time
     
     const datahere = document.getElementById("datahere");
@@ -629,4 +631,27 @@
         console.error(`Form with ID '${formId}' not found.`);
     }
 }
+    </script>
+
+    <script>
+      const fetchNotifications = async ()=>{
+        try{
+          const response = await fetch('/getDoctorNotify');
+          const data = await response.json();
+          console.log(data);
+          if(data.length){
+            document.getElementById('numOfNot').textContent = data.length;
+            let val = document.getElementById("notifications");
+            data.forEach(d=>{
+              let li = document.createElement("li");
+              li.textContent = `Push Notify send to Doctor ${d.name}`;
+              val.appendChild(li);
+            })
+          }
+          
+        }catch(error){
+          console.error('Error fetching notifications:', error);
+        }
+      }
+      fetchNotifications();
     </script>

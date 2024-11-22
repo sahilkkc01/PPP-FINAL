@@ -59,7 +59,6 @@ function getNextDateForDay(dayName) {
   const day = String(nextDate.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
-
 }
 
 const {
@@ -90,6 +89,7 @@ const {
   UserNotification,
   SMSTemplate,
   DoctorTimeTable,
+  CodeFormat,
 } = require("../models/ppcModels"); // Adjust the import based on your model files
 
 const saveClinic = async (req, res) => {
@@ -238,7 +238,6 @@ const saveDoctor = async (req, res) => {
       .json({ message: "Error saving data", error: error.message });
   }
 };
-
 
 const savePatient = async (req, res) => {
   console.log("Form Data:", req.body);
@@ -2423,9 +2422,9 @@ const doctorNotify = async (id, staffTp) => {
     responseMsg["SchEmail"] = staff.SchEmail || notifications.SchEmail;
     responseMsg["OnAppointmentSMS"] =
       staff.OnAppointmentSMS || notifications.OnAppointmentSMS;
+    responseMsg["pushNotify"] = staff.pushNotify || notifications.pushNotify;
     if (!notifications.ConSMS && staff.ConSMS) {
       console.log("Confirmation SMS sent");
-      true;
     }
 
     // Schedule SMS
@@ -2505,9 +2504,7 @@ const updateUserAppointmentStatus = async (req, res) => {
 
     // Perform the update operation
     const updateResult = await UserAppointment.update(updateBody, {
-      where: {
-        id: id,
-      },
+      where: {},
     });
 
     // Check if the update was successful
@@ -2519,7 +2516,7 @@ const updateUserAppointmentStatus = async (req, res) => {
 
     // Log the update result for debugging
     console.log("Update Result:", updateResult);
-    userNotify(id);
+    // userNotify(id);
 
     // Optionally, you can call a notification function here if needed
     // notifyUser(appointment.id);
@@ -2758,6 +2755,45 @@ const getCodeFormat = async (req, res) => {
   }
 };
 
+const getDoctorNotification = async (req, res) => {
+  try {
+    const notification = await NotificationTable.findAll({
+      where: {
+        pushNotify: true,
+      },
+      attributes: ["staffId", "date"],
+    });
+    console.log("Notification: ", notification);
+
+    if (!notification.length) {
+      return res.status(404).json({ msg: "Doctor's notification not found" });
+    }
+    const staffIdArray = notification.map((item) => item.staffId);
+    const doctorIds = await doctor_staff_Status.findAll({
+      where: {
+        id: {
+          [Op.in]: staffIdArray,
+        },
+      },
+    });
+    const doctorIdArray = doctorIds.map((item) => item.doctorStaffId);
+    if (!doctorIdArray.length) {
+      return res.status(404).json({ msg: "Doctor's notification not found" });
+    }
+    const doctors = await Doctors.findAll({
+      where: {
+        id: {
+          [Op.in]: doctorIdArray,
+        },
+      },
+    });
+    return res.status(200).json(doctors);
+  } catch (err) {
+    console.error("Error fetching doctor notification:", err);
+    return res.status(500).json({ msg: "Error during notification fetch" });
+  }
+};
+
 // Export all the controller functions
 module.exports = {
   saveClinic,
@@ -2813,5 +2849,6 @@ module.exports = {
   updateUserAppointmentStatus,
   saveTemplate,
   getDoctorTimeTable,
-  getCodeFormat
+  getCodeFormat,
+  getDoctorNotification,
 };

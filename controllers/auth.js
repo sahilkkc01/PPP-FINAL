@@ -84,7 +84,7 @@ const login = async (req, res) => {
         userId: user.userId,
         username: user.name,
         email: user.email,
-        rights:user.rights
+        rights: user.rights,
       },
       JWT_SECRET // Secret key stored in environment variable
     );
@@ -101,14 +101,16 @@ const login = async (req, res) => {
       expiresAt: new Date(Date.now() + 3 * 60 * 60 * 1000), // Set token expiration to 3 hours
     });
 
-    // req.user = {
-    //   id: user.id,
-    //   userId: user.userId,
-    //   username: user.name,
-    //   email: user.email,
-    // };
+    req.user = {
+      id: user.id,
+      userId: user.userId,
+      username: user.name,
+      email: user.email,
+    };
 
     // console.log(req.user);
+    req.session.clinicId = user.clinicid;
+    console.log(req.session.clinicId);
 
     // Step 7: Send final login response
     res.status(200).json({

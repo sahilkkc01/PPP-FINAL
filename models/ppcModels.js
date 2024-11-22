@@ -27,6 +27,7 @@ const Clinic = sequelize.define(
 const Speciality = sequelize.define(
   "Speciality",
   {
+    clinicid: DataTypes.INTEGER,
     code: DataTypes.STRING,
     name: DataTypes.STRING,
     status: {
@@ -44,6 +45,7 @@ const Expenses = sequelize.define(
   "Expenses",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     status: {
       type: DataTypes.BOOLEAN,
@@ -60,6 +62,7 @@ const Symptoms = sequelize.define(
   "Symptoms",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     status: {
       type: DataTypes.BOOLEAN,
@@ -76,6 +79,7 @@ const Tests = sequelize.define(
   "Tests",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     mrp: DataTypes.INTEGER,
     status: {
@@ -93,6 +97,7 @@ const Services = sequelize.define(
   "Services",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     price: DataTypes.STRING,
     category: DataTypes.STRING,
@@ -111,6 +116,7 @@ const Items = sequelize.define(
   "Items",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     molecule: DataTypes.STRING,
     sellingPrice: DataTypes.STRING,
@@ -130,6 +136,7 @@ const Doctors = sequelize.define(
   "Doctors",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     qualification: DataTypes.STRING,
     speciality: DataTypes.STRING,
@@ -149,6 +156,7 @@ const Patient = sequelize.define(
   "Patient",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     mobile: DataTypes.STRING,
@@ -177,6 +185,7 @@ const Staff = sequelize.define(
   "Staff",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     mobile: DataTypes.STRING,
@@ -315,7 +324,7 @@ const Visit = sequelize.define(
   }
 );
 
-// Visit.sync({ alter: true }); 
+// Visit.sync({ alter: true });
 
 const Appointment = sequelize.define(
   "Appointment",
@@ -389,6 +398,7 @@ const UserTokens = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    clinicid: DataTypes.INTEGER,
     userId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -500,6 +510,7 @@ const ItemManager = sequelize.define(
   {
     date: DataTypes.DATEONLY,
     voucherNo: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     client: DataTypes.STRING,
     paymentStatus: DataTypes.STRING,
     comment: DataTypes.TEXT,
@@ -517,6 +528,7 @@ const ExpenseManager = sequelize.define(
   "ExpenseManager",
   {
     date: DataTypes.DATEONLY,
+    clinicid: DataTypes.INTEGER,
     voucherNo: DataTypes.STRING,
     expenses: DataTypes.JSON, // JSON object to store expense details
     comment: DataTypes.TEXT,
@@ -533,6 +545,7 @@ const PurchaseClient = sequelize.define(
   "PurchaseClient",
   {
     code: DataTypes.STRING,
+    clinicid: DataTypes.INTEGER,
     name: DataTypes.STRING,
     supplyItem: DataTypes.STRING,
     drugLicNoOld: DataTypes.STRING,
@@ -562,6 +575,7 @@ const doctor_staff_Status = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    clinicid: DataTypes.INTEGER,
     doctorStaffId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -655,6 +669,7 @@ const UserAppointment = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    clinicid: DataTypes.INTEGER,
     appntSMS: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -702,6 +717,7 @@ const UserNotification = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    clinicid: DataTypes.INTEGER,
     userId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -827,6 +843,7 @@ const CodeFormat = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    clinicid: DataTypes.INTEGER,
     series: {
       type: DataTypes.STRING,
     },
@@ -842,6 +859,47 @@ const CodeFormat = sequelize.define(
     tableName: "codeFormat",
   }
 );
+
+const ClinicMaster = sequelize.define(
+  "clinicMaster",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    clinicName: {
+      type: DataTypes.STRING,
+    },
+    clinicLocation: {
+      type: DataTypes.STRING,
+    },
+    clinicAddress: {
+      type: DataTypes.STRING,
+    },
+    clinicEmail: {
+      type: DataTypes.STRING,
+    },
+    clinicPhone: {
+      type: DataTypes.STRING,
+    },
+    clinicLogo: {
+      type: DataTypes.STRING,
+    },
+    clinicStatus: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+  },
+  {
+    timestamps: false, // If you want to manage the timestamps manually
+    tableName: "clinicMaster",
+  }
+);
+
+// ClinicMaster.sync({ alter: true });
+
+// sequelize.sync({ alter: true });
 
 // CodeFormat.sync({alter:true});
 
@@ -894,5 +952,6 @@ module.exports = {
   SMSTemplate,
   NotificationTable,
   DoctorTimeTable,
-  CodeFormat
+  CodeFormat,
+  ClinicMaster,
 };

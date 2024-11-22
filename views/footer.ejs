@@ -381,10 +381,10 @@ $(".se-pre-con").fadeOut("slow");
     document.getElementById('closeMenu').addEventListener('click', function () {
         document.getElementById('menuItems').classList.remove('show');
     });
-    document.getElementById("patient360").addEventListener("click",()=>{
-      console.log("Button clicked!"); 
-      window.location.href = "/main/dash";
-    })
+    // document.getElementById("patient360").addEventListener("click",()=>{
+    //   console.log("Button clicked!"); 
+    //   window.location.href = "/main/dash";
+    // })
     </script>
   
   <script>
@@ -632,7 +632,7 @@ window.addEventListener("online", ()=>{
 });
 
 window.addEventListener('load', () => {
-  if(form[1].id){
+  if(form[1] && form[1].id){
     loadFormDataFromLocalStorage(form[1].id);
   }
 });

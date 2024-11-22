@@ -72,6 +72,7 @@ const {
   saveTemplate,
   getCodeFormat,
   getDoctorTimeTable,
+  getDoctorNotification,
 } = require("../controllers/ppcControllers");
 const {
   my_Notes: Note,
@@ -155,10 +156,14 @@ router.get("/1", async (req, res) => {
       console.log(user);
 
       if (user) {
-        return res.redirect("/patients");
+        req.user = decoded; // Attach user details to req.user
+        res.locals.user = req.user; // Make user available in templates
+        return res.redirect("/patients", {
+          name: decoded.username,
+        });
       } else {
         console.log("in");
-        return res.render("PPC/login");
+        return res.render("login");
       }
       // If the token is valid, redirect to home
     } catch (err) {
@@ -429,7 +434,6 @@ router.get("/patient-emr", async (req, res) => {
         complaints: complaint.complaints,
       }));
       console.log(complaints);
-      
 
       // Map prescriptions to include createdAt, prescriptions data, and prescribedComment for each entry
       const prescriptions = emrPrescriptions.map((prescription) => ({
@@ -950,5 +954,6 @@ router.get("/add-prifix", async (req, res) => {
 });
 
 router.get("/getCode", getCodeFormat);
+router.get("/getDoctorNotify", getDoctorNotification);
 
 module.exports = router;
