@@ -960,7 +960,6 @@ router.get("/getCode", getCodeFormat);
 router.get("/getDoctorNotify", getDoctorNotification);
 router.get("/addDisease", async (req, res) => {
   const emrPrescriptions = await EmrPrescription.findAll({
-    where: { patientId: 2 },
     order: [["createdAt", "DESC"]],
   });
 
