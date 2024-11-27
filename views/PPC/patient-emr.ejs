@@ -166,7 +166,7 @@
                 <div id="errordiv4"></div>
 
                 <!-- Container for the current prescription entry -->
-                <div class="mt-3 table-responsive">
+                <div class="mt-3 table-responsive" style="overflow: visible;">
                     <table class="table table-bordered prescription-table">
                         <thead>
                             <tr>
@@ -832,7 +832,7 @@ function populateTests() {
         <td class="form-group position-relative">
             <input type="text" class="form-control input-style search-input" placeholder="Type to search..."
                    name="drug" data-validation="required" data-error-message="Drug/Molecule is required">
-            <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
+            <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;z-index:99;"></ul>
         </td>
         <td><input type="number" name="dose" placeholder="Dose" class="form-control input-style" 
                    data-validation="required" data-error-message="Dose is required"></td>

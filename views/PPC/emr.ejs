@@ -51,6 +51,19 @@
                   
                 </div>
                 <!-- //charts -->
+                <div id="excelPreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999;">
+                  <div style="position: relative; margin: 50px auto; background: #fff; width: 80%; max-height: 90%; overflow: auto; padding: 20px; border-radius: 5px;">
+                    <h2>Excel Preview</h2>
+                    <button id="closeModalButton" style="float: right; background: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Close</button>
+                    <button id="sendToBackendButton" style="display: none; background: green; color: white; border: none; padding: 10px 20px; cursor: pointer;">Send to Backend</button>
+                    <input type="file" id="excelFileInput" style="margin-bottom: 20px;">
+                    <table id="excelPreviewTable" style="width: 100%; border-collapse: collapse; display: none; border: 1px solid #ddd;">
+                      <thead style="background: #f4f4f4;"></thead>
+                      <tbody></tbody>
+                    </table>
+                    
+                  </div>
+                </div>
                  
                  
             </div>
@@ -58,62 +71,95 @@
 
 
             <%-include('../footer');  -%>
-            <script >
-
-
-                $(document).ready(function() {
-
-         
-                // Function to fetch and display data
-                function fetchData() {
-                  $.ajax({
-                    url: '/getPatients',
-                    type: 'GET',
-                    success: function(data) {
-                        console.log(data)
-                      let tableRows = '';
-                      
-                      data.forEach(function(item) {
-                          
-                        tableRows += `
-                          <tr data-bbm-id="${item.id}">
-        
-        <td>${item.code}</td>
-        <td>${item.name}</td>
-        <td>${item.gender}</td>
-        <td>${item.mobile}</td>
-        <td>${item.email}</td>
-        <td>
-          <button type="button" id="emr_btn" class="btn btn-primary btn-style btn-change mr-2">EMR</button>
-          <a href="#" id="360_id" class="btn btn-primary btn-style btn-change">360</a>
-        </td>
-      </tr>
-                        `;
-                      });
-                    
-                      $('#tbodyid').html(tableRows);
-                      pagi_search('#searchBox','#tblid','#paginationControls')
-                      $('#tblid').on('click', '#emr_btn', function() {
-                        const id=$(this).closest('tr').data('bbm-id')
-                        const route='patient-emr'
-                          ViewBtn(route,id)
-                         });
-                         $('#tblid').on('click', '#360_id', function() {
-                        const id=$(this).closest('tr').data('bbm-id')
-                        const route='patient360'
-                          ViewBtn(route,id)
-                         });
-                         
-                         
-                    },
-                    error: function(xhr, status, error) {
-                      console.error('Error fetching classification details:', error);
-                    }
-                  });
+            <script>
+              $(document).ready(function () {
+                const cancelApp = async (id)=>{
+                  try {
+                    const response = await fetch(`/cancelAppointment?id=${id}`,{
+                      method: 'DELETE',
+                    });
+                    const data = await response.json();
+                    console.log("Cancel appointments:", data);
+                  } catch (error) {
+                    console.error("Error cancelling appointments:", error);
+                  }
                 }
+                // Function to fetch appointments
+            
+                // Function to fetch and display data
+                const fetchData = async () => {
+                  try {
+                    const response = await $.ajax({
+                      url: '/getPatients',
+                      type: 'GET',
+                    });
+                    console.log("Patients:", response);
+            
+                    let tableRows = '';
+                    response.forEach(function (item) {
+                      tableRows += `
+                        <tr data-bbm-id="${item.id}">
+                          <td>${item.code}</td>
+                          <td>${item.name}</td>
+                          <td>${item.gender}</td>
+                          <td>${item.mobile}</td>
+                          <td>${item.email}</td>
+                          <td>
+                            <button type="button" id="emr_btn" class="btn btn-primary btn-style btn-change mr-2">EMR</button>
+                            <a href="#" id="360_id" class="btn btn-primary btn-style btn-change mr-2">360</a>
+                          </td>
+                        </tr>
+                      `;
+                    });
+                    
+            
+                    $('#tbodyid').html(tableRows);
+
+                
               
-                // Fetch data on page load
+                document.getElementById('closeModalButton').addEventListener('click', () => {
+                  document.getElementById('excelPreviewModal').style.display = 'none';
+                  document.getElementById('excelFileInput').value = ''; // Clear file input
+                  const table = document.getElementById('excelPreviewTable');
+                  table.style.display = 'none'; // Hide table
+                  table.querySelector('thead').innerHTML = ''; // Clear table head
+                  table.querySelector('tbody').innerHTML = ''; // Clear table body
+                  document.getElementById('sendToBackendButton').style.display = 'none'; // Hide "Send to Backend" button
+                });
+                    pagi_search('#searchBox', '#tblid', '#paginationControls');
+            
+                    $('#tblid').on('click', '#emr_btn', function () {
+                      const id = $(this).closest('tr').data('bbm-id');
+                      const route = 'patient-emr';
+                      ViewBtn(route, id);
+                    });
+                    $('#tblid').on('click', '#cnl_btn', async function () {
+                      let flag = confirm("Are you sure you want to cancel appointment");
+                      if(!flag) return;
+                      const id = $(this).closest('tr').data('bbm-id');
+                      await cancelApp(id);
+                    });
+            
+                    $('#tblid').on('click', '#360_id', function () {
+                      const id = $(this).closest('tr').data('bbm-id');
+                      const route = 'patient360';
+                      ViewBtn(route, id);
+                    });
+
+                    $('#tblid').on('click', '#sch_btn', function () {
+                      const id = $(this).closest('tr').data('bbm-id');
+                      this.addEventListener('click', () => {
+                        document.getElementById('excelPreviewModal').style.display = 'block';
+                      });
+                    });
+            
+                  } catch (error) {
+                    console.error("Error fetching patients:", error);
+                  }
+                };
+            
                 fetchData();
+                
               });
-              
-              </script>
+            </script>
+            

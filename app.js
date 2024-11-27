@@ -5,21 +5,17 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { con } = require("./db");
 const bodyParser = require("body-parser");
-const session = require('express-session');
+const session = require("express-session");
 
 var ppcRoutes = require("./routes/ppcRoutes");
-const { authMiddleware } = require("./middleware/auth");
-
-
-
-
+// const { authMiddleware } = require("./middleware/auth");
 
 var app = express();
 
 // Setup session management
 app.use(
   session({
-    secret: 'your_secret_key', // Replace with your own secret
+    secret: "your_secret_key", // Replace with your own secret
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }, // For production, set this to true and use HTTPS
@@ -49,10 +45,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // });
 
 app.use("/", ppcRoutes);
-
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

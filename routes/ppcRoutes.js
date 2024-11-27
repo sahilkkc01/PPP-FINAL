@@ -76,6 +76,8 @@ const {
   getDisease,
   setDeseaseTable,
   getAllpointsDisease,
+  getAllAppointments,
+  uploadExcelItem,
 } = require("../controllers/ppcControllers");
 const {
   my_Notes: Note,
@@ -137,11 +139,8 @@ function decryptData(encodedEncryptedData, secretKey) {
 
 const upload = multer({ storage: storage });
 
-const {
-  authenticateMiddleware,
-  login,
-  logout,
-} = require("../controllers/auth");
+const { login, logout } = require("../controllers/auth");
+const { authMiddleware } = require("../middleware/auth");
 
 router.get("/", (req, res) => {
   res.redirect("/1");
@@ -161,7 +160,7 @@ router.get("/1", async (req, res) => {
       if (user) {
         req.user = decoded; // Attach user details to req.user
         res.locals.user = req.user; // Make user available in templates
-        return res.redirect("/patients", {
+        return res.redirect(200,"/patients", {
           name: decoded.username,
         });
       } else {
@@ -179,7 +178,43 @@ router.get("/1", async (req, res) => {
   res.render("login");
 });
 
-router.use(authenticateMiddleware);
+router.get("/qr-registration", async (req, res) => {
+  try {
+    const { cid } = req.query; // Get clinic ID from query
+    res.locals.username = "Doctor";
+
+    if (!cid) {
+      console.warn("Missing clinic ID in query.");
+      return res.status(400).send("Clinic ID is required."); // Respond with an error for missing cid
+    }
+
+    // Pass data to the template (e.g., clinicId)
+    res.render("PPC/qr_registration", { data: {} });
+  } catch (error) {
+    console.error("Error in /qr-registration route:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post(
+  "/qrpatient",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "report", maxCount: 1 },
+  ]),
+  savePatient
+);
+
+router.post(
+  "/qrpatient",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "report", maxCount: 1 },
+  ]),
+  savePatient
+);
+
+router.use(authMiddleware);
 
 router.post("/login", login);
 router.post("/logout", logout);
@@ -975,5 +1010,12 @@ router.get("/addDisease", async (req, res) => {
 router.get("/getDisease", getDisease);
 router.post("/saveDisease", setDeseaseTable);
 router.get("/diseaseSelect", getAllpointsDisease);
+
+router.get("/listDisease", async (req, res) => {
+  res.render("PPC/disease_list");
+});
+
+router.get("/getAllAppointments", getAllAppointments);
+router.post("/uploadExcelData", upload.single("file"), uploadExcelItem);
 
 module.exports = router;

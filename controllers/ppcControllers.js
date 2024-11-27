@@ -4,6 +4,8 @@ const CryptoJS = require("crypto-js");
 const { Op, Sequelize } = require("sequelize");
 const crypto = require("crypto");
 const sjcl = require("sjcl");
+const XLSX = require("xlsx");
+const path = require("path");
 
 // Encryption function
 function encryptDataForUrl(data) {
@@ -48,14 +50,23 @@ function getNextDateForDay(dayName) {
     );
   }
 
-  const daysUntilTarget = (targetDayIndex - currentDayIndex + 7) % 7 || 7; // Days until the next occurrence
+  // If today is the target day, return today's date
+  if (currentDayIndex === targetDayIndex) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
+  // Calculate days until the next occurrence
+  const daysUntilTarget = (targetDayIndex - currentDayIndex + 7) % 7 || 7;
   const nextDate = new Date();
   nextDate.setDate(nextDate.getDate() + daysUntilTarget);
 
-  // Format the date as YYYY-MM-DD
+  // Format the next date as YYYY-MM-DD
   const year = nextDate.getFullYear();
-  const month = String(nextDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const month = String(nextDate.getMonth() + 1).padStart(2, "0");
   const day = String(nextDate.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
@@ -247,7 +258,7 @@ const savePatient = async (req, res) => {
   console.log("Uploaded Files:", req.files);
 
   try {
-    const { query, code, markVisit, ...updateFields } = req.body;
+    const { cid, query, code, markVisit, ...updateFields } = req.body;
 
     // If files are uploaded, add the filenames to the updateFields
     updateFields.image = req.files?.image ? req.files.image[0].filename : "";
@@ -275,6 +286,7 @@ const savePatient = async (req, res) => {
       const newPatient = await Patient.create({
         ...updateFields,
         code,
+        clinicid: req.session.clinicId || cid,
       });
 
       // Save the examination data in the EmrExamination table
@@ -858,6 +870,7 @@ const getPatients = async (req, res) => {
       return {
         ...data.toJSON(),
         id: encId,
+        pid: data.id,
       };
     });
     res.status(200).json(encData);
@@ -1296,6 +1309,7 @@ const getPatientAppointments = async (req, res) => {
       .json({ error: "An error occurred while fetching appointments." });
   }
 };
+
 const getPatientVisits = async (req, res) => {
   try {
     const { patientId } = req.query;
@@ -2797,9 +2811,60 @@ const getDoctorNotification = async (req, res) => {
   }
 };
 
-const setDeseaseTable = async (req, res) => {
+const   setDeseaseTable = async (req, res) => {
   try {
-    const { disease, symptoms, tests, medicine } = req.body;
+    const { disease, symptoms, tests, medicine, id } = req.body;
+    if (id) {
+      const decease = await DeseaseTable.findByPk(id);
+      if (!decease) {
+        return res.status(404).json({ msg: "Desease not found" });
+      }
+      decease.name = disease;
+      await decease.save();
+
+      if (tests !== undefined && tests.length) {
+        await TestsTable.destroy({
+          where: {
+            disId: decease.id,
+          },
+        });
+        const testArray = [];
+        tests.forEach((t) => {
+          testArray.push({
+            disId: decease.id,
+            name: t,
+          });
+        });
+        await TestsTable.bulkCreate(testArray);
+      }
+      if (symptoms && symptoms.length) {
+        await EmrComplaints.update(
+          { complaints: symptoms },
+          {
+            where: {
+              disId: decease.id,
+            },
+          }
+        );
+      }
+      if (medicine && medicine.length) {
+        await MedicineTable.destroy({
+          where: {
+            disId: decease.id,
+          },
+        });
+        const medicineArray = [];
+        medicine.forEach((m) => {
+          medicineArray.push({
+            disId: decease.id,
+            name: m,
+          });
+        });
+        await MedicineTable.bulkCreate(medicineArray);
+      }
+
+      return res.status(200).json({ msg: "Desease updated successfully" });
+    }
     const deceases = await DeseaseTable.findAll({
       where: {
         name: {
@@ -2888,6 +2953,7 @@ const getAllpointsDisease = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: "Please provide clinic id." });
   }
+  const disease = await DeseaseTable.findByPk(id);
   const tests = await TestsTable.findAll({
     where: {
       disId: id,
@@ -2904,10 +2970,66 @@ const getAllpointsDisease = async (req, res) => {
     },
   });
   return res.status(200).json({
+    disease,
     tests,
     medicines,
     complaints,
   });
+};
+
+const getAllAppointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.findAll();
+    return res.status(200).json(appointments);
+  } catch (err) {
+    console.error("Error fetching appointments:", err);
+    return res.status(500).json({ msg: "Error during appointments fetch" });
+  }
+};
+
+
+
+const uploadExcelItem = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
+
+    // Read the uploaded Excel file
+    const filePath = path.join(
+      __dirname,
+      "../public/MyUploads",
+      req.file.filename
+    );
+    const workbook = XLSX.readFile(filePath);
+    const sheetName = workbook.SheetNames[0]; // Use the first sheet
+    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    // Validate and map the data to match the Items schema
+    const validData = jsonData.map((row) => ({
+      code: row["code"] || null,
+      name: row["name"] || null,
+      molecule: row["molecule"] || null,
+      sellingPrice: row["sellingPrice"] || null,
+      category: row["category"] || null,
+      clinicid: req.session.clinicId,
+    }));
+
+    // Insert data into the database
+    const insertedData = await Items.bulkCreate(validData, { validate: true });
+    console.log(insertedData);
+
+    // Respond with success
+    res.status(200).json({
+      message: "File processed successfully",
+      insertedCount: insertedData.length,
+    });
+  } catch (error) {
+    console.error("Error processing file:", error);
+    res
+      .status(500)
+      .json({ message: "Error processing file", error: error.message });
+  }
 };
 
 // Export all the controller functions
@@ -2970,4 +3092,6 @@ module.exports = {
   setDeseaseTable,
   getDisease,
   getAllpointsDisease,
+  getAllAppointments,
+  uploadExcelItem
 };

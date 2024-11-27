@@ -9,7 +9,7 @@
 
     <title>Add Patient - LifeLinkr</title>
 
-    <%-include('../header'); -%>
+   
     <div
       class="modal fade"
       id="myModal"
@@ -474,7 +474,7 @@
       <!-- //charts -->
     </div>
 
-    <%-include('../footer'); -%>
+   
     <script>
       // Function to calculate BMI
       function calculateBMI() {
@@ -859,8 +859,8 @@
       }
       function generateQRCode() {
         const qrCodeContainer = document.getElementById("qrCode");
-        const uploadUrl = `${window.location.origin}/qr-registration?cid=<%=clinicId %>`;
-
+        const uploadUrl =
+          "http://localhost:5001/qr-registration?cid=<%=clinicId %>";
         qrCodeContainer.innerHTML = ""; // Clear any previous QR code
         new QRCode(qrCodeContainer, {
           text: uploadUrl,

@@ -69,6 +69,7 @@
                             <div class="form-group">
                               <button
                                 onclick="addnrow('com')"
+                                id="plsButton"
                                 type="button"
                                 class="btn btn-outline-danger remove-slot mt-3"
                               >
@@ -101,12 +102,14 @@
                     <!-- Common Comment Field for All Tests -->
 
                     <div class="d-flex gap-2 flex-wrap mt-3 text-right">
-                      <label
+                      <button
+                        id="tstadd"
+                        type="button"
                         class="btn-secondary btn-style btn mr-2"
                         onclick="addTestRow()"
                       >
                         <i title="Add New Row" class="fas fa-plus"></i> Add
-                      </label>
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -166,7 +169,7 @@
       <div class="text-right">
         <button
           type="button"
-          onclick="updateQuery()"
+          disabled
           id="mod-btn"
           class="btn btn-primary btn-style mt-3 mr-3"
         >
@@ -174,7 +177,7 @@
         </button>
         <button
           type="button"
-          onclick=" window.location.href = '/speciality'"
+          onclick=" window.location.href = '/listDisease'"
           class="btn btn-danger btn-style mt-3 mr-3"
         >
           <i class="fas fa-times"></i> Cancel
@@ -194,7 +197,7 @@
       let rowCount = 1;
 
       // Function to add a new row
-      function addnrow(prefix) {
+      function addnrow(prefix, val = "") {
         rowCount++;
         const newRowId = `${prefix}_${rowCount}`;
 
@@ -207,7 +210,9 @@
                             <div class="col-xl-8 col-xs-10 pr-xl-2">
                                 <div class="form-group">
                                     <label class="input__label">Description</label>
-                                    <input type="text" class="form-control input-style" 
+                                    <input type="text" value="${val}" ${
+          val !== "" ? "disabled" : ""
+        } class="form-control input-style" 
                                         id="name" name="complaints" 
                                         data-validation="required" 
                                         data-error-message="Description is required"
@@ -216,8 +221,12 @@
                             </div>
                             <div class="col-xl-1 col-xs-2 pr-xl-2">
                                 <div class="form-group">
-                                    <button onclick="addnrow('${prefix}')" type="button" class="btn btn-outline-danger add-slot mt-3">+</button>
-                                    <button onclick="removeRow(this)" type="button" class="btn btn-outline-danger remove-slot mt-3">-</button>
+                                    <button onclick="addnrow('${prefix}')" ${
+          val !== "" ? "disabled" : ""
+        } type="button" class="btn btn-outline-danger add-slot mt-3">+</button>
+                                    <button onclick="removeRow(this)" type="button" ${
+                                      val !== "" ? "disabled" : ""
+                                    } class="btn btn-outline-danger remove-slot mt-3">-</button>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +244,7 @@
       }
     </script>
     <script>
-      function addTestRow() {
+      function addTestRow(val = "") {
         const container = document.getElementById("recommendedTestAdd");
         if (!container) {
           console.error("Container for recommended tests not found");
@@ -250,13 +259,17 @@
         newRow.innerHTML = `
           <div class="col-md-5">
               <div class="form-group">
-                  <select class="form-control input-style" name="selectTest[]" data-validation="required" data-error-message="Test selection is required">
+                  <select class="form-control input-style" ${
+                    val !== "" ? "disabled" : ""
+                  } name="selectTest[]" data-validation="required" data-error-message="Test selection is required">
                       <option value="" disabled selected>Loading Tests...</option>
                   </select>
               </div>
           </div>
           <div class="col-md-2 text-center">
-              <button type="button" class="btn btn-danger btn-style" onclick="removeTestRow(this)">
+              <button type="button" class="btn btn-danger btn-style" ${
+                val !== "" ? "disabled" : ""
+              } onclick="removeTestRow(this)">
                   <i class="fa-solid fa-minus"></i>
               </button>
           </div>
@@ -281,6 +294,9 @@
               const option = document.createElement("option");
               option.value = test.name; // or test.id, based on your API data
               option.textContent = `${test.name}`;
+              if (test.name === val) {
+                option.setAttribute("selected", true);
+              }
               selectDropdown.appendChild(option);
             });
           })
@@ -297,7 +313,13 @@
         }
       }
 
-      function addNewPrescriptionRow() {
+      function addNewPrescriptionRow(
+        drug = "",
+        dose = "",
+        frequency = "",
+        days = "",
+        flag = false
+      ) {
         const prescriptionTable = document.getElementById("prescriptionTable");
         const newRow = document.createElement("tr");
         newRow.classList.add(
@@ -311,43 +333,69 @@
         newRow.innerHTML = `
           <td class="form-group position-relative">
               <input type="text" class="form-control input-style search-input" placeholder="Type to search..."
-                     name="drug" data-validation="required" data-error-message="Drug/Molecule is required">
+                     name="drug" value="${drug}" ${
+          flag ? "disabled" : ""
+        } data-validation="required" data-error-message="Drug/Molecule is required">
               <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
           </td>
-          <td><input type="number" name="dose" placeholder="Dose" class="form-control input-style"
+          <td><input type="number" value="${dose}" ${
+          flag ? "disabled" : ""
+        } name="dose" placeholder="Dose" class="form-control input-style"
                      data-validation="required" data-error-message="Dose is required"></td>
           <td>
-              <select name="frequency" class="form-select input-style"
+              <select name="frequency" class="form-select input-style" ${
+                flag ? "disabled" : ""
+              }
                       data-validation="required" data-error-message="Frequency is required">
-                  <option value="" disabled selected>Select Frequency</option>
-                  <option value="TID">TID</option>
-                  <option value="BID">BID</option>
-                  <option value="QID">QID</option>
-                  <option value="OD(1-0-0)">OD(1-0-0)</option>
-                  <option value="HS">HS</option>
-                  <option value="STAT">STAT</option>
-                  <option value="OD(0-1-0)">OD(0-1-0)</option>
-                  <option value="OD(0-0-1)">OD(0-0-1)</option>
-                  <option value="6T">6T</option>
-                  <option value="8T">8T</option>
-                  <option value="Once">Once</option>
-                  <option value="5T">5T</option>
-                  <option value="7T">7T</option>
-                  <option value="SOS">SOS</option>
-                  <option value="MT">MT</option>
-                  <option value="WT">WT</option>
+                  
               </select>
           </td>
-          <td><input type="number" name="days" placeholder="Days" class="form-control input-style"
+          <td><input type="number" name="days" placeholder="Days" value="${days}" ${
+          flag ? "disabled" : ""
+        } class="form-control input-style"
                      data-validation="required" data-error-message="Days are required"></td>
           <td class="text-center">
-              <button type="button" class="btn btn-danger btn-style" onclick="removePrescriptionRow(this)">
+              <button type="button" ${
+                flag ? "disabled" : ""
+              } class="btn btn-danger btn-style" onclick="removePrescriptionRow(this)">
                   <i class="fa-solid fa-minus"></i>
               </button>
           </td>
       `;
-
         prescriptionTable.appendChild(newRow);
+        const selectDropdown = newRow.querySelector("select");
+        const freq = [
+          "TID",
+          "BID",
+          "QID",
+          "OD(1-0-0)",
+          "HS",
+          "STAT",
+          "OD(0-1-0)",
+          "OD(0-0-1)",
+          "6T",
+          "8T",
+          "Once",
+          "5T",
+          "7T",
+          "SOS",
+          "MT",
+          "WT",
+        ];
+
+        selectDropdown.innerHTML = `<option value="" disabled selected>Select a Test</option>`;
+
+        // Populate dropdown with fetched test options
+        freq.forEach((f) => {
+          const option = document.createElement("option");
+          option.value = f; // or test.id, based on your API data
+          option.textContent = f;
+          if (f === frequency) {
+            option.setAttribute("selected", true);
+          }
+          selectDropdown.appendChild(option);
+        });
+
         // populatePrescriptions();
       }
       // Function to remove a row
@@ -404,6 +452,7 @@
       function collectPrescriptionData() {
         const prescriptions = [];
         const rows = document.querySelectorAll("#prescriptionTable tr");
+        console.log(rows);
 
         rows.forEach((row) => {
           const drug = row.querySelector('input[name="drug"]')?.value;
@@ -412,6 +461,7 @@
             'select[name="frequency"]'
           )?.value;
           const days = row.querySelector('input[name="days"]')?.value;
+          console.log(drug, frequency, days, dose);
 
           if (drug && dose && frequency && days) {
             prescriptions.push({
@@ -427,7 +477,9 @@
         return prescriptions;
       }
       document.getElementById("sub-btn").addEventListener("click", async () => {
+        const params = new URLSearchParams(window.location.search);
         console.log("hello");
+        const id = params.get("id");
         let disease = document.getElementById("disease").value;
         let tests = collectTests();
         let medicine = collectPrescriptionData();
@@ -438,6 +490,7 @@
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            id,
             disease,
             tests,
             medicine,
@@ -445,11 +498,12 @@
           }),
         });
         if (response.ok) {
-          alert("Disease saved successfully");
+          $("#sucs1").modal("show");
         } else {
-          alert("Error saving disease");
+          if (response.status === 401) alert("Desease already exist");
         }
       });
+
       let prescriptionsData = []; // Parsed from server data
       let prescribedComment = ""; // Latest prescription comment
 
@@ -557,6 +611,79 @@
           previousContainer.appendChild(entryDiv);
         });
       }
+    </script>
+    <script>
+      const params = new URLSearchParams(window.location.search); // Get search parameters from URL
+      const fetchAllData = async (id) => {
+        try {
+          const response = await fetch(`/diseaseSelect?id=${id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+
+          if (data.disease) {
+            document.getElementById("disease").value = data.disease.name;
+            document.getElementById("disease").disabled = true;
+            document.getElementById("tstadd").disabled = true;
+            document.getElementById("prescriptionAdd").disabled = true;
+            document.getElementById("sub-btn").disabled = true;
+            document.getElementById("mod-btn").disabled = false;
+            document.getElementById("description").remove();
+            document.getElementById("plsButton").remove();
+          }
+          if (data.complaints && data.complaints.length) {
+            data.complaints[0].complaints.forEach((p) => {
+              addnrow("com", p);
+            });
+          }
+          if (data.tests && data.tests.length) {
+            data.tests.forEach((test) => {
+              addTestRow(test.name);
+            });
+          }
+
+          if (data.medicines && data.medicines.length) {
+            data.medicines.forEach((medicine) => {
+              addNewPrescriptionRow(
+                medicine.name.drug,
+                medicine.name.dose,
+                medicine.name.frequency,
+                medicine.name.days,
+                true
+              );
+            });
+          }
+
+          //   console.log(data);
+          //   prescriptionsData = data.prescriptions;
+          //   prescribedComment = data.prescribedComment;
+          populatePrescriptions();
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      const id = params.get("id");
+      if (id) {
+        fetchAllData(id);
+      }
+      function enableAllDisabledElements() {
+        // Select all disabled buttons, textareas, and input fields
+        const disabledElements = document.querySelectorAll(
+          "button:disabled, textarea:disabled, input:disabled, select:disabled"
+        );
+
+        // Loop through and enable each element
+        disabledElements.forEach((element) => {
+          element.disabled = false;
+        });
+
+        console.log(`${disabledElements.length} elements have been enabled.`);
+      }
+      document.getElementById("mod-btn").addEventListener("click", () => {
+        enableAllDisabledElements();
+      });
     </script>
   </head>
 </html>

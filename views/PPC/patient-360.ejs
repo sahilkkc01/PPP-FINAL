@@ -237,7 +237,7 @@
                   class="form-control input-style"
                 />
               </div>
-              
+
               <div class="col-md-3">
                 <label for="height" class="input__label">Height (Feet)</label>
                 <input
@@ -743,7 +743,7 @@
             ) {
               continue;
             } else {
-              console.log(notAvailableSlots);
+              // console.log(notAvailableSlots);
 
               selectElement.appendChild(option);
             }
@@ -781,6 +781,9 @@
       let timeTable = null;
       const fetchTimeTable = async (id) => {
         try {
+          const selectElement = document.getElementById("visitTime");
+          if (!selectElement) return;
+          selectElement.innerHTML = "";
           // Fetch the timetable data based on the given ID
           const date = new Date(); // Create a Date object from the input string
           const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
@@ -792,6 +795,7 @@
           }
           const data = await response.json();
           console.log(data);
+          appointments = data.appointment;
           timeTable = data.dayArray;
           if (!timeTable) {
             return;
@@ -835,8 +839,10 @@
         }
       };
 
-      document.getElementById("doctor").addEventListener("change", () => {
+      document.getElementById("doctor").addEventListener("change", (e) => {
         const id = document.getElementById("doctor").value;
+        console.log(e.target.value);
+
         fetchTimeTable(id);
       });
 

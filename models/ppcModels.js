@@ -615,7 +615,7 @@ const doctor_staff_Status = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "doctorStaff_Status",
+    tableName: "doctorstaff_status",
   }
 );
 
@@ -709,7 +709,7 @@ const UserAppointment = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "userAppointment",
+    tableName: "userappointment",
   }
 );
 
@@ -765,7 +765,7 @@ const UserNotification = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "userNotification",
+    tableName: "usernotification",
   }
 );
 
@@ -810,7 +810,7 @@ const SMSTemplate = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "smsTemplate",
+    tableName: "smstemplate",
   }
 );
 
@@ -837,8 +837,12 @@ const DoctorTimeTable = sequelize.define("DoctorTimeTable", {
     allowNull: false,
     defaultValue: [],
   },
+},
+{
+  timestamps: true, // If you want to manage the timestamps manually
+  tableName: "doctortimetables",
 });
-
+DoctorTimeTable.sync()
 const CodeFormat = sequelize.define(
   "CodeFormat",
   {
@@ -860,7 +864,7 @@ const CodeFormat = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "codeFormat",
+    tableName: "codeformat",
   }
 );
 
@@ -897,7 +901,7 @@ const ClinicMaster = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "clinicMaster",
+    tableName: "clinicmaster",
   }
 );
 
@@ -918,7 +922,7 @@ const DeseaseTable = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "deseaseTable",
+    tableName: "deseasetable",
   }
 );
 
@@ -939,7 +943,7 @@ const TestsTable = sequelize.define(
   },
   {
     timestamps: false, // If you want to manage the timestamps manually
-    tableName: "testsTable",
+    tableName: "teststable",
   }
 );
 
@@ -960,7 +964,7 @@ const MedicineTable = sequelize.define(
   },
   {
     timestamps: false,
-    tableName: "medicationTable",
+    tableName: "medicationtable",
   }
 );
 

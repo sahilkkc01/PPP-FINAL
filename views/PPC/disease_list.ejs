@@ -5,58 +5,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Bills - LifeLinkr</title>
+    <title>LifeLinkr</title>
 
     <%-include('../header');  -%>
-     
-
 
             <!-- content -->
             <div class="container-fluid">
 
                 <!-- charts -->
                 <div class="col-lg-12 pl-lg-0 mt-2">
-                    <h4 class="primary">View All Bills</h4>
+                    <h4 class="primary">View All Disease</h4>
                 </div>
                 <div class="chart">
                     <div class="row">
-                        <div class="col-6 mb-3 mb-3">
+                        <div class="col-4 mb-3 mb-3">
                             <div class="form-group"><label class="input__label">Search</label><input type="text" id="searchBox" class="form-control input-style" placeholder=""></div>
                           </div>
-                        <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+                        <div class="col-lg-12 pl-lg-3 chart-grid mt-1">
                             <!--part 1-->
                             <div class="card card_border">
 									<table class="table2" id="tblid">
 									<tr>
 									
-									<th>Patient Name</th>
-									<th>Mobile</th>
-                                
-									<th>Bill No</th>
-									<th>Bill Date</th>
-									<th>Total Amount</th>
-									<th>Payment Mode</th>
-								
-									<th width="10%">Print</th>
+									<th>Code</th>
+									<th>Name</th>
+									<th>View</th>
 									</tr>
                                     <tbody id="tbodyid">
 
                                     </tbody>
 									
 									</table>
-
                                 </div>
-                                <div id="paginationControls"></div>
+                                    <div id="paginationControls"></div>
+
+                                
                             </div>
                           
                         </div>
                        
                     </div>
-                    <div class="form-group mb-3 text-right">
-                        <button type="button" onclick=" window.location.href = '/bill'" class="btn-primary btn-style btn mr-2"><strong><i class="fa-solid fa-plus"></i> New</strong></button>
-                    </div>
+                  
                 </div>
                 <!-- //charts -->
+                <div class="form-group mb-3 text-right">
+                  <button type="button" onclick=" window.location.href = '/addDisease'" class="btn-primary btn-style btn mr-2"><strong><i
+                      class="fa-solid fa-plus"></i> New</strong></button>
+              </div>
                  
                  
             </div>
@@ -73,34 +68,31 @@
                 // Function to fetch and display data
                 function fetchData() {
                   $.ajax({
-                    url: '/getBills',
+                    url: '/getDisease',
                     type: 'GET',
                     success: function(data) {
                         console.log(data)
                       let tableRows = '';
                       
-                      data.forEach(function(item) {
-                        console.log(data);
+                      data.reverse().forEach(function(item) {
                           
                         tableRows += `
-       <tr data-bill-id="${item.id}">
-        <td>${item.patient.name}</td>
-        <td>${item.patient.mobile}</td>
-        <td>${item.bill_no}</td>
-       <td>${new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-
-        <td>${item.totalAmount}</td>
-        <td>${item.paymentMode}</td>
-        <td><button type="button" id="print_btn" class="btn btn-primary btn-style btn-change">Print</button></td>
+                          <tr data-bbm-id="${item.id}">
+        
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td>
+          <button type="button" id="view_btn" class="btn btn-primary btn-style btn-change mr-2">View</button>
+        </td>
       </tr>
                         `;
                       });
                     
                       $('#tbodyid').html(tableRows);
                       pagi_search('#searchBox','#tblid','#paginationControls')
-                      $('#tblid').on('click', '#print_btn', function() {
-                        const id=$(this).closest('tr').data('bill-id')
-                        const route='printBill'
+                      $('#tblid').on('click', '#view_btn', function() {
+                        const id=$(this).closest('tr').data('bbm-id')
+                        const route='addDisease'
                           ViewBtn(route,id)
                          });
                          
