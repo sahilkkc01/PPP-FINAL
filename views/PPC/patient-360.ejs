@@ -693,10 +693,10 @@
         let notAvailableSlots = [];
         if (appointments && appointments.length) {
           appointments.forEach((a) => {
-            const date = new Date(a.date); // Create a Date object from the input string
-            const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
-            const thisDay = days[dayIndex];
-            if (thisDay === day) {
+            const thisDate = new Date(a.date).toDateString().split("T")[0]; // Create a Date object from the input string
+            // const dayIndex = thisDate.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
+            // const thisDay = days[dayIndex];
+            if (thisDate === date.toDateString().split("T")[0]) {
               notAvailableSlots.push(a.time);
             }
           });

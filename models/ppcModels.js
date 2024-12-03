@@ -320,7 +320,7 @@ const Visit = sequelize.define(
     bp: DataTypes.STRING,
     sugar: DataTypes.STRING,
     bmi: DataTypes.STRING,
-    doctor: DataTypes.STRING,
+    // doctor: DataTypes.STRING,
   },
   {
     tableName: "visit",
