@@ -107,6 +107,7 @@ const login = async (req, res) => {
       userId: user.userId,
       username: user.name,
       email: user.email,
+      clinicId:user.clinicId
     };
 
     // console.log(req.user);

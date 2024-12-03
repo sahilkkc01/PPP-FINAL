@@ -18453,7 +18453,7 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   width: 32px;
   height: 15px;
-  margin-left: 0px;
+  margin-left: 5px;
   background-color: #eaf9f8a3;
   box-shadow: 0px 0px 1px 0.5px #0EB9AF;
   border-radius: 15px;
@@ -18634,3 +18634,6 @@ ul .search-bar-li{
 .daily-summary tr:nth-child(even) {
   background-color: #f2f2f2; /* Change this to any color you like */
 }
+
+
+

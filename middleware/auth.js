@@ -18,7 +18,9 @@ const authMiddleware = async (req, res, next) => {
     }
     // Decode and verify the token
     const decodedToken = jwt.verify(token, "llppc"); // Replace with your actual secret key
-    console.log(decodedToken);
+    console.log('Token',decodedToken);
+    console.log('User',req.user);
+    console.log('Session',req.session);
     // Store rights in session (or any other info you want from the decoded token)
     req.session.rights = decodedToken.rights;
     req.session.userId = decodedToken.userId; // Optional: Store user ID if needed
@@ -28,6 +30,11 @@ const authMiddleware = async (req, res, next) => {
     res.locals.clinicId = decodedToken.clinicId || "";
     // Log the session for debugging purposes
     console.log("Session:", req.session);
+
+    // Set visibility flags based on rights
+    res.locals.canEdit = decodedToken.rights !== "View Only"; // Example condition
+    res.locals.canViewAdminSection = decodedToken.rights === "Admin"; // Example condition
+    res.locals.doctor = decodedToken.rights === "Doctor"; // Example condition
 
     // Continue to the next middleware or route handler
     next();

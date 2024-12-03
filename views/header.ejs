@@ -263,7 +263,7 @@
 
             <!-- logo start -->
             <div class="logo">
-                <h1><a href="index.html"><img src="../images/logo.png" alt="logo"></a></h1>
+                <h1><a href="/sendReminder"><img src="../images/logo.png" alt="logo"></a></h1>
             </div>
 
             <div class="logo-icon text-center">
@@ -330,7 +330,11 @@
                             
                             <li><a href="patients">Patient Registration</a> </li>
                             <li><a href="sendReminder">Follow-Ups</a> </li>
+                            <% if (doctor) { %>
                             <li><a href="emr" >For Doctor(EMR)</a> </li>
+                            <% } else { %>
+                     
+                              <% } %>
                             <li><a href="calender" >Appointment Calender</a> </li>
                             <li><a href="billlist">Billing</a></li>
                             <li><a href="patient360">Patient 360</a></li>
@@ -341,32 +345,39 @@
                            
                         </ul>
                     </li>
+
+
+                    <% if (canEdit) { %>
+                      <li class="menu-list">
+                        <a href="#" class="d-flex align-items-center">
+                          <img class="icon-img" src="../images/global-settings.png" alt="">
+                          <span class="link-name">SETUP CLINIC</span>
+                        </a>
+                        <ul class="sub-menu-list">
+                          <!-- Only show the menu items if the user does not have 'View Only' in their rights -->
+                          
+                            <li><a href="clinics">Add Clinic</a></li>
+                            <li><a href="staff">Add Staff</a></li>
+                            <li><a href="speciality">Add Speciality</a></li>
+                            <li><a href="symptoms">Add Symptoms</a></li>
+                            <li><a href="tests">Add Tests</a></li>
+                            <li><a href="services">Add Services</a></li>
+                            <li><a href="items">Add Medicine</a></li>
+                            <li><a href="doctors">Add Doctor</a></li>
+                            <li><a href="expenses">Add Expenses</a></li>
+                            <li><a href="purchaseClient">Add Purchase Client</a></li>
+                            <li><a href="listDisease">Add Disease</a></li>
+                            <li><a href="notificationTemp">Notification Template</a></li>
+                          
+                            <li><a href="notification-setting">Notification Settings</a></li>
+                      
+                        </ul>
+                      </li>
+                   
+                    <% } else { %>
+                     
+                    <% } %>
                  
-                    <li class="menu-list">
-                      <a href="#" class="d-flex align-items-center">
-                        <img class="icon-img" src="../images/global-settings.png" alt="">
-                        <span class="link-name">SETUP CLINIC</span>
-                      </a>
-                      <ul class="sub-menu-list">
-                        <!-- Only show the menu items if the user does not have 'View Only' in their rights -->
-                        
-                          <li><a href="clinics">Add Clinic</a></li>
-                          <li><a href="staff">Add Staff</a></li>
-                          <li><a href="speciality">Add Speciality</a></li>
-                          <li><a href="symptoms">Add Symptoms</a></li>
-                          <li><a href="tests">Add Tests</a></li>
-                          <li><a href="services">Add Services</a></li>
-                          <li><a href="items">Add Medicine</a></li>
-                          <li><a href="doctors">Add Doctor</a></li>
-                          <li><a href="expenses">Add Expenses</a></li>
-                          <li><a href="purchaseClient">Add Purchase Client</a></li>
-                          <li><a href="listDisease">Add Disease</a></li>
-                          <li><a href="notificationTemp">Notification Template</a></li>
-                        
-                          <li><a href="notification-setting">Notification Settings</a></li>
-                    
-                      </ul>
-                    </li>
                  
                    
                     
@@ -412,7 +423,7 @@
                                     <ul id="notifications" class="dropdown-menu">
                                         <li>
                                             <div class="notification_header">
-                                                <h3>You have <span id="numOfNot"></span> new notifications</h3>
+                                                <h3>You have <span id="numOfNot"></span> No notifications</h3>
                                             </div>
                                         </li>
                                         <!-- <li><a href="#" class="grid">

@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Add Doctor - LifeLinkr</title>
-    <style>
-      .hidden{
-        display: none;
-      }
-    </style>
+   
 
+<style>
+    .hidden{
+      display: none;
+    }
+    .btn-outline-success, .btn-outline-danger{
+      line-height: 1;
+margin-top: 20px;
+    }
+  </style>
     <%-include('../header');  -%>
         <!-- main content start -->
             <!-- content -->
@@ -284,6 +289,7 @@
 
                                             </div>
                                             <div id="loadingIndicator"></div>
+                                            <div class="col-md-12">
                                             <div class="text-right">
                                                 <button type="button" onclick="updateQuery()" id="mod-btn" class="btn btn-primary btn-style mt-3 mr-3"><i class="fa-regular fa-pen-to-square"></i> Modify</button>
                                                 <button type="button" onclick=" window.location.href = '/doctors'" class="btn btn-danger btn-style mt-3 mr-3"><i
@@ -291,6 +297,7 @@
                                                 <button type="submit" id="sub-btn" class="btn btn-primary btn-style mt-3"><i
                                                         class="far fa-save"></i> Save</button>
                                             </div>
+                                        </div>
 
                                         </form>
                                     </div>

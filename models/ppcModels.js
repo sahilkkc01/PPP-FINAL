@@ -320,6 +320,8 @@ const Visit = sequelize.define(
     bp: DataTypes.STRING,
     sugar: DataTypes.STRING,
     bmi: DataTypes.STRING,
+    doctor: DataTypes.STRING,
+
   },
   {
     tableName: "visit",
@@ -996,7 +998,7 @@ const MedicineTable = sequelize.define(
 
 // UserTokens.sync({ alter: true });
 
-// sequelize.sync()
+//sequelize.sync()
 
 module.exports = {
   UserTokens,

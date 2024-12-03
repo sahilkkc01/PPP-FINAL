@@ -285,8 +285,8 @@ const savePatient = async (req, res) => {
       // Create new patient record
       const newPatient = await Patient.create({
         ...updateFields,
-        code,
-        clinicid: req.session.clinicId || cid,
+        code, 
+        clinicid: req.session.clinicId || 0,
       });
 
       // Save the examination data in the EmrExamination table
@@ -385,7 +385,13 @@ const saveStaff = async (req, res) => {
   console.log("Form Data:", req.body);
 
   try {
-    const { query, code, role, password, ...updateFields } = req.body;
+    // Extracting fields from request body
+    const { query, clinicid, code, role, userId, password, ...updateFields } = req.body;
+    
+    // Decrypt the clinicid
+    const decryptedClinicId = decryptData(decodeURIComponent(clinicid), "llppc");
+    console.log('dec',decryptedClinicId)
+    updateFields.clinicId = decryptedClinicId; // Add decrypted clinicId to updateFields
 
     // Encrypt the password
     const encryptedPassword = md5(password);
@@ -395,7 +401,7 @@ const saveStaff = async (req, res) => {
       // Update record if query is 1
       const [updated] = await Staff.update(
         updateFields, // Use dynamic fields for updating
-        { where: { code } } // Condition to find the record
+        { where: { code, clinicId: decryptedClinicId } } // Condition to find the record by clinicId as well
       );
 
       if (updated) {
@@ -404,30 +410,38 @@ const saveStaff = async (req, res) => {
         res.status(404).json({ message: "Staff not found for update." });
       }
     } else {
-      // Check for duplicate 'code' before creating a new record
-      const existingStaff = await Staff.findOne({ where: { code } });
+      // Check for duplicate 'code' or 'userId' before creating a new record
+      const existingStaff = await Staff.findOne({
+        where: { 
+          [Op.or]: [{ code }, { userId }],
+      
+        },
+      });
 
       if (existingStaff) {
-        return res
-          .status(409)
-          .json({ message: "A Staff with this code already exists." });
+        const conflictField = existingStaff.code === code ? 'code' : 'userId';
+        return res.status(409).json({
+          message: `A Staff with this ${conflictField} already exists in this clinic.`,
+        });
       }
 
       // Add parsed role and encrypted password to req.body for new record creation
       req.body.role = updateFields.role;
       req.body.password = encryptedPassword; // Store the encrypted password
+      req.body.clinicid = decryptedClinicId; // Add clinicId to the request body
 
+    
       // Create new record if no duplicate is found
       await Staff.create(req.body);
       res.status(200).json({ message: "Data saved successfully!" });
     }
   } catch (error) {
     console.error("Error saving data:", error);
-    res
-      .status(500)
-      .json({ message: "Error saving data", error: error.message });
+    res.status(500).json({ message: "Error saving data", error: error.message });
   }
 };
+
+
 
 const saveSymptoms = async (req, res) => {
   console.log("Form Data:", req.body);
@@ -1191,6 +1205,8 @@ const saveVisit = async (req, res) => {
 
     // Decrypt the patient ID
     const decryptedId = decryptData(decodeURIComponent(patientId), "llppc");
+    const decryptedDoctorId = decryptData(decodeURIComponent(doctor), "llppc");
+
 
     // Validate required fields
     if (!decryptedId || !visitDate || !visitTime) {
@@ -1199,6 +1215,10 @@ const saveVisit = async (req, res) => {
       });
     }
 
+    const doctorDetails = await Doctors.findOne({
+      where: { id: decryptedDoctorId },
+      attributes: ["name"], // Fetch only the name to reduce data retrieval
+    });
     // Save the visit in the database
     const newVisit = await Visit.create({
       patientId: decryptedId,
@@ -1209,6 +1229,7 @@ const saveVisit = async (req, res) => {
       bp,
       sugar,
       bmi,
+      doctor: doctorDetails.name,
     });
 
     const appointment = await Appointment.create({
