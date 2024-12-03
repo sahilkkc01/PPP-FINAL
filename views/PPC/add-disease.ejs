@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Add Diseases - LifeLinkr</title>
+    <%-include('../header'); -%>
+
+    <!-- content -->
+    <div class="container-fluid">
+      <!-- charts -->
+      <div class="col-lg-12 pl-lg-0 mt-2">
+        <h4 class="primary">Add Diseases</h4>
+      </div>
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-12 pl-lg-2 chart-grid mt-1">
+            <!--part 1-->
+            <div class="card card_border">
+              <div class="">
+                <div class="col-xl-12 pr-xl-2 p-heading">
+                  <h6 class="p-text">Add Diseases</h6>
+                </div>
+
+                <div class="col-xl-12 pr-xl-2 mb-4">
+                  <form id="symptomsForm" class="mt-2">
+                    <input type="hidden" name="query" id="query" value="0" />
+                    <div id="errordiv"></div>
+                    <div class="row">
+                      <div class="col-xl-4 col-xs-6 pr-xl-2">
+                        <div class="form-group">
+                          <label class="input__label">Diseases Name*</label>
+                          <input
+                            type="text"
+                            class="form-control input-style"
+                            id="disease"
+                            name="name"
+                            data-validation="required"
+                            data-error-message="Description is required"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+                      <div class="col-xl-12 col-xs-12 pr-xl-2">
+                        <h6 class="primary mt-2">Add Complaints</h6>
+                      </div>
+
+                      <div class="col-md-12" id="com_1">
+                        <div class="row" id="nwcomp">
+                          <div class="col-xl-8 col-xs-10 pr-xl-2">
+                            <div class="form-group">
+                              <label class="input__label">Description</label>
+                              <input
+                                type="text"
+                                class="form-control input-style"
+                                id="description"
+                                name="complaints"
+                                data-validation="required"
+                                data-error-message="Description is required"
+                                placeholder=""
+                              />
+                            </div>
+                          </div>
+                          <div class="col-xl-1 col-xs-2 pr-xl-2">
+                            <div class="form-group">
+                              <button
+                                onclick="addnrow('com')"
+                                id="plsButton"
+                                type="button"
+                                class="btn btn-outline-danger remove-slot mt-3"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="loadingIndicator"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!--part 1 ended-->
+            <div class="mt-4">
+              <div class="card">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center px-2 py-0"
+                >
+                  <span class="myo-left-right">Add Tests</span>
+                </div>
+                <div class="card-body dspn" id="recommendedTestsCardBody">
+                  <form id="recommendedTestsForm">
+                    <div id="errordiv3"></div>
+                    <!-- Container to append new test rows -->
+                    <div id="recommendedTestAdd"></div>
+                    <!-- Common Comment Field for All Tests -->
+
+                    <div class="d-flex gap-2 flex-wrap mt-3 text-right">
+                      <button
+                        id="tstadd"
+                        type="button"
+                        class="btn-secondary btn-style btn mr-2"
+                        onclick="addTestRow()"
+                      >
+                        <i title="Add New Row" class="fas fa-plus"></i> Add
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <div class="card">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center px-2 py-0"
+                >
+                  <span class="myo-left-right">Prescription</span>
+                </div>
+
+                <form id="prescriptionForm">
+                  <div class="card-body dspn" id="prescriptionCardBody">
+                    <div id="errordiv4"></div>
+
+                    <!-- Container for the current prescription entry -->
+                    <div class="mt-3 table-responsive">
+                      <table class="table table-bordered prescription-table">
+                        <thead>
+                          <tr>
+                            <th>Drug/Molecule</th>
+                            <th>Dose</th>
+                            <th>Frequency</th>
+                            <th>Days</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="prescriptionTable"></tbody>
+                      </table>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap mt-3 text-right">
+                      <button
+                        type="button"
+                        id="prescriptionAdd"
+                        onclick="addNewPrescriptionRow()"
+                        class="btn-secondary btn-style btn mr-1"
+                      >
+                        <strong><i class="fa-solid fa-plus"></i> Add</strong>
+                      </button>
+                    </div>
+                    <div
+                      id="previousPrescriptionsContainer"
+                      class="ovrflwy"
+                    ></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- //charts -->
+      <div class="text-right">
+        <button
+          type="button"
+          disabled
+          id="mod-btn"
+          class="btn btn-primary btn-style mt-3 mr-3"
+        >
+          <i class="fa-regular fa-pen-to-square"></i> Modify
+        </button>
+        <button
+          type="button"
+          onclick=" window.location.href = '/listDisease'"
+          class="btn btn-danger btn-style mt-3 mr-3"
+        >
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button
+          type="submit"
+          id="sub-btn"
+          class="btn btn-primary btn-style mt-3"
+        >
+          <i class="far fa-save"></i> Save
+        </button>
+      </div>
+    </div>
+
+    <%-include('../footer'); -%>
+    <script>
+      let rowCount = 1;
+
+      // Function to add a new row
+      function addnrow(prefix, val = "") {
+        rowCount++;
+        const newRowId = `${prefix}_${rowCount}`;
+
+        const newDiv = document.createElement("div");
+        newDiv.className = "col-md-12";
+        newDiv.id = newRowId;
+
+        newDiv.innerHTML = `
+                        <div class="row">
+                            <div class="col-xl-8 col-xs-10 pr-xl-2">
+                                <div class="form-group">
+                                    <label class="input__label">Description</label>
+                                    <input type="text" value="${val}" ${
+          val !== "" ? "disabled" : ""
+        } class="form-control input-style" 
+                                        id="name" name="complaints" 
+                                        data-validation="required" 
+                                        data-error-message="Description is required"
+                                        placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-xl-1 col-xs-2 pr-xl-2">
+                                <div class="form-group">
+                                    <button onclick="addnrow('${prefix}')" ${
+          val !== "" ? "disabled" : ""
+        } type="button" class="btn btn-outline-danger add-slot mt-3">+</button>
+                                    <button onclick="removeRow(this)" type="button" ${
+                                      val !== "" ? "disabled" : ""
+                                    } class="btn btn-outline-danger remove-slot mt-3">-</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+        // Append the new row to the parent container
+        const container = document.getElementById("nwcomp");
+        container.appendChild(newDiv);
+      }
+
+      // Function to remove a row
+      function removeRow(button) {
+        const rowDiv = button.closest(".col-md-12");
+        rowDiv.remove();
+      }
+    </script>
+    <script>
+      function addTestRow(val = "") {
+        const container = document.getElementById("recommendedTestAdd");
+        if (!container) {
+          console.error("Container for recommended tests not found");
+          return;
+        }
+
+        // Create a new row for the test selection and removal button
+        const newRow = document.createElement("div");
+        newRow.classList.add("row", "align-items-center", "mb-2");
+
+        // Set up the basic structure of the row
+        newRow.innerHTML = `
+          <div class="col-md-5">
+              <div class="form-group">
+                  <select class="form-control input-style" ${
+                    val !== "" ? "disabled" : ""
+                  } name="selectTest[]" data-validation="required" data-error-message="Test selection is required">
+                      <option value="" disabled selected>Loading Tests...</option>
+                  </select>
+              </div>
+          </div>
+          <div class="col-md-2 text-center">
+              <button type="button" class="btn btn-danger btn-style" ${
+                val !== "" ? "disabled" : ""
+              } onclick="removeTestRow(this)">
+                  <i class="fa-solid fa-minus"></i>
+              </button>
+          </div>
+      `;
+
+        // Append the new row to the container
+        container.appendChild(newRow);
+
+        // Select the dropdown we just added
+        const selectDropdown = newRow.querySelector("select");
+
+        // Fetch test data and populate the dropdown
+        axios
+          .get("/getTests") // Replace with your actual endpoint
+          .then((response) => {
+            const tests = response.data;
+            // Clear previous options if any
+            selectDropdown.innerHTML = `<option value="" disabled selected>Select a Test</option>`;
+
+            // Populate dropdown with fetched test options
+            tests.forEach((test) => {
+              const option = document.createElement("option");
+              option.value = test.name; // or test.id, based on your API data
+              option.textContent = `${test.name}`;
+              if (test.name === val) {
+                option.setAttribute("selected", true);
+              }
+              selectDropdown.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching test data:", error);
+            selectDropdown.innerHTML = `<option value="" disabled selected>Error loading tests</option>`;
+          });
+      }
+      // Function to remove a test row
+      function removeTestRow(button) {
+        const row = button.closest(".row");
+        if (row) {
+          row.remove();
+        }
+      }
+
+      function addNewPrescriptionRow(
+        drug = "",
+        dose = "",
+        frequency = "",
+        days = "",
+        flag = false
+      ) {
+        const prescriptionTable = document.getElementById("prescriptionTable");
+        const newRow = document.createElement("tr");
+        newRow.classList.add(
+          "my-3",
+          "gap-4",
+          "justify-content-between",
+          "align-items-center",
+          "row-0"
+        );
+
+        newRow.innerHTML = `
+          <td class="form-group position-relative">
+              <input type="text" class="form-control input-style search-input" placeholder="Type to search..."
+                     name="drug" value="${drug}" ${
+          flag ? "disabled" : ""
+        } data-validation="required" data-error-message="Drug/Molecule is required">
+              <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
+          </td>
+          <td><input type="number" value="${dose}" ${
+          flag ? "disabled" : ""
+        } name="dose" placeholder="Dose" class="form-control input-style"
+                     data-validation="required" data-error-message="Dose is required"></td>
+          <td>
+              <select name="frequency" class="form-select input-style" ${
+                flag ? "disabled" : ""
+              }
+                      data-validation="required" data-error-message="Frequency is required">
+                  
+              </select>
+          </td>
+          <td><input type="number" name="days" placeholder="Days" value="${days}" ${
+          flag ? "disabled" : ""
+        } class="form-control input-style"
+                     data-validation="required" data-error-message="Days are required"></td>
+          <td class="text-center">
+              <button type="button" ${
+                flag ? "disabled" : ""
+              } class="btn btn-danger btn-style" onclick="removePrescriptionRow(this)">
+                  <i class="fa-solid fa-minus"></i>
+              </button>
+          </td>
+      `;
+        prescriptionTable.appendChild(newRow);
+        const selectDropdown = newRow.querySelector("select");
+        const freq = [
+          "TID",
+          "BID",
+          "QID",
+          "OD(1-0-0)",
+          "HS",
+          "STAT",
+          "OD(0-1-0)",
+          "OD(0-0-1)",
+          "6T",
+          "8T",
+          "Once",
+          "5T",
+          "7T",
+          "SOS",
+          "MT",
+          "WT",
+        ];
+
+        selectDropdown.innerHTML = `<option value="" disabled selected>Select a Test</option>`;
+
+        // Populate dropdown with fetched test options
+        freq.forEach((f) => {
+          const option = document.createElement("option");
+          option.value = f; // or test.id, based on your API data
+          option.textContent = f;
+          if (f === frequency) {
+            option.setAttribute("selected", true);
+          }
+          selectDropdown.appendChild(option);
+        });
+
+        // populatePrescriptions();
+      }
+      // Function to remove a row
+      function removePrescriptionRow(button) {
+        const row = button.closest("tr");
+        if (row) {
+          row.remove();
+        }
+      }
+
+      const fetchDisease = async (dis) => {
+        try {
+          const response = await axios.get(`/getDisease?name=${dis}`);
+          if (response.status >= 400) {
+            alert("Disease of this name already exists");
+            document.getElementById("disease").value = "";
+            return;
+          }
+        } catch (error) {
+          console.error("Error fetching disease data:", error);
+        }
+      };
+
+      document.getElementById("disease").addEventListener("change", () => {
+        const name = document.getElementById("disease").value;
+        fetchDisease(name);
+      });
+
+      function collectTests() {
+        let testData = [];
+        document
+          .querySelectorAll('select[name="selectTest[]"]')
+          .forEach((d) => {
+            const selectedTest = d.value;
+            if (testData.includes(selectedTest)) {
+              return;
+            }
+            testData.push(selectedTest);
+          });
+        console.log(testData);
+        return testData;
+      }
+
+      function collecSymptoms() {
+        const sym = [];
+        document.querySelectorAll("input[name='complaints']").forEach((d) => {
+          const str = d.value;
+          sym.push(str);
+        });
+        console.log(sym);
+        return sym;
+      }
+
+      function collectPrescriptionData() {
+        const prescriptions = [];
+        const rows = document.querySelectorAll("#prescriptionTable tr");
+        console.log(rows);
+
+        rows.forEach((row) => {
+          const drug = row.querySelector('input[name="drug"]')?.value;
+          const dose = row.querySelector('input[name="dose"]')?.value;
+          const frequency = row.querySelector(
+            'select[name="frequency"]'
+          )?.value;
+          const days = row.querySelector('input[name="days"]')?.value;
+          console.log(drug, frequency, days, dose);
+
+          if (drug && dose && frequency && days) {
+            prescriptions.push({
+              drug,
+              dose: parseInt(dose, 10),
+              frequency,
+              days: parseInt(days, 10),
+            });
+          }
+        });
+
+        console.log(prescriptions);
+        return prescriptions;
+      }
+      document.getElementById("sub-btn").addEventListener("click", async () => {
+        const params = new URLSearchParams(window.location.search);
+        console.log("hello");
+        const id = params.get("id");
+        let disease = document.getElementById("disease").value;
+        let tests = collectTests();
+        let medicine = collectPrescriptionData();
+        let symptoms = collecSymptoms();
+        const response = await fetch("/saveDisease", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            disease,
+            tests,
+            medicine,
+            symptoms,
+          }),
+        });
+        if (response.ok) {
+          $("#sucs1").modal("show");
+        } else {
+          if (response.status === 401) alert("Desease already exist");
+        }
+      });
+
+      let prescriptionsData = []; // Parsed from server data
+      let prescribedComment = ""; // Latest prescription comment
+
+      //   try {
+      //     // Wrap JSON.stringify in single quotes to pass as a valid JavaScript string
+      //     const prescriptionsData = JSON.parse(
+      //       "<%- JSON.stringify(prescriptions) %>"
+      //     );
+      //     console.log("Parsed data:", prescriptionsData);
+      //   } catch (error) {
+      //     console.error("Error parsing prescriptions data:", error);
+      //   }
+
+      function populatePrescriptions() {
+        const previousContainer = document.getElementById(
+          "previousPrescriptionsContainer"
+        );
+        // const commentField = document.getElementById("prescribedComment"); // Latest comment input field
+
+        // Clear any existing content
+        previousContainer.innerHTML = "";
+
+        // Check if there are no prescriptions
+        if (
+          !prescriptionsData ||
+          prescriptionsData.length === 0 ||
+          prescriptionsData.every((entry) => entry.prescriptions.length === 0)
+        ) {
+          previousContainer.innerHTML = "<p>No Medicine Prescribed.</p>";
+          return;
+        }
+
+        // Populate the latest prescription comment if available
+        // commentField.value = prescribedComment || "";
+
+        // Display each prescription entry grouped by date
+        prescriptionsData.forEach((entry, index) => {
+          const entryDiv = document.createElement("div");
+          entryDiv.classList.add("mb-4", "p-3", "border", "rounded");
+          entryDiv.setAttribute("id", `prescriptionEntry-${index}`);
+
+          // Display the date
+          const date = new Date(entry.createdAt).toLocaleDateString();
+          const dateParagraph = document.createElement("p");
+          dateParagraph.classList.add("font-weight-bold");
+          dateParagraph.innerText = `${formatDate(date)}`;
+          entryDiv.appendChild(dateParagraph);
+
+          // Table for prescriptions
+          const table = document.createElement("table");
+          table.classList.add(
+            "table",
+            "table-bordered",
+            "prescription-table",
+            "table-responsive",
+            "ft14"
+          );
+          table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Drug/Molecule</th>
+                    <th>Dose</th>
+                    <th>Frequency</th>
+                    <th>Days</th>
+                </tr>
+            </thead>
+        `;
+
+          const tbody = document.createElement("tbody");
+
+          entry.prescriptions.forEach((prescription) => {
+            console.log("dfd", prescription);
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${prescription.drug}</td>
+                <td>${prescription.dose}</td>
+                <td>${prescription.frequency}</td>
+                <td>${prescription.days}</td>
+            `;
+            tbody.appendChild(row);
+          });
+
+          table.appendChild(tbody);
+          entryDiv.appendChild(table);
+
+          // Only display the comment if there is one
+          if (entry.prescribedComment) {
+            const commentDiv = document.createElement("div");
+            commentDiv.classList.add("mt-2");
+            commentDiv.innerHTML = `<strong>Comment:</strong> ${entry.prescribedComment}`;
+            entryDiv.appendChild(commentDiv);
+          }
+
+          // Add a print button for each prescription entry
+          const printButton = document.createElement("button");
+          printButton.classList.add("btn", "btn-primary", "btn-style", "mt-2");
+          printButton.innerHTML = `<i class="fa-solid fa-print"></i> Print Prescription`;
+          printButton.setAttribute(
+            "onclick",
+            `printPrescription('prescriptionEntry-${index}')`
+          );
+          entryDiv.appendChild(printButton);
+
+          // Append the entry to the previous prescriptions container
+          previousContainer.appendChild(entryDiv);
+        });
+      }
+    </script>
+    <script>
+      const params = new URLSearchParams(window.location.search); // Get search parameters from URL
+      const fetchAllData = async (id) => {
+        try {
+          const response = await fetch(`/diseaseSelect?id=${id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+
+          if (data.disease) {
+            document.getElementById("disease").value = data.disease.name;
+            document.getElementById("disease").disabled = true;
+            document.getElementById("tstadd").disabled = true;
+            document.getElementById("prescriptionAdd").disabled = true;
+            document.getElementById("sub-btn").disabled = true;
+            document.getElementById("mod-btn").disabled = false;
+            document.getElementById("description").remove();
+            document.getElementById("plsButton").remove();
+          }
+          if (data.complaints && data.complaints.length) {
+            data.complaints[0].complaints.forEach((p) => {
+              addnrow("com", p);
+            });
+          }
+          if (data.tests && data.tests.length) {
+            data.tests.forEach((test) => {
+              addTestRow(test.name);
+            });
+          }
+
+          if (data.medicines && data.medicines.length) {
+            data.medicines.forEach((medicine) => {
+              addNewPrescriptionRow(
+                medicine.name.drug,
+                medicine.name.dose,
+                medicine.name.frequency,
+                medicine.name.days,
+                true
+              );
+            });
+          }
+
+          //   console.log(data);
+          //   prescriptionsData = data.prescriptions;
+          //   prescribedComment = data.prescribedComment;
+          populatePrescriptions();
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      const id = params.get("id");
+      if (id) {
+        fetchAllData(id);
+      }
+      function enableAllDisabledElements() {
+        // Select all disabled buttons, textareas, and input fields
+        const disabledElements = document.querySelectorAll(
+          "button:disabled, textarea:disabled, input:disabled, select:disabled"
+        );
+
+        // Loop through and enable each element
+        disabledElements.forEach((element) => {
+          element.disabled = false;
+        });
+
+        console.log(`${disabledElements.length} elements have been enabled.`);
+      }
+      document.getElementById("mod-btn").addEventListener("click", () => {
+        enableAllDisabledElements();
+      });
+    </script>
+  </head>
+</html>

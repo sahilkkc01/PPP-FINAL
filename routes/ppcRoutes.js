@@ -161,7 +161,7 @@ router.get("/1", async (req, res) => {
       if (user) {
         req.user = decoded; // Attach user details to req.user
         res.locals.user = req.user; // Make user available in templates
-        return res.redirect(200,"/patients", {
+        return res.redirect(200, "/patients", {
           name: decoded.username,
         });
       } else {
@@ -654,7 +654,6 @@ router.get("/printBill", async (req, res) => {
   }
 });
 
-
 router.get("/printEmr", async (req, res) => {
   try {
     // Get visitId from query parameters
@@ -706,7 +705,7 @@ router.get("/printEmr", async (req, res) => {
         try {
           return complaint.complaints;
         } catch (e) {
-          console.error('Error parsing complaint:', e);
+          console.error("Error parsing complaint:", e);
           return [];
         }
       })
@@ -734,7 +733,7 @@ router.get("/printEmr", async (req, res) => {
         try {
           return prescription.prescriptions;
         } catch (e) {
-          console.error('Error parsing prescription:', e);
+          console.error("Error parsing prescription:", e);
           return [];
         }
       })
@@ -754,13 +753,13 @@ router.get("/printEmr", async (req, res) => {
       },
     });
     // Parse the EMR history results
-const parsedEmrHistory = emrHistory.map((history) => ({
-  id: history.dataValues.id,
-  patientId: history.dataValues.patientId,
-  details: history.dataValues.history,
-  createdAt: new Date(history.dataValues.createdAt).toLocaleString(),
-  updatedAt: new Date(history.dataValues.updatedAt).toLocaleString(),
-}));
+    const parsedEmrHistory = emrHistory.map((history) => ({
+      id: history.dataValues.id,
+      patientId: history.dataValues.patientId,
+      details: history.dataValues.history,
+      createdAt: new Date(history.dataValues.createdAt).toLocaleString(),
+      updatedAt: new Date(history.dataValues.updatedAt).toLocaleString(),
+    }));
 
     console.log("EMR History:", parsedEmrHistory);
 
@@ -790,7 +789,7 @@ const parsedEmrHistory = emrHistory.map((history) => ({
           updatedAt: new Date(test.updatedAt).toLocaleString(), // Format updatedAt
         };
       } catch (e) {
-        console.error('Error parsing recommended test:', e);
+        console.error("Error parsing recommended test:", e);
         return [];
       }
     });
@@ -810,7 +809,9 @@ const parsedEmrHistory = emrHistory.map((history) => ({
 
     // If no next follow-up is found, set it to null or a default value
     const followUpDate = nextFollowUp
-      ? `${new Date(nextFollowUp.date).toLocaleDateString()} at ${nextFollowUp.time}`
+      ? `${new Date(nextFollowUp.date).toLocaleDateString()} at ${
+          nextFollowUp.time
+        }`
       : "N/A";
     console.log("Follow-Up Date:", followUpDate);
 
@@ -830,9 +831,6 @@ const parsedEmrHistory = emrHistory.map((history) => ({
     res.status(500).json({ error: "An error occurred while fetching data." });
   }
 });
-
-
-
 
 router.get("/purchaseClient", (req, res) => {
   res.render("PPC/purchaseClient");

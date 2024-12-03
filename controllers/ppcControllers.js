@@ -285,7 +285,7 @@ const savePatient = async (req, res) => {
       // Create new patient record
       const newPatient = await Patient.create({
         ...updateFields,
-        code, 
+        code,
         clinicid: req.session.clinicId || 0,
       });
 
@@ -386,11 +386,15 @@ const saveStaff = async (req, res) => {
 
   try {
     // Extracting fields from request body
-    const { query, clinicid, code, role, userId, password, ...updateFields } = req.body;
-    
+    const { query, clinicid, code, role, userId, password, ...updateFields } =
+      req.body;
+
     // Decrypt the clinicid
-    const decryptedClinicId = decryptData(decodeURIComponent(clinicid), "llppc");
-    console.log('dec',decryptedClinicId)
+    const decryptedClinicId = decryptData(
+      decodeURIComponent(clinicid),
+      "llppc"
+    );
+    console.log("dec", decryptedClinicId);
     updateFields.clinicId = decryptedClinicId; // Add decrypted clinicId to updateFields
 
     // Encrypt the password
@@ -412,14 +416,13 @@ const saveStaff = async (req, res) => {
     } else {
       // Check for duplicate 'code' or 'userId' before creating a new record
       const existingStaff = await Staff.findOne({
-        where: { 
+        where: {
           [Op.or]: [{ code }, { userId }],
-      
         },
       });
 
       if (existingStaff) {
-        const conflictField = existingStaff.code === code ? 'code' : 'userId';
+        const conflictField = existingStaff.code === code ? "code" : "userId";
         return res.status(409).json({
           message: `A Staff with this ${conflictField} already exists in this clinic.`,
         });
@@ -430,18 +433,17 @@ const saveStaff = async (req, res) => {
       req.body.password = encryptedPassword; // Store the encrypted password
       req.body.clinicid = decryptedClinicId; // Add clinicId to the request body
 
-    
       // Create new record if no duplicate is found
       await Staff.create(req.body);
       res.status(200).json({ message: "Data saved successfully!" });
     }
   } catch (error) {
     console.error("Error saving data:", error);
-    res.status(500).json({ message: "Error saving data", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error saving data", error: error.message });
   }
 };
-
-
 
 const saveSymptoms = async (req, res) => {
   console.log("Form Data:", req.body);
@@ -1207,7 +1209,6 @@ const saveVisit = async (req, res) => {
     const decryptedId = decryptData(decodeURIComponent(patientId), "llppc");
     const decryptedDoctorId = decryptData(decodeURIComponent(doctor), "llppc");
 
-
     // Validate required fields
     if (!decryptedId || !visitDate || !visitTime) {
       return res.status(400).json({
@@ -1844,7 +1845,7 @@ const getVisits = async (req, res) => {
     const startOfPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
     // Base query conditions
-    const baseConditions = patientId
+    let baseConditions = patientId
       ? { patientId: parseInt(patientId, 10) }
       : {};
 
@@ -2832,7 +2833,7 @@ const getDoctorNotification = async (req, res) => {
   }
 };
 
-const   setDeseaseTable = async (req, res) => {
+const setDeseaseTable = async (req, res) => {
   try {
     const { disease, symptoms, tests, medicine, id } = req.body;
     if (id) {
@@ -3008,8 +3009,6 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
-
-
 const uploadExcelItem = async (req, res) => {
   try {
     if (!req.file) {
@@ -3114,5 +3113,5 @@ module.exports = {
   getDisease,
   getAllpointsDisease,
   getAllAppointments,
-  uploadExcelItem
+  uploadExcelItem,
 };

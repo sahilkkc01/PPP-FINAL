@@ -321,7 +321,6 @@ const Visit = sequelize.define(
     sugar: DataTypes.STRING,
     bmi: DataTypes.STRING,
     doctor: DataTypes.STRING,
-
   },
   {
     tableName: "visit",
@@ -816,35 +815,38 @@ const SMSTemplate = sequelize.define(
   }
 );
 
-const DoctorTimeTable = sequelize.define("DoctorTimeTable", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+const DoctorTimeTable = sequelize.define(
+  "DoctorTimeTable",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    doctorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    dayType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    slotTiming: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    timeTable: {
+      type: DataTypes.JSON,
+      allowNull: false,
+      defaultValue: [],
+    },
   },
-  doctorId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  dayType: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  slotTiming: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  timeTable: {
-    type: DataTypes.JSON,
-    allowNull: false,
-    defaultValue: [],
-  },
-},
-{
-  timestamps: true, // If you want to manage the timestamps manually
-  tableName: "doctortimetables",
-});
-DoctorTimeTable.sync()
+  {
+    timestamps: true, // If you want to manage the timestamps manually
+    tableName: "doctortimetables",
+  }
+);
+DoctorTimeTable.sync();
 const CodeFormat = sequelize.define(
   "CodeFormat",
   {
@@ -998,7 +1000,7 @@ const MedicineTable = sequelize.define(
 
 // UserTokens.sync({ alter: true });
 
-//sequelize.sync()
+// sequelize.sync({ alter: true });
 
 module.exports = {
   UserTokens,
