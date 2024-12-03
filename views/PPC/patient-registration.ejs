@@ -644,6 +644,7 @@
 
         return `${year}-${month}-${day}`;
       }
+
       let appointments = null;
       const days = [
         "Sunday",
@@ -691,13 +692,18 @@
         let notAvailableSlots = [];
         if (appointments && appointments.length) {
           appointments.forEach((a) => {
-            const date = a.date.split("T")[0]; // Create a Date object from the input string
-            // const dayIndex = thisDate.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
-            // const thisDay = days[dayIndex];
-            console.log("DATE COMPARISON ", date, ":", getNextDateForDay(day));
+            if (a.date !== "" || a.date !== null || a.date !== undefined) {
+              const date = a.date.split("T")[0];
+              console.log(
+                "DATE COMPARISON ",
+                date,
+                ":",
+                getNextDateForDay(day)
+              );
 
-            if (date === getNextDateForDay(day)) {
-              notAvailableSlots.push(a.time);
+              if (date === getNextDateForDay(day)) {
+                notAvailableSlots.push(a.time);
+              }
             }
           });
         }
