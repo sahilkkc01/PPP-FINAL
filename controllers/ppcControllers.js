@@ -4,8 +4,7 @@ const CryptoJS = require("crypto-js");
 const { Op, Sequelize } = require("sequelize");
 const crypto = require("crypto");
 const sjcl = require("sjcl");
-const XLSX = require("xlsx");
-const path = require("path");
+const nodemailer = require("nodemailer");
 
 // Encryption function
 function encryptDataForUrl(data) {
@@ -43,6 +42,7 @@ function getNextDateForDay(dayName) {
 
   const currentDayIndex = new Date().getDay(); // Current day index (0-6)
   const targetDayIndex = daysOfWeek[dayName]; // Target day index
+  console.log(dayName);
 
   if (targetDayIndex === undefined) {
     throw new Error(
@@ -105,6 +105,7 @@ const {
   TestsTable,
   MedicineTable,
 } = require("../models/ppcModels"); // Adjust the import based on your model files
+const path = require("path");
 
 const saveClinic = async (req, res) => {
   console.log("Form Data:", req.body);
@@ -195,13 +196,32 @@ const saveDoctor = async (req, res) => {
         });
         Object.entries(timeTable).forEach(([key, value]) => {
           console.log(key, value);
-
-          tableData.push({
-            doctorId: updatedDoctor.id,
-            dayType: key,
-            timeTable: value,
-            slotTiming: parseInt(req.body.timeSlot),
-          });
+          if (key === "All") {
+            const days = [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ];
+            days.forEach((day) => {
+              tableData.push({
+                doctorId: updatedDoctor.id,
+                dayType: day,
+                timeTable: value,
+                slotTiming: parseInt(req.body.timeSlot),
+              });
+            });
+          } else {
+            tableData.push({
+              doctorId: updatedDoctor.id,
+              dayType: key,
+              timeTable: value,
+              slotTiming: parseInt(req.body.timeSlot),
+            });
+          }
         });
         console.log(tableData, "hello", req.body.timeSlot);
 
@@ -286,7 +306,7 @@ const savePatient = async (req, res) => {
       const newPatient = await Patient.create({
         ...updateFields,
         code,
-        clinicid: req.session.clinicId || 0,
+        clinicid: req.session.clinicId || cid,
       });
 
       // Save the examination data in the EmrExamination table
@@ -385,17 +405,7 @@ const saveStaff = async (req, res) => {
   console.log("Form Data:", req.body);
 
   try {
-    // Extracting fields from request body
-    const { query, clinicid, code, role, userId, password, ...updateFields } =
-      req.body;
-
-    // Decrypt the clinicid
-    const decryptedClinicId = decryptData(
-      decodeURIComponent(clinicid),
-      "llppc"
-    );
-    console.log("dec", decryptedClinicId);
-    updateFields.clinicId = decryptedClinicId; // Add decrypted clinicId to updateFields
+    const { query, code, role, password, ...updateFields } = req.body;
 
     // Encrypt the password
     const encryptedPassword = md5(password);
@@ -405,7 +415,7 @@ const saveStaff = async (req, res) => {
       // Update record if query is 1
       const [updated] = await Staff.update(
         updateFields, // Use dynamic fields for updating
-        { where: { code, clinicId: decryptedClinicId } } // Condition to find the record by clinicId as well
+        { where: { code } } // Condition to find the record
       );
 
       if (updated) {
@@ -414,24 +424,18 @@ const saveStaff = async (req, res) => {
         res.status(404).json({ message: "Staff not found for update." });
       }
     } else {
-      // Check for duplicate 'code' or 'userId' before creating a new record
-      const existingStaff = await Staff.findOne({
-        where: {
-          [Op.or]: [{ code }, { userId }],
-        },
-      });
+      // Check for duplicate 'code' before creating a new record
+      const existingStaff = await Staff.findOne({ where: { code } });
 
       if (existingStaff) {
-        const conflictField = existingStaff.code === code ? "code" : "userId";
-        return res.status(409).json({
-          message: `A Staff with this ${conflictField} already exists in this clinic.`,
-        });
+        return res
+          .status(409)
+          .json({ message: "A Staff with this code already exists." });
       }
 
       // Add parsed role and encrypted password to req.body for new record creation
       req.body.role = updateFields.role;
       req.body.password = encryptedPassword; // Store the encrypted password
-      req.body.clinicid = decryptedClinicId; // Add clinicId to the request body
 
       // Create new record if no duplicate is found
       await Staff.create(req.body);
@@ -1207,7 +1211,6 @@ const saveVisit = async (req, res) => {
 
     // Decrypt the patient ID
     const decryptedId = decryptData(decodeURIComponent(patientId), "llppc");
-    const decryptedDoctorId = decryptData(decodeURIComponent(doctor), "llppc");
 
     // Validate required fields
     if (!decryptedId || !visitDate || !visitTime) {
@@ -1216,10 +1219,6 @@ const saveVisit = async (req, res) => {
       });
     }
 
-    const doctorDetails = await Doctors.findOne({
-      where: { id: decryptedDoctorId },
-      attributes: ["name"], // Fetch only the name to reduce data retrieval
-    });
     // Save the visit in the database
     const newVisit = await Visit.create({
       patientId: decryptedId,
@@ -1230,7 +1229,6 @@ const saveVisit = async (req, res) => {
       bp,
       sugar,
       bmi,
-      doctor: doctorDetails.name,
     });
 
     const appointment = await Appointment.create({
@@ -1246,6 +1244,7 @@ const saveVisit = async (req, res) => {
       visit: newVisit,
       appointment: appointment,
     });
+    await sendEmailTemplate(decryptedId, "send", req);
   } catch (error) {
     console.error("Error saving visit:", error);
     res
@@ -1257,7 +1256,7 @@ const saveVisit = async (req, res) => {
 const saveAppointment = async (req, res) => {
   console.log("Received data:", req.body);
   try {
-    const { patientId, appointmentDate } = req.body;
+    const { patientId, appointmentDate, doctorId } = req.body;
     const decryptedId = decryptData(decodeURIComponent(patientId), "llppc");
 
     // Validate required fields
@@ -1275,6 +1274,7 @@ const saveAppointment = async (req, res) => {
       patientId: patientId,
       date: appointmentDate,
       time: currentTime,
+      doctorId,
     });
 
     // Send a success response
@@ -3001,13 +3001,104 @@ const getAllpointsDisease = async (req, res) => {
 
 const getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.findAll();
+    const { id } = req.query;
+    let whereC = null;
+    let appointments = null;
+    const today = new Date().toISOString().split("T")[0];
+    if (id) {
+      let dId = decryptData(decodeURIComponent(id), "llppc");
+      whereC = {
+        patientId: dId,
+        date: {
+          [Op.gte]: today, // Ensure we're checking for today (date only)
+          [Op.lt]: new Date(new Date().setDate(new Date().getDate() + 1))
+            .toISOString()
+            .split("T")[0], // Ensure it's before tomorrow
+        },
+      };
+      appointments = await Appointment.findOne({
+        where: whereC,
+      });
+    } else {
+      whereC = {
+        date: {
+          [Op.gte]: today, // Ensure we're checking for today (date only)
+          [Op.lt]: new Date(new Date().setDate(new Date().getDate() + 1))
+            .toISOString()
+            .split("T")[0], // Ensure it's before tomorrow
+        },
+      };
+      appointments = await Appointment.findAll({
+        where: whereC,
+      });
+    }
+    // const allAppointments = await Appointment.findAll();
+
     return res.status(200).json(appointments);
   } catch (err) {
     console.error("Error fetching appointments:", err);
     return res.status(500).json({ msg: "Error during appointments fetch" });
   }
 };
+
+const cancelAppointment = async (req, res) => {
+  const { id } = req.query;
+  const decodeDId = decryptData(decodeURIComponent(id), "llppc");
+  if (!id) {
+    return res.status(400).json({ message: "Please provide appointment id." });
+  }
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    console.log(
+      "TOday: ",
+      today,
+      " : ",
+      new Date(new Date().setDate(new Date().getDate() + 1))
+        .toISOString()
+        .split("T")[0]
+    );
+
+    const appointment = await Appointment.findOne({
+      where: {
+        patientId: decodeDId,
+        date: {
+          [Op.gte]: today, // Ensure we're checking for today (date only)
+          [Op.lt]: new Date(new Date().setDate(new Date().getDate() + 1))
+            .toISOString()
+            .split("T")[0], // Ensure it's before tomorrow
+        },
+      },
+    });
+    const visit = await Visit.findOne({
+      where: {
+        patientId: decodeDId,
+        date: {
+          [Op.gte]: today, // Ensure we're checking for today (date only)
+          [Op.lt]: new Date(new Date().setDate(new Date().getDate() + 1))
+            .toISOString()
+            .split("T")[0], // Ensure it's before tomorrow
+        },
+      },
+    });
+
+    if (!appointment || !visit) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+    await appointment.destroy();
+    await visit.destroy();
+    await sendEmailTemplate(decodeDId, "cancel", req);
+    return res
+      .status(200)
+      .json({ message: "Appointment cancelled successfully" });
+  } catch (err) {
+    console.error("Error cancelling appointment:", err);
+    return res
+      .status(500)
+      .json({ msg: "Error during appointment cancellation" });
+  }
+};
+
+const XLSX = require("xlsx");
 
 const uploadExcelItem = async (req, res) => {
   try {
@@ -3050,6 +3141,95 @@ const uploadExcelItem = async (req, res) => {
       .status(500)
       .json({ message: "Error processing file", error: error.message });
   }
+};
+
+const sendMail = async (sender, recipient, subject, text, html) => {
+  try {
+    // Configure the transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // Use any email service (e.g., Gmail, Outlook)
+      auth: {
+        user: "wtf.lakshya145@gmail.com", // Set your email user in environment variables
+        pass: "vwaxirfazdyewvkq", // Set your email password in environment variables
+      },
+    });
+
+    // Define the email options
+    const mailOptions = {
+      from: sender,
+      to: recipient,
+      subject,
+      text,
+      html,
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent: ", info.response);
+    return info;
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    throw error;
+  }
+};
+
+const sendEmailTemplate = async (id, type, req) => {
+  try {
+    if (!id) {
+      return res.status(400).json({ message: "Please provide patient id." });
+    }
+    const patient = await Patient.findByPk(id);
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found." });
+    }
+    const template = await SMSTemplate.findOne({
+      where: {
+        clinicid: req.session.clinicId,
+      },
+    });
+    if (!template) {
+      console.log("No template found");
+    }
+    let temp = "";
+    let from = "wtf.lakshya145@gmail.com";
+    if (type === "cancel") temp = template.canEmailTemp;
+    else temp = template.confEmailTemp;
+    if (type === "cancel") {
+      await sendMail(
+        from,
+        // patient.email,
+        "ayushdnfd1679@gmail.com",
+        "Appointment Cancel",
+        "Email for notiifying for cancelation of appointment",
+        temp
+      );
+    } else {
+      await sendMail(
+        from,
+        "ayushdnfd1679@gmail.com",
+        "Appointment Confirmation",
+        "Email for notiifying for appointment confirmation",
+        temp
+      );
+    }
+    console.log("Email sent successfully");
+  } catch (err) {
+    console.error("Error sending email template: ", err);
+  }
+};
+
+const downloadData = async (req, res) => {
+  const filePath = path.join(__dirname, "../public/MyUploads", "MOCK_DATA.csv");
+
+  // Check if the file exists
+  res.download(filePath, "example.csv", (err) => {
+    if (err) {
+      console.error("Error sending file:", err);
+      res.status(500).send("Error downloading the file");
+    } else {
+      console.log("File sent successfully");
+    }
+  });
 };
 
 // Export all the controller functions
@@ -3113,5 +3293,7 @@ module.exports = {
   getDisease,
   getAllpointsDisease,
   getAllAppointments,
+  cancelAppointment,
   uploadExcelItem,
+  downloadData,
 };

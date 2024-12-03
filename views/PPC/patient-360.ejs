@@ -64,6 +64,24 @@
                   >
                     Mark Visit
                   </button>
+                  <button
+                    href="#"
+                    class="btn btn-danger me-2 mr-1"
+                    style="display: none"
+                    id="cancelVisit"
+                  >
+                    Cancel Visit
+                  </button>
+                  <button
+                    href="#"
+                    class="btn btn-primary me-2 mr-1"
+                    style="display: none"
+                    id="resch_visit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#markVisitModal"
+                  >
+                    Reschedule Visit
+                  </button>
                 </div>
               </div>
 
@@ -331,8 +349,21 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="saveVisit()">
+            <button
+              type="button"
+              id="mk_id"
+              class="btn btn-primary"
+              onclick="saveVisit()"
+            >
               Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="rsch_id"
+              style="display: none"
+            >
+              Reschedule
             </button>
           </div>
         </div>
@@ -499,13 +530,14 @@
         fetchPatientBills(item.id);
         fetchPatientAppointments(item.id);
         fetchPatientVisits(item.id);
+        fetchAppointment(item.id);
       }
 
       // Fetch patient bills
       async function fetchPatientBills(patientId) {
         try {
           const response = await axios.get(
-            `/getPatientBills/?patientId=${patientId}`
+            `/getPatientBills?patientId=${patientId}`
           );
           const bills = response.data;
           const billsTableBody = document.getElementById("billsTableBody");
@@ -568,6 +600,51 @@
           console.error("Error fetching patient appointments:", error);
         }
       }
+
+      const fetchAppointment = async (patientId) => {
+        const response = await fetch(`/getAllAppointments?id=${patientId}`);
+        const data = await response.json();
+        console.log("Data :", data);
+        if (data && data.id) {
+          document.getElementById("markVisit").style.display = "none";
+          document.getElementById("mk_id").style.display = "none";
+          document.getElementById("rsch_id").style.display = "";
+          document.getElementById("cancelVisit").style.display = "";
+          document.getElementById("resch_visit").style.display = "";
+          document
+            .getElementById("cancelVisit")
+            .addEventListener("click", () => {
+              let conf = confirm("Are you sure you want to delete it: ");
+              if (conf) {
+                cancelApp(patientId);
+              }
+              // cancelApp(patientId);
+              // fetchAppointment();
+            });
+          document.getElementById("rsch_id").addEventListener("click", () => {
+            let conf = confirm("Are you sure you want to reschedule it: ");
+            if (conf) {
+              cancelApp(patientId);
+              saveVisit();
+            }
+          });
+        }
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchAppointment();
+      });
+
+      const cancelApp = async (id) => {
+        try {
+          const response = await fetch(`/cancelAppointment?id=${id}`, {
+            method: "DELETE",
+          });
+          const data = await response.json();
+          console.log("Cancel appointments:", data);
+        } catch (error) {
+          console.error("Error cancelling appointments:", error);
+        }
+      };
 
       // Fetch patient appointments
       async function fetchPatientVisits(patientId) {
@@ -693,9 +770,7 @@
         let notAvailableSlots = [];
         if (appointments && appointments.length) {
           appointments.forEach((a) => {
-            const thisDate = new Date(a.date).toDateString().split("T")[0]; // Create a Date object from the input string
-            // const dayIndex = thisDate.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
-            // const thisDay = days[dayIndex];
+            const thisDate = new Date(a.date).toDateString().split("T")[0];
             if (thisDate === date.toDateString().split("T")[0]) {
               notAvailableSlots.push(a.time);
             }
@@ -782,8 +857,7 @@
       const fetchTimeTable = async (id) => {
         try {
           const selectElement = document.getElementById("visitTime");
-          if (!selectElement) return;
-          selectElement.innerHTML = "";
+
           // Fetch the timetable data based on the given ID
           const date = new Date(); // Create a Date object from the input string
           const dayIndex = date.getDay(); // Get the day index (0 for Sunday, 6 for Saturday)
@@ -800,6 +874,8 @@
           if (!timeTable) {
             return;
           }
+
+          selectElement.innerHTML = "";
 
           timeTable.forEach((day) => {
             if (day.dayType === val) {
@@ -851,7 +927,6 @@
 
       // Call the function to populate the dropdown
       fetchDoctor();
-      document.getElementById("day").addEventListener("change", () => {});
     </script>
   </head>
 </html>

@@ -8,44 +8,19 @@
     />
 
     <title>Add Patient - LifeLinkr</title>
+    <link rel="stylesheet" href="../stylesheets/style-starter.css?v=0.2" />
+    <link rel="stylesheet" href="../stylesheets/style.css?v=0.1" />
 
-    <%-include('../header'); -%>
-    <div
-      class="modal fade"
-      id="myModal"
-      tabindex="-1"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div
-            style="display: flex; justify-content: center"
-            class="modal-header"
-          >
-            <h5 class="modal-title" id="myModalLabel">SCAN Qr</h5>
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-          </div>
-          <div
-            id="qrCode"
-            style="display: flex; justify-content: center"
-            class="modal-body"
-          >
-            <!-- <img src="" alt="qrCode" id="qr"> -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-          
-    </div>
+    <!-- google fonts -->
+    <link
+      href="//fonts.googleapis.com/css?family=Montserrat:300,400,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+
     <!-- main content start -->
 
     <!-- content -->
@@ -432,16 +407,6 @@
                     <div class="text-right">
                       <button
                         type="button"
-                        onclick="generateQRCode()"
-                        data-bs-toggle="modal"
-                        data-bs-target="#myModal"
-                        class="btn btn-primary btn-style mt-3 mr-3"
-                      >
-                        <i class="fa-regular fa-pen-to-square"></i>
-                        SCAN QR
-                      </button>
-                      <button
-                        type="button"
                         onclick="updateQuery()"
                         id="mod-btn"
                         class="btn btn-primary btn-style mt-3 mr-3"
@@ -473,8 +438,8 @@
       </div>
       <!-- //charts -->
     </div>
-
     <%-include('../footer'); -%>
+
     <script>
       // Function to calculate BMI
       function calculateBMI() {
@@ -508,33 +473,6 @@
     </script>
 
     <script>
-      function updateQuery() {
-        document.getElementById("query").value = 1;
-        $("#mod-btn").prop("disabled", true);
-        $("input, select").prop("disabled", false);
-        $("#code").prop("readonly", true);
-        document.getElementById("sub-btn").disabled = false;
-      }
-
-      if ("<%= data.id %>" !== "") {
-        $("input, select").prop("disabled", true);
-        document.getElementById("sub-btn").disabled = true;
-        document.getElementById("mod-btn").disabled = false;
-        document.getElementById("code").value = "<%=data.code%>";
-        document.getElementById("name").value = "<%=data.name%>";
-        document.getElementById("email").value = "<%=data.email%>";
-        document.getElementById("mobile").value = "<%=data.mobile%>";
-        document.getElementById("age").value = "<%=data.age%>";
-        document.getElementById("weight_Kg").value = "<%=data.weight_Kg%>";
-        document.getElementById("height_Feet").value = "<%=data.height_Feet%>";
-        document.getElementById("gender").value = "<%=data.gender%>";
-        document.getElementById("address").value = "<%=data.address%>";
-      } else {
-        document.getElementById("mod-btn").disabled = true;
-      }
-    </script>
-
-    <script>
       const params = new URLSearchParams(window.location.search);
       $(document).ready(function () {
         console.log("Document is ready");
@@ -543,15 +481,15 @@
           event.preventDefault();
           const { isValid, errorMessage } = validateForm(formId);
           const errorDivId = "#errordiv";
-          // let cid = params.get("cid");
-          // console.log(cid);
+          let cid = params.get("cid");
+          console.log(cid);
 
           if (isValid) {
-            const url = "/savePatient";
+            const url = "/qrpatient";
             const loadingDiv = "#loadingIndicator";
             const formData = new FormData(this);
 
-            // formData.append("cid", cid);
+            formData.append("cid", cid);
 
             // Log the form data entries for debugging
             const dataArray = Array.from(formData.entries());
@@ -833,6 +771,8 @@
         }
       };
 
+      document.getElementById("footmenu").style.display = "none";
+
       document.getElementById("doctor").addEventListener("change", () => {
         const id = document.getElementById("doctor").value;
         fetchTimeTable(id);
@@ -894,24 +834,6 @@
           });
         }
       });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script>
-      let cid = params.get("cid");
-      if (cid) {
-        document.getElementById("qrCode").disabled = true;
-      }
-      function generateQRCode() {
-        const qrCodeContainer = document.getElementById("qrCode");
-        const uploadUrl = `${window.location.origin}/qr-registration?cid=<%=clinicId %>`;
-
-        qrCodeContainer.innerHTML = ""; // Clear any previous QR code
-        new QRCode(qrCodeContainer, {
-          text: uploadUrl,
-          width: 200,
-          height: 200,
-        });
-      }
     </script>
   </head>
 </html>

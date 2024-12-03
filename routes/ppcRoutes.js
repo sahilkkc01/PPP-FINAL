@@ -78,6 +78,8 @@ const {
   getAllpointsDisease,
   getAllAppointments,
   uploadExcelItem,
+  cancelAppointment,
+  downloadData,
 } = require("../controllers/ppcControllers");
 const {
   my_Notes: Note,
@@ -183,6 +185,7 @@ router.get("/qr-registration", async (req, res) => {
   try {
     const { cid } = req.query; // Get clinic ID from query
     res.locals.username = "Doctor";
+    res.locals.doctor = null;
 
     if (!cid) {
       console.warn("Missing clinic ID in query.");
@@ -408,6 +411,8 @@ router.get("/patient-emr", async (req, res) => {
     try {
       // Fetch the patient data by primary key
       const patientData = await Patient.findByPk(decryptedId);
+      let Doctorname = "";
+      let doctorId = "";
 
       // If no patient data found, send an empty response
       if (!patientData) {
@@ -419,6 +424,8 @@ router.get("/patient-emr", async (req, res) => {
           prescriptions: [],
           tests: [],
           visitSaved: false,
+          Doctorname: "",
+          doctorId: "",
           username: userDetails.username,
         });
       }
@@ -438,6 +445,24 @@ router.get("/patient-emr", async (req, res) => {
           },
         },
       });
+
+      const appointment = await Appointment.findOne({
+        where: {
+          patientId: decryptedId,
+          date: {
+            [Op.gte]: today, // Ensure we're checking for today (date only)
+            [Op.lt]: new Date(new Date().setDate(new Date().getDate() + 1))
+              .toISOString()
+              .split("T")[0], // Ensure it's before tomorrow
+          },
+        },
+        attributes: ["doctorId"],
+      });
+      if (appointment) {
+        const doctor = await Doctors.findByPk(appointment.doctorId);
+        Doctorname = doctor.name;
+        doctorId = doctor.id;
+      }
 
       // Determine if the visit is saved
       const visitSaved = !!visitEntry;
@@ -508,6 +533,8 @@ router.get("/patient-emr", async (req, res) => {
         prescriptions,
         tests,
         visitSaved,
+        Doctorname,
+        doctorId,
         username: userDetails.username,
       });
     } catch (error) {
@@ -659,7 +686,7 @@ router.get("/printEmr", async (req, res) => {
     // Get visitId from query parameters
     const { id } = req.query;
     const decryptedId = decryptData(decodeURIComponent(id), "llppc"); // Decrypt and decode the visit ID
-    console.log("Decrypted Visit ID:", decryptedId);
+    console.log(decryptedId);
 
     // Fetch the visit details based on the decrypted ID
     const visit = await Visit.findOne({
@@ -670,7 +697,6 @@ router.get("/printEmr", async (req, res) => {
     if (!visit) {
       return res.status(404).json({ error: "Visit not found." });
     }
-    console.log("Visit Details:", visit);
 
     // Fetch the patient details using the patientId from the visit
     const patient = await Patient.findOne({
@@ -682,22 +708,35 @@ router.get("/printEmr", async (req, res) => {
     if (!patient) {
       return res.status(404).json({ error: "Patient not found." });
     }
-    console.log("Patient Details:", patient);
+    const apt = await Appointment.findOne({
+      where: {
+        patientId: visit.patientId,
+        date: visit.date,
+      },
+    });
 
-    // Fetch all the EMR complaints for the patient with the same visit date
+    let doctorName = "";
+    if (apt) {
+      doc = await Doctors.findOne({
+        where: { id: apt.doctorId },
+      });
+      if (doc) doctorName = doc.name;
+    }
+
+    const today = new Date(visit.date).toDateString();
+    const tomorrow = new Date(
+      new Date(visit.date).setDate(new Date(visit.date).getDate() + 1)
+    ).toDateString();
+
+    // Fetch all the EMR complaints for the patient based on visitId
     const emrComplaints = await EmrComplaints.findAll({
       where: {
         patientId: visit.patientId,
         createdAt: {
-          [Op.between]: [
-            new Date(visit.date).setHours(0, 0, 0, 0), // Start of the visit date
-            new Date(visit.date).setHours(23, 59, 59, 999), // End of the visit date
-          ],
+          [Op.between]: [today, tomorrow],
         },
       },
     });
-
-    console.log("EMR Complaints:", emrComplaints);
 
     // Parse the complaints data into objects
     const parsedComplaints = emrComplaints
@@ -705,27 +744,20 @@ router.get("/printEmr", async (req, res) => {
         try {
           return complaint.complaints;
         } catch (e) {
-          console.error("Error parsing complaint:", e);
           return [];
         }
       })
       .flat(); // Flatten the array of complaints
-    console.log("Parsed Complaints:", parsedComplaints);
 
-    // Fetch all the EMR prescriptions for the patient with the same visit date
+    // Fetch all the EMR prescriptions for the patient based on visitId
     const emrPrescriptions = await EmrPrescription.findAll({
       where: {
         patientId: visit.patientId,
         createdAt: {
-          [Op.between]: [
-            new Date(visit.date).setHours(0, 0, 0, 0),
-            new Date(visit.date).setHours(23, 59, 59, 999),
-          ],
+          [Op.between]: [today, tomorrow],
         },
       },
     });
-
-    console.log("EMR Prescriptions:", emrPrescriptions);
 
     // Parse the prescriptions data into objects
     const parsedPrescriptions = emrPrescriptions
@@ -733,97 +765,60 @@ router.get("/printEmr", async (req, res) => {
         try {
           return prescription.prescriptions;
         } catch (e) {
-          console.error("Error parsing prescription:", e);
           return [];
         }
       })
       .flat(); // Flatten the array of prescriptions
-    console.log("Parsed Prescriptions:", parsedPrescriptions);
 
-    // Fetch the EMR history for the patient with the same visit date
-    const emrHistory = await EmrHistory.findAll({
-      where: {
-        patientId: visit.patientId,
-        createdAt: {
-          [Op.between]: [
-            new Date(visit.date).setHours(0, 0, 0, 0),
-            new Date(visit.date).setHours(23, 59, 59, 999),
-          ],
-        },
-      },
-    });
-    // Parse the EMR history results
-    const parsedEmrHistory = emrHistory.map((history) => ({
-      id: history.dataValues.id,
-      patientId: history.dataValues.patientId,
-      details: history.dataValues.history,
-      createdAt: new Date(history.dataValues.createdAt).toLocaleString(),
-      updatedAt: new Date(history.dataValues.updatedAt).toLocaleString(),
-    }));
-
-    console.log("EMR History:", parsedEmrHistory);
-
-    // Fetch the EMR recommended tests for the patient with the same visit date
-    const emrRecommendedTests = await EmrRecommendedTests.findAll({
-      where: {
-        patientId: visit.patientId,
-        createdAt: {
-          [Op.between]: [
-            new Date(visit.date).setHours(0, 0, 0, 0),
-            new Date(visit.date).setHours(23, 59, 59, 999),
-          ],
-        },
-      },
+    // Fetch the EMR examination details (height, weight, etc.) for the visit
+    const emrExamination = await EmrExamination.findOne({
+      where: { patientId: visit.patientId },
+      order: [["createdAt", "DESC"]], // Fetch the most recent examination record
     });
 
-    console.log("EMR Recommended Tests:", emrRecommendedTests);
-
-    // Parse the recommended tests data into objects
-    const parsedRecommendedTests = emrRecommendedTests.map((test) => {
-      try {
-        const parsedTests = test.tests; // Parse the JSON string in 'tests'
-        return {
-          tests: parsedTests, // The parsed tests array
-          comment: test.comment || "N/A", // Default to 'N/A' if no comment
-          createdAt: new Date(test.createdAt).toLocaleString(), // Format createdAt
-          updatedAt: new Date(test.updatedAt).toLocaleString(), // Format updatedAt
-        };
-      } catch (e) {
-        console.error("Error parsing recommended test:", e);
-        return [];
-      }
+    // Fetch the EMR history for the patient
+    const emrHistory = await EmrHistory.findOne({
+      where: { patientId: visit.patientId },
+      order: [["createdAt", "DESC"]],
     });
-    console.log("Parsed Recommended Tests:", parsedRecommendedTests);
 
-    // Fetch the next follow-up appointment (if any) after the current visit
+    // Fetch the next follow-up date (if any) after the current visit
     const nextFollowUp = await Appointment.findOne({
       where: {
         patientId: visit.patientId,
-        date: { [Op.gt]: visit.date }, // Find the next appointment date greater than current visit date
+        date: { [Op.gt]: visit.date }, // Find the next visit date greater than current visit date
       },
       order: [["date", "ASC"]], // Order by date to get the earliest follow-up
-      attributes: ["date", "time"], // Include time of the next appointment
+      attributes: ["date"],
     });
-
-    console.log("Next Follow-Up:", nextFollowUp);
 
     // If no next follow-up is found, set it to null or a default value
     const followUpDate = nextFollowUp
-      ? `${new Date(nextFollowUp.date).toLocaleDateString()} at ${
-          nextFollowUp.time
-        }`
+      ? new Date(nextFollowUp.date).toLocaleDateString()
       : "N/A";
-    console.log("Follow-Up Date:", followUpDate);
 
     // Render the printEmr page with all the fetched data
+    console.log({
+      visit,
+      patient,
+      parsedComplaints,
+      parsedPrescriptions,
+      emrExamination,
+      emrHistory,
+      doctorName,
+      followUpDate,
+      billDate: new Date().toLocaleDateString(), // Optional: current date for bill
+    });
+
     res.render("PPC/printEmr", {
       visit,
       patient,
       parsedComplaints,
       parsedPrescriptions,
-      parsedEmrHistory,
-      parsedRecommendedTests,
+      emrExamination,
+      emrHistory,
       followUpDate,
+      doctorName,
       billDate: new Date().toLocaleDateString(), // Optional: current date for bill
     });
   } catch (error) {
@@ -1091,6 +1086,9 @@ router.get("/listDisease", async (req, res) => {
 });
 
 router.get("/getAllAppointments", getAllAppointments);
+router.delete("/cancelAppointment", cancelAppointment);
+
 router.post("/uploadExcelData", upload.single("file"), uploadExcelItem);
 
+router.get("/download-excel", downloadData);
 module.exports = router;

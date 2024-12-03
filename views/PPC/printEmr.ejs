@@ -22,7 +22,7 @@
         padding-bottom: 10px;
       "
     >
-      <h2 style="margin: 0">Lifelinkr</h2>
+      <h2 style="margin: 0">Aakash Healthcare Super Speciality Hospital</h2>
       <p style="margin: 5px 0">We care, He cures</p>
       <p style="margin: 5px 0">Prescription</p>
     </div>
@@ -43,13 +43,13 @@
           patient.gender %>
         </p>
         <p><strong>ID:</strong> <%= patient.id %></p>
-        <p><strong>Doctor:</strong> <%= visit.doctor %></p>
+        <p><strong>Doctor:</strong> <%= doctorName %></p>
       </div>
 
       <!-- Prescription Details -->
       <div style="width: 50%; float: left">
         <p><strong>Prescription No:</strong> <%= visit.id %></p>
-        <p><strong>Date:</strong> <%= billDate %></p>
+        <p><strong>Bill Date:</strong> <%= billDate %></p>
       </div>
     </div>
 
@@ -78,12 +78,18 @@
       <% if (parsedComplaints.length > 0) { %>
       <ul>
         <% parsedComplaints.forEach(complaint => { %>
-        <li><%= complaint.complaint %> <%= complaint.since %></li>
+        <li>
+          <strong>Since:</strong> <%= complaint.since %> -
+          <strong>Complaint:</strong> <%= complaint.complaint %>
+        </li>
         <% }); %>
       </ul>
       <% } else { %>
       <p>No complaints listed.</p>
       <% } %>
+
+      <h4>Diagnosis</h4>
+      <p><%= emrHistory ? emrHistory.history : 'N/A' %></p>
     </div>
 
     <!-- Prescription Section -->
@@ -104,40 +110,6 @@
       <p>No prescriptions listed.</p>
       <% } %>
     </div>
-
-    <!-- Recommended Tests Section -->
-    <div style="margin-top: 20px">
-      <h4>Recommended Tests</h4>
-      <% if (parsedRecommendedTests.length > 0) { %>
-      <ul>
-        <% parsedRecommendedTests.forEach(test => { %>
-        <li>
-          <strong>Tests:</strong>
-          <ul>
-            <% test.tests.forEach(t => { %>
-            <li><%= t.test %></li>
-            <% }); %>
-          </ul>
-        </li>
-        <% }) %>
-      </ul>
-      <% } else { %>
-      <p>No recommended tests listed.</p>
-      <% } %>
-    </div>
-
-    <h4>History</h4>
-    <% if (parsedEmrHistory.length > 0) { %>
-    <ul>
-      <% parsedEmrHistory.forEach(history => { %>
-      <li>
-        <p><strong>Details:</strong> <%= history.details %></p>
-      </li>
-      <% }); %>
-    </ul>
-    <% } else { %>
-    <p>No EMR history available for this visit.</p>
-    <% } %>
 
     <!-- Follow-Up Section -->
     <div style="margin-top: 20px">
