@@ -565,13 +565,17 @@ router.get("/patient-registration", async (req, res) => {
     try {
       const data = await Patient.findByPk(decryptedId); // Assuming you have a PatientRegistration model
       const values = data.get({ plain: true });
-      res.render("PPC/patient-registration", { data: values });
+      const emrVal = await EmrExamination.findOne({
+        where: { patientId: decryptedId },
+      });
+      const values2 = emrVal.get({ plain: true });
+      res.render("PPC/patient-registration", { data: values, emrVal: values2 });
     } catch (error) {
       console.error("Error fetching data:", error);
       res.status(500).send("Internal Server Error");
     }
   } else {
-    res.render("PPC/patient-registration", { data: {} });
+    res.render("PPC/patient-registration", { data: {}, emrVal: {} });
   }
 });
 

@@ -525,10 +525,16 @@
         document.getElementById("email").value = "<%=data.email%>";
         document.getElementById("mobile").value = "<%=data.mobile%>";
         document.getElementById("age").value = "<%=data.age%>";
-        document.getElementById("weight_Kg").value = "<%=data.weight_Kg%>";
-        document.getElementById("height_Feet").value = "<%=data.height_Feet%>";
+        document.getElementById("weight_Kg").value = "<%=emrVal.weightKg%>";
+        document.getElementById("height_Feet").value = "<%=emrVal.heightFeet%>";
         document.getElementById("gender").value = "<%=data.gender%>";
         document.getElementById("address").value = "<%=data.address%>";
+        document.getElementById("bmi").value = "<%=emrVal.bmi%>";
+        document.getElementById("bloodPressure").value =
+          "<%=emrVal.bloodPressure%>";
+        document.getElementById("temperature").value =
+          "<%= emrVal.temperature%>";
+        document.getElementById("pulse").value = "<%=emrVal.pulse%>";
       } else {
         document.getElementById("mod-btn").disabled = true;
       }

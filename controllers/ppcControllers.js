@@ -287,6 +287,19 @@ const savePatient = async (req, res) => {
     if (query === "1") {
       // Update record if query is 1
       const [updated] = await Patient.update(updateFields, { where: { code } });
+      const data = await Patient.findOne({ where: { code } });
+      const [updated2] = await EmrExamination.update(
+        {
+          heightFeet: parseFloat(req.body.height_Feet) || null,
+          weightKg: parseFloat(req.body.weight_Kg) || null,
+          temperature: parseFloat(req.body.temperature) || null,
+          pulse: parseInt(req.body.pulse) || null,
+          bmi: parseFloat(req.body.bmi) || null,
+          bloodPressure: req.body.bloodPressure || null,
+          bloodGroup: req.body.bloodGroup || null,
+        },
+        { where: { patientId: data.id } }
+      );
 
       if (updated) {
         res.status(200).json({ message: "Patient data updated successfully!" });
