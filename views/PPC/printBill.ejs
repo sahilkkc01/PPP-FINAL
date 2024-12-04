@@ -52,7 +52,7 @@
 <body>
 
     <!-- Print Button -->
-    <button class="print-btn" onclick="window.print()">Print</button>
+    <!-- <button class="print-btn" onclick="window.print()">Print</button> -->
 
     <!-- Hospital Header -->
     <div class="header">
@@ -77,15 +77,19 @@
             <td class="text-right"><strong>Payment Mode:</strong> <%= bill.paymentMode || '' %></td>
         </tr>
         <tr>
-            <td><strong>Address:</strong> <%= patient.address || '' %>, Contact No: <%= patient.mobile || '' %></td>
+            <td><strong>Address:</strong> <%= patient.address || '' %></td>
+            
             <!-- <td class="text-right"><strong>Discharge Date:</strong> -- / -- / --</td> -->
         </tr>
         <tr>
-            <td><strong>Consulting Doctors:</strong></td>
+            <td><strong>Contact:</strong> <%= patient.mobile || '' %></td>
+            
+            <!-- <td class="text-right"><strong>Discharge Date:</strong> -- / -- / --</td> -->
         </tr>
         <tr>
-            <td>&nbsp;&nbsp;- Dynamic Name (General Physician)</td>
+            <td><strong>Consulting Doctors:</strong><%= visit.doctor || '' %></td>
         </tr>
+       
     </table>
 
     <!-- Provisional Bill Table -->

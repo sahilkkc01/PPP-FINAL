@@ -1215,6 +1215,7 @@ const saveVisit = async (req, res) => {
       visitDate,
       visitTime,
       weight,
+      height,
       fever,
       bp,
       sugar,
@@ -1224,6 +1225,8 @@ const saveVisit = async (req, res) => {
 
     // Decrypt the patient ID
     const decryptedId = decryptData(decodeURIComponent(patientId), "llppc");
+    const decryptedDoctorId = decryptData(decodeURIComponent(doctor), "llppc");
+
 
     // Validate required fields
     if (!decryptedId || !visitDate || !visitTime) {
@@ -1232,16 +1235,22 @@ const saveVisit = async (req, res) => {
       });
     }
 
+    const doctorDetails = await Doctors.findOne({
+      where: { id: decryptedDoctorId },
+      attributes: ["name"], // Fetch only the name to reduce data retrieval
+    });
     // Save the visit in the database
     const newVisit = await Visit.create({
       patientId: decryptedId,
       date: visitDate,
       time: visitTime,
       weight,
+      height,
       fever,
       bp,
       sugar,
       bmi,
+      doctor: doctorDetails.name,
     });
 
     const appointment = await Appointment.create({

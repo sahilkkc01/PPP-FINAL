@@ -316,11 +316,12 @@ const Visit = sequelize.define(
     date: DataTypes.DATE,
     time: DataTypes.TIME,
     weight: DataTypes.STRING,
+    height: DataTypes.STRING,
     fever: DataTypes.STRING,
     bp: DataTypes.STRING,
     sugar: DataTypes.STRING,
     bmi: DataTypes.STRING,
-    // doctor: DataTypes.STRING,
+    doctor: DataTypes.STRING,
   },
   {
     tableName: "visit",
@@ -329,7 +330,7 @@ const Visit = sequelize.define(
   }
 );
 
-// Visit.sync({ alter: true });
+Visit.sync({ alter: true });
 
 const Appointment = sequelize.define(
   "Appointment",

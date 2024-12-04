@@ -670,6 +670,11 @@ router.get("/printBill", async (req, res) => {
       attributes: ["id", "name", "email", "gender", "mobile", "age"], // Specify the fields needed
     });
 
+    const visit = await Visit.findOne({
+      where: { patientId: bill.patientId },
+      order: [['createdAt', 'DESC']], // Assuming `createdAt` tracks the entry creation time
+    });
+    
     // If no patient is found, return a 404 error
     if (!patient) {
       return res.status(404).json({ error: "Patient not found." });
@@ -677,8 +682,9 @@ router.get("/printBill", async (req, res) => {
 
     console.log(bill);
     console.log(patient);
+    console.log('sd',visit)
     // Render the printBill page with the fetched bill and patient data
-    res.render("PPC/printBill", { bill, patient });
+    res.render("PPC/printBill", { bill, patient ,visit});
   } catch (error) {
     console.error("Error fetching bill or patient data:", error);
     res.status(500).json({ error: "An error occurred while fetching data." });

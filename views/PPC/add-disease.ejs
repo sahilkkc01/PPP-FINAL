@@ -331,12 +331,12 @@
         );
 
         newRow.innerHTML = `
-          <td class="form-group position-relative">
+          <td class="form-group">
               <input type="text" class="form-control input-style search-input" placeholder="Type to search..."
                      name="drug" value="${drug}" ${
           flag ? "disabled" : ""
         } data-validation="required" data-error-message="Drug/Molecule is required">
-              <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
+              <ul class="list-group position-absolute suggestions-list" style="max-height: 200px; overflow-y: auto;z-index:999;"></ul>
           </td>
           <td><input type="number" value="${dose}" ${
           flag ? "disabled" : ""
@@ -684,6 +684,64 @@
       document.getElementById("mod-btn").addEventListener("click", () => {
         enableAllDisabledElements();
       });
+
+
+      let responseData = [];
+function fetchMedicineData() {
+    axios.get('/getItems') // Replace with your actual endpoint
+        .then(response => {
+            responseData = response.data;
+            console.log('Fetched data:', responseData);
+        })
+        .catch(error => { 
+            console.error('Error fetching medicine data:', error);
+        });
+}
+fetchMedicineData()
+
+      // Add input event listener to the dynamically added inputs with class `search-input`
+document.addEventListener('input', function(event) {
+    if (event.target.classList.contains('search-input')) {
+        const query = event.target.value;
+        const suggestionsList = event.target.nextElementSibling; // Get the associated suggestions list
+        showSuggestions(query, responseData, suggestionsList);
+    }
+});
+
+// Function to filter and display suggestions
+function showSuggestions(query, data, suggestionsList) {
+    suggestionsList.innerHTML = ''; // Clear existing suggestions
+
+    if (query.length === 0) return;
+
+    const filteredData = data.filter(item => 
+        item.name.toLowerCase().includes(query.toLowerCase()) ||
+        item.molecule.toLowerCase().includes(query.toLowerCase())
+    );
+
+    filteredData.forEach(item => {
+        const li = document.createElement('li');
+        li.classList.add('list-group-item');
+        li.style.cursor = 'pointer';
+        li.innerHTML = `
+            <strong>Item Name:</strong> ${item.name} &nbsp;
+            <strong>Molecule:</strong> ${item.molecule} &nbsp;
+            <strong>Price:</strong> ${item.sellingPrice} &nbsp;
+            <strong>Category:</strong> ${item.category}
+        `;
+
+        // Add click event to populate input field with selected suggestion
+        li.addEventListener('click', () => {
+            const input = suggestionsList.previousElementSibling;
+            input.value = item.name; // Populate input with the selected item's name
+            suggestionsList.innerHTML = ''; // Clear suggestions
+        });
+
+        suggestionsList.appendChild(li);
+    });
+}
+// Set up the checkbox event listener
+
     </script>
   </head>
 </html>

@@ -88,7 +88,8 @@
 
                                 </div>
                             </div>
-								<div class="mt-4">
+
+								<div class="mt-2">
 									<div class="card">
 										<div class="card-header d-flex justify-content-between align-items-center px-2 py-0">
 											<span class="myo-left-right">Complaint</span>
@@ -174,7 +175,7 @@
                 <div id="errordiv4"></div>
 
                 <!-- Container for the current prescription entry -->
-                <div class="mt-3 table-responsive">
+                <div class="mt-3 table-responsive" style="overflow: visible;">
                     <table class="table table-bordered prescription-table">
                         <thead>
                             <tr>
@@ -297,7 +298,7 @@
 
 								<div class="d-flex  justify-content-between top-myometrium">
                                     <div class="heading-myomertium d-flex align-items-center">
-                                    <span>Recorded By: Dr. <%=Doctorname%></span>
+                                    <span>Recorded By:  <%=username%></span>
                                     </div>
                                     </div>
 								
@@ -413,6 +414,7 @@
               if (visitSaved==='false') {
         // Display the alert message
         alert('Visit not marked. Please complete the visit.');
+        $('#diseaseSelect').prop('disabled',true);
 
         // Disable all toggle icons by modifying their styles
         document.querySelectorAll('.Open-close-icon').forEach(function(toggleIcon) {
@@ -658,7 +660,7 @@ function populateComplaints() {
                 console.log("Adding complaint:", complaint);
 
                 const listItem = document.createElement('li');
-                listItem.innerText = `${complaint.complaint} - ${complaint.since} `;
+                listItem.innerText = `${complaint.complaint} ${complaint.since || ''} `;
                 complaintList.appendChild(listItem);
             });
 
@@ -708,39 +710,36 @@ function populateComplaints() {
         }
     }
 // Collect complaint data from form inputs
-				function collectComplaintData() {
-					const complaintsData = [];
-					const complaintInputs = Array.from(document.querySelectorAll('input[name="complaint[]"]'));
-					const sinceInputs = Array.from(document.querySelectorAll('input[name="since[]"]'));
-					const patientId = document.getElementById('patientId').value;
-                    sinceInputs.reverse();
-			
-					complaintInputs.reverse().forEach((input, index) => {
-						const complaintText = input.value;
-						const sinceDuration = sinceInputs[index]? sinceInputs[index].value:"";
-			
-						if (complaintText) {
-							complaintsData.push({
-								complaint: complaintText,
-								since: sinceDuration, 
-							});
-                            console.log({
-								complaint: complaintText,
-								since: sinceDuration, 
-							});
-                            
-						}
-					});
-			
-					const formData = {
-						patientId: patientId,
-						complaints: complaintsData
-					};
-			
-					console.log("Complaint Form Data:", JSON.stringify(formData));
-					return formData;
-				}
-			
+function collectComplaintData() {
+    const complaintsData = [];
+    const complaintInputs = document.querySelectorAll('input[name="complaint[]"]');
+    const sinceInputs = document.querySelectorAll('input[name="since[]"]');
+    const patientId = document.getElementById('patientId').value;
+
+    complaintInputs.forEach((input, index) => {
+        const complaintText = input.value.trim();
+        const sinceDuration = sinceInputs[index]?.value?.trim(); // Optional chaining to handle missing `sinceInputs`
+
+        if (complaintText) { // Ensure `complaint` is provided
+            const complaintEntry = {
+                complaint: complaintText,
+            };
+            if (sinceDuration) {
+                complaintEntry.since = sinceDuration; // Add `since` only if it exists
+            }
+            complaintsData.push(complaintEntry);
+        }
+    });
+
+    const formData = {
+        patientId: patientId.trim(),
+        complaints: complaintsData,
+    };
+
+    console.log("Complaint Form Data:", JSON.stringify(formData));
+    return formData;
+}
+
 				// ================================
 				// Examination Form Functions
 				// ================================
@@ -846,7 +845,7 @@ function populateTests() {
         <td class="form-group position-relative">
             <input type="text" class="form-control input-style search-input" placeholder="Type to search..."
                    name="drug" data-validation="required" data-error-message="Drug/Molecule is required">
-            <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;"></ul>
+            <ul class="list-group position-absolute w-100 suggestions-list" style="max-height: 200px; overflow-y: auto;z-index:99;"></ul>
         </td>
         <td><input type="number" name="dose" placeholder="Dose" class="form-control input-style" 
                    data-validation="required" data-error-message="Dose is required"></td>
@@ -1031,7 +1030,6 @@ $('#aptSubmit').on('click', function (event) {
     // Collect data from the form fields
     const patientId = $('#patientId').val(); // Get the patient ID
     const followUpDate = $('#followUpDate').val(); // Get the follow-up 
-    const doctorId = "<%= doctorId %>"; // Get the doctor
     console.log('id',patientId)
     console.log('wed',followUpDate)
 
@@ -1044,8 +1042,7 @@ $('#aptSubmit').on('click', function (event) {
     // Prepare form data object
     const formData = {
         patientId: patientId,
-        appointmentDate: followUpDate,
-        doctorId
+        appointmentDate: followUpDate
     };
 
     const errorDivId = '#errordiv6';
@@ -1105,7 +1102,7 @@ $('#recommendedTestsForm').on('submit', function (event) {
 // Function to collect test data
 function collectTestData() {
     const testsData = [];
-    const testSelects = document.querySelectorAll('select[name="selectTest[]"]');
+    const testSelects = document.querySelectorAll('select[name="selectTest[]"],input[name="selectTest[]"]');
     const comment = $('#testComment').val(); // Get the common comment
     const patientId = $('#patientId').val(); // Get patient ID from hidden field
 
@@ -1117,7 +1114,6 @@ function collectTestData() {
             });
         }
     });
-    
 
     // Prepare final form data object
     const formData = {
@@ -1137,30 +1133,33 @@ function collectPrescriptionData() {
     const rows = document.querySelectorAll('#prescriptionTable tr');
 
     rows.forEach(row => {
-        const drug = row.querySelector('input[name="drug"]')?.value;
-        const dose = row.querySelector('input[name="dose"]')?.value;
-        const frequency = row.querySelector('select[name="frequency"]')?.value;
-        const days = row.querySelector('input[name="days"]')?.value;
+        const drug = row.querySelector('input[name="drug"]')?.value.trim();
+        const dose = row.querySelector('input[name="dose"]')?.value.trim();
+        const frequencyInput = row.querySelector('input[name="frequency"]')?.value.trim();
+        const frequencySelect = row.querySelector('select[name="frequency"]')?.value;
+        const frequency = frequencyInput || frequencySelect; // Use the one that exists
+        const days = row.querySelector('input[name="days"]')?.value.trim();
 
+        // Only include entries with all required fields
         if (drug && dose && frequency && days) {
             prescriptions.push({
                 drug,
                 dose: parseInt(dose, 10),
                 frequency,
-                days: parseInt(days, 10)
+                days: parseInt(days, 10),
             });
         }
     });
 
     // Include any additional fields, such as comments
-    const prescribedComment = document.getElementById('prescribedComment').value;
-	const patientId= document.getElementById('patientId').value;
+    const prescribedComment = document.getElementById('prescribedComment')?.value.trim();
+    const patientId = document.getElementById('patientId')?.value.trim();
 
     // Create final formData object
     const formData = {
-		patientId,
+        patientId,
         prescriptions,
-        prescribedComment
+        prescribedComment,
     };
 
     console.log("Prescription Data:", formData); // Log for debugging
@@ -1181,15 +1180,7 @@ function collectPrescriptionData() {
                     if (icon.classList.contains("fa-angles-up")) {
                     icon.classList.remove("fa-angles-up");
                     icon.classList.add("fa-angles-down");
-                    if(a == 'complaintCardBody'){
-                        addNewRow();
-                    }
-                    if(a == 'recommendedTestsCardBody'){
-                        addTestRow();
-                    }
-                    if(a == 'prescriptionCardBody'){
-                        addNewPrescriptionRow();
-                    }
+                   
 
                     } else {
                     icon.classList.remove("fa-angles-down");
@@ -1203,6 +1194,9 @@ function collectPrescriptionData() {
 					populateHistory();
 					populatePrescriptions();
 					populateTests();
+                    addNewRow();
+                    addTestRow();
+                    addNewPrescriptionRow();
 				});
 
 				document.addEventListener('DOMContentLoaded', function() {
@@ -1440,16 +1434,25 @@ function shbtn(a, b) {
     }
     fetchDiseses();
     const getAllpoints = async (id)=>{
+        if (!id) {
+            $('#recommendedTestAdd').empty();
+            $('#complaintsContainer').empty();
+            $('#prescriptionTable').empty();
+            return; // Exit the function if id is blank
+        }
         try{
             const response = await fetch(`/diseaseSelect?id=${id}`);
             const points = await response.json();
             console.log(points);
-            
+            const container = document.getElementById('recommendedTestAdd');
+            $('#recommendedTestAdd').empty()
 
             if(points.complaints && points.complaints.length){
-                const container = document.getElementById('complaintsContainer');
-                container.innerHTML = "";
+                toggleCardBody('complaintCardBody', 'complaintToggleIcon')
+                $('#complaintsContainer').empty()
                 points.complaints[0].complaints.forEach(point => {
+                    const container = document.getElementById('complaintsContainer');
+                   
 					const newRow = document.createElement('div');
 					newRow.classList.add('row', 'align-items-center', 'mb-2');
 					newRow.innerHTML = `
@@ -1462,11 +1465,11 @@ function shbtn(a, b) {
 							<i title="Remove Row" class="btn-secondary btn-style btn fas fa-minus " onclick="removeRow(this)"></i>
 						</div>`;
 					container.appendChild(newRow);
+                   
                 })
             }
             if(points.tests && points.tests.length > 0){
-                const container = document.getElementById('recommendedTestAdd');
-                container.innerHTML = "";
+                toggleCardBody('recommendedTestsCardBody', 'recommendedTestsToggleIcon')
                 points.tests.forEach(point => {
                     const newRow = document.createElement('div');
     newRow.classList.add('row', 'align-items-center', 'mb-2');
@@ -1475,9 +1478,7 @@ function shbtn(a, b) {
     newRow.innerHTML = `
         <div class="col-md-5">
             <div class="form-group">
-                <select class="form-control input-style" name="selectTest[]" data-validation="required" readonly data-error-message="Test selection is required">
-                    <option value="${point.name}" selected>${point.name}</option>
-                </select>
+                <input class="form-control input-style" name="selectTest[]" data-validation="required" value="${point.name}" disabled data-error-message="Test selection is required" />
             </div>
         </div>
         <div class="col-md-2 text-center">
@@ -1493,10 +1494,10 @@ function shbtn(a, b) {
             }
 
             if(points.medicines && points.medicines.length){
-                const prescriptionTable = document.getElementById("prescriptionTable");
-                prescriptionTable.innerHTML = "";
+                toggleCardBody('prescriptionCardBody', 'prescriptionToggleIcon')
+                $('#prescriptionTable').empty()
                 points.medicines.forEach(point=>{
-                    
+                    const prescriptionTable = document.getElementById("prescriptionTable");
         const newRow = document.createElement("tr");
         newRow.classList.add(
           "my-3",
@@ -1515,10 +1516,8 @@ function shbtn(a, b) {
           <td><input type="number" name="dose" placeholder="Dose" class="form-control input-style"
                      data-validation="required" value="${point.name.dose}" disabled data-error-message="Dose is required"></td>
           <td>
-              <select name="frequency" disabled class="form-select input-style"
-                      data-validation="required" data-error-message="Frequency is required">
-                    <option selected value="${point.name.frequency}">${point.name.frequency}</option>
-                </select>
+              <input name="frequency" class="form-select input-style"
+                      data-validation="required" value="${point.name.frequency}" disabled data-error-message="Frequency is required" />
           </td>
           <td><input type="number" name="days" placeholder="Days" value="${point.name.days}" disabled class="form-control input-style"
                      data-validation="required" data-error-message="Days are required"></td>
