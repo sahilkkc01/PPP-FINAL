@@ -1,135 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prescription</title>
     <style>
-      @media print {
-        /* Hide elements you don't want to print */
-        .menuListID {
-          display: none !important;
+        @media print {
+            button {
+                display: none;
+            }
         }
-      }
     </style>
-  </head>
-  <body style="font-family: Arial, sans-serif; padding: 20px">
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
     <!-- Header Section -->
-    <div
-      style="
-        text-align: center;
-        border-bottom: 2px solid #000;
-        padding-bottom: 10px;
-      "
-    >
-      <h2 style="margin: 0">Lifelinkr</h2>
-      <p style="margin: 5px 0">We care, He cures</p>
-      <p style="margin: 5px 0">Prescription</p>
+         <!-- Print Button -->
+    <button onclick="window.print()" >Print Prescription</button>
+    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px;">
+        <h2 style="margin: 0;">Lifelinkr</h2>
+        <p style="margin: 5px 0;">We care, He cures</p>
+        <p style="margin: 5px 0;">Prescription</p>
     </div>
 
     <!-- Patient Details -->
-    <div
-      style="
-        margin-top: 20px;
-        width: 100%;
-        display: flex;
-        border-bottom: 1px solid #666;
-      "
-    >
-      <div style="width: 50%; float: left">
-        <p><strong>Patient Name:</strong> <%= patient.name %></p>
-        <p>
-          <strong>Age/Sex:</strong> <%= patient.age %> Year(s) / <%=
-          patient.gender %>
-        </p>
-        <p><strong>ID:</strong> <%= patient.id %></p>
-        <p><strong>Doctor:</strong> <%= doctorName %></p>
-      </div>
+    <div style="margin-top: 20px;width:100%;display:flex;border-bottom:1px solid #666;">
+        <div style="width:50%;float:left;">
+            <p><strong>Patient Name:</strong> <%= patient.name %></p>
+            <p><strong>Age/Sex:</strong> <%= patient.age %> Year(s) / <%= patient.gender %></p>
+            <p><strong>ID:</strong> <%= patient.id %></p>
+            <p><strong>Doctor:</strong> <%= visit.doctor %></p>
+        </div>
 
-      <!-- Prescription Details -->
-      <div style="width: 50%; float: left">
-        <p><strong>Prescription No:</strong> <%= visit.id %></p>
-        <p><strong>Bill Date:</strong> <%= billDate %></p>
-      </div>
+        <!-- Prescription Details -->
+        <div style="width:50%;float:left;">
+            <p><strong>Prescription No:</strong> <%= visit.id %></p>
+            <p><strong>Date:</strong> <%= billDate %></p>
+        </div>
     </div>
 
     <!-- Vitals Section -->
-    <div
-      style="
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        border-bottom: 1px solid #666;
-        padding-bottom: 20px;
-      "
-    >
-      <span><strong>BP:</strong> <%= visit.bp || 'N/A' %></span>
-      <span><strong>Suger:</strong> <%= visit.sugar || 'N/A' %></span>
-      <span><strong>Height(Ft):</strong> <%= visit.height || 'N/A' %></span>
-      <span><strong>Weight(Kg):</strong> <%= visit.weight || 'N/A' %></span>
-      <span><strong>Temp(°C):</strong> <%= visit.fever || 'N/A' %></span>
-      <span><strong>BMI:</strong> <%= visit.bmi || 'N/A' %></span>
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;width:100%;border-bottom:1px solid #666;padding-bottom:20px;">
+        <span><strong>BP:</strong> <%= visit.bp || 'N/A' %></span>
+        <span><strong>Suger:</strong> <%= visit.sugar || 'N/A' %></span>
+        <span><strong>Height(Ft):</strong> <%= visit.height || 'N/A' %></span>
+        <span><strong>Weight(Kg):</strong> <%= visit.weight || 'N/A' %></span>
+        <span><strong>Temp(°C):</strong> <%= visit.fever || 'N/A' %></span>
+        <span><strong>BMI:</strong> <%= visit.bmi || 'N/A' %></span>
     </div>
 
     <!-- Chief Complaints and Diagnosis -->
-    <div style="margin-top: 20px">
-      <h4>Chief Complaints</h4>
-      <% if (parsedComplaints.length > 0) { %>
-      <ul>
-        <% parsedComplaints.forEach(complaint => { %>
-        <li>
-          <strong>Since:</strong> <%= complaint.since %> -
-          <strong>Complaint:</strong> <%= complaint.complaint %>
-        </li>
-        <% }); %>
-      </ul>
-      <% } else { %>
-      <p>No complaints listed.</p>
-      <% } %>
-
-      <h4>Diagnosis</h4>
-      <p><%= emrHistory ? emrHistory.history : 'N/A' %></p>
+    <div style="margin-top: 20px;">
+        <h4>Chief Complaints</h4>
+        <% if (parsedComplaints.length > 0) { %>
+            <ul>
+                <% parsedComplaints.forEach(complaint => { %>
+                    <li> <%= complaint.complaint %>  <%= complaint.since %></li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No complaints listed.</p>
+        <% } %>
     </div>
 
     <!-- Prescription Section -->
-    <div style="margin-top: 20px">
-      <h4>Prescription</h4>
-      <% if (parsedPrescriptions.length > 0) { %>
-      <ul>
-        <% parsedPrescriptions.forEach(prescription => { %>
-        <li>
-          <strong>Drug:</strong> <%= prescription.drug %> -
-          <strong>Dose:</strong> <%= prescription.dose %>mg -
-          <strong>Frequency:</strong> <%= prescription.frequency %> -
-          <strong>Days:</strong> <%= prescription.days %> days
-        </li>
-        <% }) %>
-      </ul>
-      <% } else { %>
-      <p>No prescriptions listed.</p>
-      <% } %>
+    <div style="margin-top: 20px;">
+        <h4>Prescription</h4>
+        <% if (parsedPrescriptions.length > 0) { %>
+            <ul>
+                <% parsedPrescriptions.forEach(prescription => { %>
+                    <li>
+                        <strong>Drug:</strong> <%= prescription.drug %> 
+                        - <strong>Dose:</strong> <%= prescription.dose %>mg 
+                        - <strong>Frequency:</strong> <%= prescription.frequency %>
+                        - <strong>Days:</strong> <%= prescription.days %> days
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No prescriptions listed.</p>
+        <% } %>
     </div>
 
+    <!-- Recommended Tests Section -->
+    <div style="margin-top: 20px;">
+        <h4>Recommended Tests</h4>
+        <% if (parsedRecommendedTests.length > 0) { %>
+            <ul>
+                <% parsedRecommendedTests.forEach(test => { %>
+                    <li>
+                        <strong>Tests:</strong> 
+                        <ul>
+                            <% test.tests.forEach(t => { %>
+                                <li><%= t.test %></li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No recommended tests listed.</p>
+        <% } %>
+    </div>
+
+    <h4>History</h4>
+    <% if (parsedEmrHistory.length > 0) { %>
+        <ul>
+            <% parsedEmrHistory.forEach(history => { %>
+                <li>
+                    <p><strong>Details:</strong> <%= history.details %></p>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No EMR history available for this visit.</p>
+    <% } %>
+    
     <!-- Follow-Up Section -->
-    <div style="margin-top: 20px">
-      <h4>Follow-Up</h4>
-      <p><strong>Next Follow-Up Date:</strong> <%= followUpDate %></p>
+    <div style="margin-top: 20px;">
+        <h4>Follow-Up</h4>
+        <p><strong>Next Follow-Up Date:</strong> <%= followUpDate %></p>
     </div>
 
-    <!-- Print Button -->
-    <button
-      onclick="window.print()"
-      class="menuListID"
-      style="
-        display: block;
-        margin: 20px auto;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-      "
-    >
-      Print Prescription
-    </button>
-  </body>
+
+
+</body>
 </html>
+<script>
+    // Listen for the print event to hide the button after printing
+    window.onafterprint = function () {
+        document.querySelector('button').style.display = 'none';
+    };
+</script>

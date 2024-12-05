@@ -168,6 +168,7 @@ const Patient = sequelize.define(
     report: DataTypes.STRING,
     address: DataTypes.STRING,
     ConsultingDoctor: DataTypes.STRING,
+    refferedBy: DataTypes.STRING,
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -180,7 +181,7 @@ const Patient = sequelize.define(
   }
 );
 
-// Patient.sync({ alter: true });
+Patient.sync({ alter: true });
 const Staff = sequelize.define(
   "Staff",
   {

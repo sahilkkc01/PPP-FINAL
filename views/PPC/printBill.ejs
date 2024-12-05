@@ -37,22 +37,23 @@
             text-align: right;
             margin-top: 10px;
         }
-        .print-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+       
         .text-right {
             text-align: right;
+        }
+    </style>
+    <style>
+        @media print {
+            button {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
     <!-- Print Button -->
-    <!-- <button class="print-btn" onclick="window.print()">Print</button> -->
+    <button class="print-btn" onclick="window.print()">Print</button>
 
     <!-- Hospital Header -->
     <div class="header">
@@ -162,3 +163,9 @@
 
 </body>
 </html>
+<script>
+    // Listen for the print event to hide the button after printing
+    window.onafterprint = function () {
+        document.querySelector('button').style.display = 'none';
+    };
+</script>

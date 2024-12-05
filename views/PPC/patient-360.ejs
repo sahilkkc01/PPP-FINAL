@@ -179,6 +179,7 @@
                     <thead class="table-light">
                       <tr>
                         <th>Date</th>
+                        <th>Attended By</th>
                         <th>Time</th>
                         <th></th>
                       </tr>
@@ -589,9 +590,12 @@
           appointments.forEach((appointment) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                        <td>${new Date(
-                          appointment.date
-                        ).toLocaleDateString()}</td>
+                        <td>${new Date(appointment.date).toLocaleDateString('en-US', {
+  day: '2-digit',
+  month: 'long', // Full month name (e.g., January, February)
+  year: 'numeric'
+})}</td>
+
                         <td>${appointment.time}</td>
                     `;
             appointmentsTableBody.appendChild(row);
@@ -611,6 +615,7 @@
           document.getElementById("rsch_id").style.display = "";
           document.getElementById("cancelVisit").style.display = "";
           document.getElementById("resch_visit").style.display = "";
+          $('#visitDate').prop('readonly',false)
           document
             .getElementById("cancelVisit")
             .addEventListener("click", () => {
@@ -641,6 +646,10 @@
           });
           const data = await response.json();
           console.log("Cancel appointments:", data);
+          alert('Appointment Cancelled');
+          window.location.reload();
+       
+
         } catch (error) {
           console.error("Error cancelling appointments:", error);
         }
@@ -659,7 +668,12 @@
           visits.forEach((visit) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                        <td>${new Date(visit.date).toLocaleDateString()}</td>
+                        <td>${new Date(visit.date).toLocaleDateString('en-US', {
+  day: '2-digit',
+  month: 'long', // Full month name (e.g., January, February)
+  year: 'numeric'
+})}</td>
+                        <td>${visit.doctor || ''}</td>
                         <td>${visit.time}</td>
                                                 
 <td><button type="button" class="btn btn-primary btn-style btn-change" onclick="printEmr('${
@@ -713,6 +727,7 @@
           // Check response status
           if (response.status === 200) {
             alert("Visit saved successfully!");
+            window.location.reload();
           } else {
             alert("Failed to save the visit. Please try again.");
           }
